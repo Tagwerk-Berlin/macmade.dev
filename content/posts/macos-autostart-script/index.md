@@ -89,3 +89,15 @@ launchApp("CleanShot X", true, false, heavyDelay)
 
 -- 5) Mountain Duck: Erst starten, wenn alles andere läuft
 launchApp("Mountain Duck", false, false, heavyDelay)
+````
+
+### Einrichtung
+
+1.  Kopiere den Code in den Skripteditor.
+2.  Drücke `Cmd + S` zum Speichern.
+3.  **Wichtig:** Wähle beim Dateiformat **"Programm"** (Application) aus.
+    
+![Speichern Dialog: Als Programm auswählen](startup.png)
+
+4.  Gehe in die **Systemeinstellungen -> Allgemein -> Anmeldeobjekte**.
+5.  Füge dein neues Programm hinzu.
