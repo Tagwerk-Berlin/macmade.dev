@@ -6,29 +6,8 @@
     <description>Recent content in Posts on macmade.dev</description>
     <generator>Hugo -- 0.152.2</generator>
     <language>de</language>
-    <lastBuildDate>Wed, 26 Nov 2025 10:55:53 +0100</lastBuildDate>
+    <lastBuildDate>Wed, 26 Nov 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Hallo Welt</title>
-      <link>http://localhost:1313/posts/hallo-welt/</link>
-      <pubDate>Wed, 26 Nov 2025 10:55:53 +0100</pubDate>
-      <guid>http://localhost:1313/posts/hallo-welt/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Bild Test Post</title>
-      <link>http://localhost:1313/posts/bild-test/</link>
-      <pubDate>Wed, 26 Nov 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/bild-test/</guid>
-      <description>&lt;h1 id=&#34;test-des-bildes-im-text&#34;&gt;Test des Bildes im Text&lt;/h1&gt;
-&lt;p&gt;Hier versuchen wir, das Bild direkt im Text anzuzeigen:&lt;/p&gt;
-&lt;figure&gt;
-    &lt;img loading=&#34;lazy&#34; src=&#34;testbild.jpg&#34;
-         alt=&#34;Mein Avatar aus dem Content-Ordner&#34;/&gt; &lt;figcaption&gt;
-            &lt;p&gt;Mein Avatar aus dem Content-Ordner&lt;/p&gt;
-        &lt;/figcaption&gt;
-&lt;/figure&gt;</description>
-    </item>
     <item>
       <title>macOS Autostart bändigen: Reihenfolge der Apps festlegen</title>
       <link>http://localhost:1313/posts/macos-autostart-script/</link>

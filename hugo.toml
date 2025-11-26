@@ -21,12 +21,13 @@ buildFuture = false
   defaultTheme = "auto" # Erkennt System Dark/Light automatisch
   description = "Mac · .NET · Docker · Proxmox · Automatisierung"
   author = "Matthias Hartmann"
-  
-  # Profil-Modus (Die Startseite wie bei Blowfish)
+  ShowCodeCopyButtons = true
+  ShowShareButtons = true
+   
   [params.profileMode]
     enabled = true
     title = "macmade.dev"
-    subtitle = "Softwareentwickler · Mac · .NET · Docker · Proxmox"
+    subtitle = "Softwareentwicklung · Mac · .NET · Docker · Proxmox"
     imageUrl = "avatar.jpg" # Sucht in /static/
     imageTitle = "Matthias Hartmann"
     imageWidth = 150
@@ -37,10 +38,21 @@ buildFuture = false
       url = "/posts"
     
    
+[[menu.main]]
+  identifier = "posts"
+  name = "Beiträge"
+  url = "/posts/"
+  weight = 10
 
-[menu]
-  [[menu.main]]
-    identifier = "posts"
-    name = "Beiträge"
-    url = "/posts/"
-    weight = 10
+# Das Footer-Menü
+[[menu.footer]]
+  identifier = "impressum"
+  name = "Impressum"
+  url = "/impressum/"
+  weight = 10
+
+[[menu.footer]]
+  identifier = "datenschutz"
+  name = "Datenschutz"
+  url = "/datenschutz/"
+  weight = 20
