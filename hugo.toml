@@ -19,7 +19,7 @@ buildFuture = false
 
 [params]
   defaultTheme = "auto" # Erkennt System Dark/Light automatisch
-  description = "Mac · .NET · Docker · Proxmox · Automatisierung"
+  description = "Notizen zu Code, Mac, Proxmox, Docker und LLms und alles was so anfällt"
   author = "Matthias Hartmann"
   ShowCodeCopyButtons = true
   ShowShareButtons = true
@@ -27,14 +27,14 @@ buildFuture = false
   [params.profileMode]
     enabled = true
     title = "macmade.dev"
-    subtitle = "Softwareentwicklung · Mac · .NET · Docker · Proxmox"
+    subtitle = "Der Zettelkasten für Code, .net, Proxmox, Docker, Mac und alles was so anfällt"
     imageUrl = "avatar.jpg" # Sucht in /static/
     imageTitle = "Matthias Hartmann"
     imageWidth = 150
     imageHeight = 150
     
     [[params.profileMode.buttons]]
-      name = "Blog"
+      name = "Zettelkasten"
       url = "/posts"
     
    
