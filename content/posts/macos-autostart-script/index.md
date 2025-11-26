@@ -89,7 +89,7 @@ launchApp("CleanShot X", true, false, heavyDelay)
 
 -- 5) Mountain Duck: Erst starten, wenn alles andere läuft
 launchApp("Mountain Duck", false, false, heavyDelay)
-````
+```
 
 ### Einrichtung
 
@@ -102,4 +102,6 @@ launchApp("Mountain Duck", false, false, heavyDelay)
 
 
 4.  Gehe in die **Systemeinstellungen -> Allgemein -> Anmeldeobjekte**.
-5.  Füge dein neues Programm hinzu.
+5.  Füge dein neues *Programm* hinzu.
+
+

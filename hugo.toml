@@ -36,14 +36,7 @@ buildFuture = false
       name = "Blog"
       url = "/posts"
     
-    [[params.profileMode.buttons]]
-      name = "Github"
-      url = "https://github.com/Tagwerk-Berlin"
-
-  # Social Icons (in der Fußzeile oder Profil)
-  [[params.socialIcons]]
-    name = "github"
-    url = "https://github.com/Tagwerk-Berlin"
+   
 
 [menu]
   [[menu.main]]
