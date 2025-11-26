@@ -1,13 +1,41 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Posts on macmade.dev</title>
     <link>http://localhost:1313/posts/</link>
     <description>Recent content in Posts on macmade.dev</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.152.2</generator>
     <language>de</language>
-    
-    <lastBuildDate>Wed, 26 Nov 2025 06:57:34 +0100</lastBuildDate><atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
-    
+    <lastBuildDate>Wed, 26 Nov 2025 10:55:53 +0100</lastBuildDate>
+    <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Hallo Welt</title>
+      <link>http://localhost:1313/posts/hallo-welt/</link>
+      <pubDate>Wed, 26 Nov 2025 10:55:53 +0100</pubDate>
+      <guid>http://localhost:1313/posts/hallo-welt/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Bild Test Post</title>
+      <link>http://localhost:1313/posts/bild-test/</link>
+      <pubDate>Wed, 26 Nov 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/bild-test/</guid>
+      <description>&lt;h1 id=&#34;test-des-bildes-im-text&#34;&gt;Test des Bildes im Text&lt;/h1&gt;
+&lt;p&gt;Hier versuchen wir, das Bild direkt im Text anzuzeigen:&lt;/p&gt;
+&lt;figure&gt;
+    &lt;img loading=&#34;lazy&#34; src=&#34;testbild.jpg&#34;
+         alt=&#34;Mein Avatar aus dem Content-Ordner&#34;/&gt; &lt;figcaption&gt;
+            &lt;p&gt;Mein Avatar aus dem Content-Ordner&lt;/p&gt;
+        &lt;/figcaption&gt;
+&lt;/figure&gt;</description>
+    </item>
+    <item>
+      <title>macOS Autostart bändigen: Reihenfolge der Apps festlegen</title>
+      <link>http://localhost:1313/posts/macos-autostart-script/</link>
+      <pubDate>Wed, 26 Nov 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/macos-autostart-script/</guid>
+      <description>&lt;p&gt;Kennt ihr das? Ihr meldet euch am Mac an, und sofort versuchen zehn Programme gleichzeitig zu starten. Das Resultat: Der Rechner schnauft, und – viel schlimmer – Tools, die auf eine Netzwerkverbindung angewiesen sind (wie &lt;strong&gt;Mountain Duck&lt;/strong&gt; oder andere File-Provider), stürzen ab oder meckern, weil das WLAN noch gar nicht verbunden ist.&lt;/p&gt;
+&lt;p&gt;macOS bietet von Haus aus leider keine Möglichkeit, eine Verzögerung (Delay) oder eine Reihenfolge für Anmeldeobjekte festzulegen. Es feuert einfach alles gleichzeitig ab.&lt;/p&gt;</description>
+    </item>
   </channel>
 </rss>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Workflows on macmade.dev</title>
+    <link>http://localhost:1313/categories/workflows/</link>
+    <description>Recent content in Workflows on macmade.dev</description>
+    <generator>Hugo -- 0.152.2</generator>
+    <language>de</language>
+    <lastBuildDate>Wed, 26 Nov 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/categories/workflows/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>macOS Autostart bändigen: Reihenfolge der Apps festlegen</title>
+      <link>http://localhost:1313/posts/macos-autostart-script/</link>
+      <pubDate>Wed, 26 Nov 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/macos-autostart-script/</guid>
+      <description>&lt;p&gt;Kennt ihr das? Ihr meldet euch am Mac an, und sofort versuchen zehn Programme gleichzeitig zu starten. Das Resultat: Der Rechner schnauft, und – viel schlimmer – Tools, die auf eine Netzwerkverbindung angewiesen sind (wie &lt;strong&gt;Mountain Duck&lt;/strong&gt; oder andere File-Provider), stürzen ab oder meckern, weil das WLAN noch gar nicht verbunden ist.&lt;/p&gt;
+&lt;p&gt;macOS bietet von Haus aus leider keine Möglichkeit, eine Verzögerung (Delay) oder eine Reihenfolge für Anmeldeobjekte festzulegen. Es feuert einfach alles gleichzeitig ab.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

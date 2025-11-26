@@ -1,3 +1,53 @@
-baseURL = 'https://example.org/'
-languageCode = 'en-us'
-title = 'My New Hugo Site'
+baseURL = "https://macmade.dev/"
+title = "macmade.dev"
+theme = "PaperMod"
+languageCode = "de"
+defaultContentLanguage = "de"
+
+enableRobotsTXT = true
+buildDrafts = false
+buildFuture = false
+
+[markup]
+  [markup.highlight]
+    anchorLineNos = false
+    codeFences = true
+    guessSyntax = true
+    lineNos = true       # Zeilennummern anzeigen
+    style = "monokai"    # Oder "dracula", "github" etc.
+    tabWidth = 4
+
+[params]
+  defaultTheme = "auto" # Erkennt System Dark/Light automatisch
+  description = "Mac · .NET · Docker · Proxmox · Automatisierung"
+  author = "Matthias Hartmann"
+  
+  # Profil-Modus (Die Startseite wie bei Blowfish)
+  [params.profileMode]
+    enabled = true
+    title = "macmade.dev"
+    subtitle = "Softwareentwickler · Mac · .NET · Docker · Proxmox"
+    imageUrl = "avatar.jpg" # Sucht in /static/
+    imageTitle = "Matthias Hartmann"
+    imageWidth = 150
+    imageHeight = 150
+    
+    [[params.profileMode.buttons]]
+      name = "Blog"
+      url = "/posts"
+    
+    [[params.profileMode.buttons]]
+      name = "Github"
+      url = "https://github.com/Tagwerk-Berlin"
+
+  # Social Icons (in der Fußzeile oder Profil)
+  [[params.socialIcons]]
+    name = "github"
+    url = "https://github.com/Tagwerk-Berlin"
+
+[menu]
+  [[menu.main]]
+    identifier = "posts"
+    name = "Beiträge"
+    url = "/posts/"
+    weight = 10

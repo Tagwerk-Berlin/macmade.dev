@@ -1,8 +1,0 @@
-mainSections = ["posts"]
-
-[header]
-  layout = "basic"
-
-[footer]
-  enable = true
-  showCopyright = false
