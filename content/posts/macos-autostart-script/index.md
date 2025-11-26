@@ -14,9 +14,8 @@ cover:
     relative: true # WICHTIG: Damit sucht er im Bundle-Ordner, nicht in /static
 ---
 
-Kennt ihr das? Ihr meldet euch am Mac an, und sofort versuchen zehn Programme gleichzeitig zu starten. Das Resultat: Der Rechner schnauft, und – viel schlimmer – Tools, die auf eine Netzwerkverbindung angewiesen sind (wie **Mountain Duck** oder andere File-Provider), stürzen ab oder meckern, weil das WLAN noch gar nicht verbunden ist.
-
-macOS bietet von Haus aus leider keine Möglichkeit, eine Verzögerung (Delay) oder eine Reihenfolge für Anmeldeobjekte festzulegen. Es feuert einfach alles gleichzeitig ab.
+Mac eingeschaltet, Passwort eingetippt – und sofort startet ein ganzer Zoo an Apps gleichzeitig. Die Folge: Der Mac wirkt zäh, und besonders netzwerkabhängige Tools wie Mountain Duck oder andere File‑Provider verabschieden sich gleich wieder, da MacOS noch nicht bereit ist.
+Der Haken: macOS bietet keine Möglichkeit, Login‑Apps gestaffelt oder mit einem Delay zu starten. Was als Anmeldeobjekt eingetragen ist, feuert das System stumpf parallel ab – ohne Rücksicht auf Reihenfolge oder Abhängigkeiten.
 
 ## Die Lösung: Ein AppleScript als "Traffic Controller"
 
@@ -72,7 +71,7 @@ on launchApp(appName, useActivate, minimizeWindows, pauseAfter)
     end if
 end launchApp
 
--- 🚀 Start-Reihenfolge
+--  Start-Reihenfolge
 
 -- 1) Warten bis macOS WLAN/Netzwerk hat
 delay initialDelay
