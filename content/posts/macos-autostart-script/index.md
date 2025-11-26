@@ -96,7 +96,7 @@ launchApp("Mountain Duck", false, false, heavyDelay)
 1.  Kopiere den Code in den Skripteditor.
 2.  Drücke `Cmd + S` zum Speichern.
 3.  **Wichtig:** Wähle beim Dateiformat **"Programm"** (Application) aus.
-    
+     
 ## ![Speichern Dialog: Als Programm auswählen](startup.png)
 {{< figure src="startup.png" title="Speichern Dialog: Als Programm auswählen" width="50%" >}}
 
