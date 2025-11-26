@@ -8,7 +8,12 @@ enableRobotsTXT = true
 buildDrafts = false
 buildFuture = false
 
+  
+copyright = "&copy; 2025 macmade.dev &middot; <a href='/impressum/'>Impressum</a> &middot; <a href='/datenschutz/'>Datenschutz</a>"
+
 [markup]
+  [markup.goldmark.renderer]
+    unsafe = true
   [markup.highlight]
     anchorLineNos = false
     codeFences = true
@@ -16,14 +21,17 @@ buildFuture = false
     lineNos = true       # Zeilennummern anzeigen
     style = "monokai"    # Oder "dracula", "github" etc.
     tabWidth = 4
+[outputs]
+  home = ["HTML", "RSS", "JSON"] # JSON ist wichtig für den Suchindex
 
 [params]
   defaultTheme = "auto" # Erkennt System Dark/Light automatisch
   description = "Notizen zu Code, Mac, Proxmox, Docker und LLms und alles was so anfällt"
+  # HIER muss es stehen (HTML ist erlaubt):
   author = "Matthias Hartmann"
   ShowCodeCopyButtons = true
-  ShowShareButtons = true
-   
+  ShowShareButtons = false
+    
   [params.profileMode]
     enabled = true
     title = "macmade.dev"
@@ -43,16 +51,10 @@ buildFuture = false
   name = "Beiträge"
   url = "/posts/"
   weight = 10
+[[menu.main]]
+  identifier = "search"
+  name = "Suche"
+  url = "/search/"
+  weight = 5
 
-# Das Footer-Menü
-[[menu.footer]]
-  identifier = "impressum"
-  name = "Impressum"
-  url = "/impressum/"
-  weight = 10
-
-[[menu.footer]]
-  identifier = "datenschutz"
-  name = "Datenschutz"
-  url = "/datenschutz/"
-  weight = 20
+ 

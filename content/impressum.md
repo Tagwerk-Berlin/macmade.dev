@@ -2,6 +2,7 @@
 title: "Impressum"
 layout: "single"
 summary: "Rechtliche Angaben"
+searchHidden: true
 hidemeta: true  # Versteckt Datum/Autor
 disableShare: true # Keine Social-Share-Buttons im Impressum
 draft: false

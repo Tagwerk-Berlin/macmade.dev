@@ -4,6 +4,7 @@ layout: "single"
 summary: "Rechtliche Angaben"
 hidemeta: true  # Versteckt Datum/Autor
 disableShare: true # Keine Social-Share-Buttons im Impressum
+searchHidden: true
 draft: false
 ---
 Datenschutzerklärung
