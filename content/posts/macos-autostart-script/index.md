@@ -103,5 +103,3 @@ launchApp("Mountain Duck", false, false, heavyDelay)
 
 4.  Gehe in die **Systemeinstellungen -> Allgemein -> Anmeldeobjekte**.
 5.  Füge dein neues *Programm* hinzu.
-
-
