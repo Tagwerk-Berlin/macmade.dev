@@ -19,7 +19,7 @@ Der Haken: macOS bietet keine Möglichkeit, Login‑Apps gestaffelt oder mit ein
 
 ## Die Lösung: Ein AppleScript als "Traffic Controller"
 
-Statt die Apps direkt in die Anmeldeobjekte zu werfen, habe ich ein kleines AppleScript geschrieben. Also eine wirklich einfache Lösung, die schmell umzusetzen ist.
+Statt die Apps direkt in die Anmeldeobjekte zu werfen, habe ich ein kleines AppleScript geschrieben. Also eine wirklich einfache Lösung, die schnell umzusetzen ist.
 
 1.  Es wartet, bis das System "wach" ist.
 2.  Es startet unwichtige Hintergrund-Tools.
