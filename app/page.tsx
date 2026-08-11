@@ -18,7 +18,7 @@ const coreSystems = [
   {
     index: "02",
     name: "Akasha",
-    status: "im Einsatz",
+    status: "im Einsatz · neuer Stand im Source",
     purpose: "Kuratiertes Arbeitsgedächtnis",
     lead: "Bewahrt Entscheidungen, Fehlermuster und echten Wiederaufnahmekontext über einzelne Aufgaben hinweg auf.",
     problem:
@@ -28,7 +28,7 @@ const coreSystems = [
     workflow:
       "Zu Beginn wird nach passendem Wissen gesucht. Gespeichert wird nur bestätigtes, außerhalb des aktuellen Slices nützliches Wissen – oder ein wirklich benötigter Übergabestand. Repository und aktuelle Dokumentation bleiben maßgeblich.",
     tradeoff:
-      "Retrieval ist probabilistisch und Metadaten brauchen Pflege. Der aktuelle Default-Suchpfad kann abgelaufene Einträge nebenbei bereinigen; das spart Wartung, koppelt aber Lesen und Schreiben. Für wenige stabile Notizen ist eine versionierte Markdown-Datei einfacher.",
+      "Retrieval bleibt probabilistisch und Metadaten brauchen Pflege. Ein neuer, noch nicht ausgerollter Stand trennt Suche und Bereinigung wieder strikt und bildet explizite Ersetzungen fail-closed ab. Bis zum Deployment bleibt das eine Eigenschaft des Source, nicht des laufenden Systems. Für wenige stabile Notizen ist eine versionierte Markdown-Datei einfacher.",
     facts: ["PostgreSQL + pgvector", "Typen + TTL", "semantische Suche"],
   },
   {
@@ -81,7 +81,9 @@ export default function Home() {
             macmade.dev ist eine technische Bestandsaufnahme selbst gebauter
             Infrastruktur: nicht als Produktportfolio, sondern als Erklärung
             dafür, warum drei kleine Systeme entstanden sind – und welchen
-            Preis ihre Trennung hat.
+            Preis ihre Trennung hat. Jeder Stand ist eine versionierte
+            Momentaufnahme; spätere Änderungen sollen auch zeigen, welche
+            Trade-offs kleiner wurden, neu entstanden oder ganz verschwanden.
           </p>
         </div>
         <aside className="hero-note" aria-label="Einordnung">
@@ -297,6 +299,11 @@ export default function Home() {
               Inventare und operative Schutzmechanismen sind absichtlich nicht
               Teil dieser Seite. Sie erklären die Konzepte nicht besser, würden
               aber die Angriffsfläche beschreiben.
+            </p>
+            <p>
+              Künftige Screenshots sind redigierte Momentaufnahmen mit
+              kontrollierten Inhalten. Sie belegen eine Oberfläche, nicht den
+              aktuellen Zustand eines privaten Systems.
             </p>
           </aside>
         </div>
