@@ -404,6 +404,81 @@ h1 {
   color: #9d3c1d;
 }
 
+.journal-snapshot {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.62fr);
+  gap: 0;
+  margin: 48px 0 0;
+  border: 1px solid var(--ink);
+  background: var(--dark);
+  color: #f3f1e9;
+}
+
+.snapshot-copy {
+  align-self: center;
+  padding: 48px;
+}
+
+.snapshot-copy .tool-purpose {
+  color: var(--signal);
+}
+
+.snapshot-copy h4 {
+  max-width: 620px;
+  margin-bottom: 22px;
+  font-size: clamp(30px, 3.3vw, 50px);
+  font-weight: 530;
+  line-height: 1;
+  letter-spacing: -0.045em;
+}
+
+.snapshot-copy > p:not(.tool-purpose) {
+  max-width: 650px;
+  color: #c1cbc4;
+  font-size: 16px;
+}
+
+.snapshot-copy .snapshot-caveat {
+  margin: 34px 0 0;
+  padding-top: 24px;
+  border-top: 1px solid #657169;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 11px;
+}
+
+.snapshot-frame {
+  display: grid;
+  place-items: end center;
+  min-width: 0;
+  padding: 30px 30px 0;
+  overflow: hidden;
+  border-left: 1px solid #657169;
+  background:
+    linear-gradient(rgba(198, 237, 88, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(198, 237, 88, 0.05) 1px, transparent 1px),
+    #101612;
+  background-size: 24px 24px;
+}
+
+.snapshot-frame img {
+  display: block;
+  width: min(100%, 458px);
+  height: auto;
+  border: 1px solid #657169;
+  border-bottom: 0;
+}
+
+.journal-snapshot figcaption {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 11px 16px;
+  border-top: 1px solid #657169;
+  color: #9eaaa2;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+}
+
 .workflow-list {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -899,6 +974,20 @@ footer a:focus-visible {
   .sources-grid,
   .museum-details {
     grid-template-columns: 1fr;
+  }
+
+  .journal-snapshot {
+    grid-template-columns: 1fr;
+  }
+
+  .snapshot-copy {
+    padding: 34px 26px;
+  }
+
+  .snapshot-frame {
+    padding: 22px 22px 0;
+    border-top: 1px solid #657169;
+    border-left: 0;
   }
 
   .museum-title {

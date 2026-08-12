@@ -18,18 +18,18 @@ const coreSystems = [
   {
     index: "02",
     name: "Akasha",
-    status: "im Einsatz · neuer Stand im Source",
+    status: "im Einsatz · kanonische Auflösung aktiv",
     purpose: "Kuratiertes Arbeitsgedächtnis",
     lead: "Bewahrt Entscheidungen, Fehlermuster und echten Wiederaufnahmekontext über einzelne Aufgaben hinweg auf.",
     problem:
       "Wiederverwendbare Erkenntnisse verschwinden in Chats und Notizen. Das Gegenextrem – jede Sitzung vollständig zu speichern – erzeugt jedoch ein lautes, widersprüchliches Gedächtnis.",
     mechanism:
-      "Ein .NET-MCP-Server speichert kompakte Einträge in PostgreSQL mit pgvector. Semantische Suche wird mit Metadaten wie Projekt, Typ und Scope kombiniert. Temporärer Session-Kontext erhält standardmäßig eine TTL; Commit-Suche ist ein expliziter Sonderfall.",
+      "Ein .NET-MCP-Server speichert kompakte Einträge in PostgreSQL mit pgvector. Semantische Suche wird mit Metadaten wie Projekt, Typ und Scope kombiniert. Temporärer Session-Kontext erhält standardmäßig eine TTL; explizite Supersession-Beziehungen lösen Treffer zu kanonischen Einträgen auf.",
     workflow:
       "Zu Beginn wird nach passendem Wissen gesucht. Gespeichert wird nur bestätigtes, außerhalb des aktuellen Slices nützliches Wissen – oder ein wirklich benötigter Übergabestand. Repository und aktuelle Dokumentation bleiben maßgeblich.",
     tradeoff:
-      "Retrieval bleibt probabilistisch und Metadaten brauchen Pflege. Ein neuer, noch nicht ausgerollter Stand trennt Suche und Bereinigung wieder strikt und bildet explizite Ersetzungen fail-closed ab. Bis zum Deployment bleibt das eine Eigenschaft des Source, nicht des laufenden Systems. Für wenige stabile Notizen ist eine versionierte Markdown-Datei einfacher.",
-    facts: ["PostgreSQL + pgvector", "Typen + TTL", "semantische Suche"],
+      "Suche und Query bleiben strikt lesend; abgelaufene Einträge werden nur durch eine explizite Bereinigung gelöscht. Supersession löst Widersprüche dennoch nicht allgemein: Ersetzungen müssen ausdrücklich referenziert werden und scheitern bei fehlenden oder zyklischen Beziehungen fail-closed. Retrieval bleibt probabilistisch und Metadaten brauchen Pflege. Für wenige stabile Notizen ist eine versionierte Markdown-Datei einfacher.",
+    facts: ["PostgreSQL + pgvector", "Typen + TTL + Supersession", "semantische Suche"],
   },
   {
     index: "03",
@@ -206,6 +206,45 @@ export default function Home() {
                     <p>{tool.tradeoff}</p>
                   </div>
                 </div>
+
+                {tool.name === "CodexJournal" && (
+                  <figure className="journal-snapshot">
+                    <div className="snapshot-copy">
+                      <p className="tool-purpose">
+                        Oberfläche · <time dateTime="2026-08-11">11.08.2026</time>
+                      </p>
+                      <h4>Ein Slice als lesbarer Arbeitsstand.</h4>
+                      <p>
+                        Die Projektion bringt Ziel, Task-, Slice- und
+                        Sessionstatus sowie den letzten fachlichen Stand in
+                        eine Ansicht. Das macht den Unterschied zwischen
+                        „ein Prozess lief“ und „eine Arbeit ist geprüft
+                        abgeschlossen“ auch ohne Kenntnis des Ereignismodells
+                        sichtbar.
+                      </p>
+                      <p className="snapshot-caveat">
+                        Gezeigt wird ausschließlich der bereits öffentliche
+                        macmade.dev-Slice. Die Aufnahme ist kein Live-Zugriff
+                        und kein UI-Versprechen: Oberfläche, Felder und Status
+                        dürfen mit dem Journal altern.
+                      </p>
+                    </div>
+                    <div className="snapshot-frame">
+                      {/* eslint-disable-next-line @next/next/no-img-element -- statisches öffentliches Belegbild ohne Bildoptimierungs-Route im Export */}
+                      <img
+                        src="/journal-slice-detail-2026-08-11.jpg"
+                        width="458"
+                        height="788"
+                        loading="lazy"
+                        decoding="async"
+                        alt="CodexJournal-Detailansicht des öffentlichen macmade.dev-Slice mit Ziel, Status und letztem Stand"
+                      />
+                    </div>
+                    <figcaption>
+                      CodexDashboard · kontrollierter Ausschnitt vom 11.08.2026
+                    </figcaption>
+                  </figure>
+                )}
               </div>
             </article>
           ))}
@@ -369,7 +408,10 @@ export default function Home() {
             <h3>Bewusst nicht behauptet</h3>
             <ul>
               <li>dass jeder dokumentierte Plan bereits implementiert ist</li>
-              <li>dass ein Index synchron oder ein Suchtreffer kanonisch ist</li>
+              <li>
+                dass ein von Akasha als aktuell aufgelöster Treffer die
+                kanonische Repository-Quelle ersetzt
+              </li>
               <li>dass Journal und Akasha automatisch gekoppelt sind</li>
               <li>dass lokale Infrastruktur ein übertragbares Produkt darstellt</li>
             </ul>
@@ -383,9 +425,9 @@ export default function Home() {
               aber die Angriffsfläche beschreiben.
             </p>
             <p>
-              Künftige Screenshots sind redigierte Momentaufnahmen mit
-              kontrollierten Inhalten. Sie belegen eine Oberfläche, nicht den
-              aktuellen Zustand eines privaten Systems.
+              Der gezeigte Screenshot ist eine kontrollierte, datierte
+              Momentaufnahme eines bereits öffentlichen Slice. Er belegt eine
+              Oberfläche, nicht den aktuellen Zustand eines privaten Systems.
             </p>
           </aside>
         </div>

@@ -14,7 +14,11 @@ test("exportiert die öffentliche technische Seite als statisches HTML", async (
   assert.match(html, /devMCP/);
   assert.match(html, /Grenze \/ Trade-off/);
   assert.match(html, /Keine Betriebsanleitung/);
-  assert.match(html, /neuer, noch nicht ausgerollter Stand/);
+  assert.match(html, /kanonische Auflösung aktiv/);
+  assert.match(html, /Typen \+ TTL \+ Supersession/);
+  assert.match(html, /journal-slice-detail-2026-08-11\.jpg/);
+  assert.match(html, /Ein Slice als lesbarer Arbeitsstand/);
+  assert.doesNotMatch(html, /noch nicht ausgerollter Stand|Bis zum Deployment/);
   assert.match(html, /Werkzeugmuseum/);
   assert.match(html, /CodexSlicer/);
   assert.match(html, /retired/);
@@ -33,4 +37,14 @@ test("verwendet öffentliche kanonische Metadaten", async () => {
   assert.match(html, /<link rel="canonical" href="https:\/\/macmade\.dev\/?"/);
   assert.match(html, /<meta property="og:image" content="https:\/\/macmade\.dev\/og\.png"/);
   assert.doesNotMatch(html, /localhost|x-forwarded-host/i);
+  assert.doesNotMatch(html, /codexdashboard\.macmade\.dev|019ff[0-9a-f-]{20,}/i);
+});
+
+test("liefert die datierte Journal-Momentaufnahme als festes JPEG aus", async () => {
+  const image = await readFile(
+    new URL("../dist/client/journal-slice-detail-2026-08-11.jpg", import.meta.url),
+  );
+
+  assert.deepEqual([...image.subarray(0, 4)], [255, 216, 255, 224]);
+  assert.ok(image.byteLength > 50_000);
 });
