@@ -66,3 +66,11 @@ test("liefert die datierten Journal-Momentaufnahmen als feste JPEGs aus", async 
     assert.ok(image.byteLength > 50_000);
   }
 });
+
+test("trennt die mobile Hauptüberschrift typografisch statt zeichenweise", async () => {
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+
+  assert.match(css, /h1\s*{[^}]*hyphens:\s*auto/s);
+  assert.match(css, /h1\s*{[^}]*overflow-wrap:\s*normal/s);
+  assert.doesNotMatch(css, /overflow-wrap:\s*anywhere/);
+});

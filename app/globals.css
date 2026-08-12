@@ -924,8 +924,10 @@ footer a:focus-visible {
   }
 
   h1 {
-    overflow-wrap: anywhere;
-    font-size: clamp(46px, 14vw, 62px);
+    hyphens: auto;
+    overflow-wrap: normal;
+    word-break: normal;
+    font-size: clamp(38px, 10.5vw, 52px);
   }
 
   .hero-copy,
