@@ -406,7 +406,7 @@ h1 {
 
 .journal-snapshot {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.62fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: 0;
   margin: 48px 0 0;
   border: 1px solid var(--ink);
@@ -447,12 +447,14 @@ h1 {
 }
 
 .snapshot-frame {
-  display: grid;
-  place-items: end center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
   min-width: 0;
-  padding: 30px 30px 0;
+  align-self: start;
+  padding: 22px;
   overflow: hidden;
-  border-left: 1px solid #657169;
   background:
     linear-gradient(rgba(198, 237, 88, 0.05) 1px, transparent 1px),
     linear-gradient(90deg, rgba(198, 237, 88, 0.05) 1px, transparent 1px),
@@ -460,12 +462,42 @@ h1 {
   background-size: 24px 24px;
 }
 
+.snapshot-frame a {
+  display: block;
+  width: 100%;
+  max-width: 620px;
+}
+
+.snapshot-frame a:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 4px;
+}
+
+.snapshot-sequence {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid #657169;
+}
+
+.snapshot-frame + .snapshot-frame {
+  border-left: 1px solid #657169;
+}
+
+.snapshot-label {
+  align-self: stretch;
+  margin-bottom: 14px;
+  color: var(--signal);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
 .snapshot-frame img {
   display: block;
-  width: min(100%, 458px);
+  width: min(100%, 620px);
   height: auto;
   border: 1px solid #657169;
-  border-bottom: 0;
 }
 
 .journal-snapshot figcaption {
@@ -892,7 +924,14 @@ footer a:focus-visible {
   }
 
   h1 {
-    font-size: clamp(50px, 16vw, 72px);
+    overflow-wrap: anywhere;
+    font-size: clamp(46px, 14vw, 62px);
+  }
+
+  .hero-copy,
+  .hero-note {
+    min-width: 0;
+    max-width: 100%;
   }
 
   .section-rule {
@@ -984,8 +1023,11 @@ footer a:focus-visible {
     padding: 34px 26px;
   }
 
-  .snapshot-frame {
-    padding: 22px 22px 0;
+  .snapshot-sequence {
+    grid-template-columns: 1fr;
+  }
+
+  .snapshot-frame + .snapshot-frame {
     border-top: 1px solid #657169;
     border-left: 0;
   }

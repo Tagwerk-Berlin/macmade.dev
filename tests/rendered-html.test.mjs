@@ -24,8 +24,15 @@ test("exportiert die öffentliche technische Seite als statisches HTML", async (
   assert.match(html, /Embedding-Lücken können die Source trotzdem degraded lassen/);
   assert.match(html, /Historische Generationen verschwinden nicht automatisch/);
   assert.doesNotMatch(html, /atomarer Lifecycle im Source|Integration und Deployment sind nicht Teil dieses Stands/);
-  assert.match(html, /journal-slice-detail-2026-08-11\.jpg/);
-  assert.match(html, /Ein Slice als lesbarer Arbeitsstand/);
+  assert.match(html, /journal-review-2026-08-12\.jpg/);
+  assert.match(html, /journal-rereview-result-2026-08-12\.jpg/);
+  assert.match(html, /Change Control im Ausschnitt/);
+  assert.match(html, /drei konkreten Befunden/);
+  assert.match(html, /Session- und Slice-IDs/);
+  assert.match(html, /Review-Ausschnitt in voller Größe öffnen/);
+  assert.match(html, /Re-Review-Ausschnitt in voller Größe öffnen/);
+  assert.match(html, /Ausschnitte realer Slices/);
+  assert.doesNotMatch(html, /journal-slice-detail-2026-08-11\.jpg/);
   assert.doesNotMatch(html, /noch nicht ausgerollter Stand|Bis zum Deployment/);
   assert.match(html, /Werkzeugmuseum/);
   assert.match(html, /CodexSlicer/);
@@ -48,11 +55,14 @@ test("verwendet öffentliche kanonische Metadaten", async () => {
   assert.doesNotMatch(html, /codexdashboard\.macmade\.dev|019ff[0-9a-f-]{20,}/i);
 });
 
-test("liefert die datierte Journal-Momentaufnahme als festes JPEG aus", async () => {
-  const image = await readFile(
-    new URL("../dist/client/journal-slice-detail-2026-08-11.jpg", import.meta.url),
-  );
+test("liefert die datierten Journal-Momentaufnahmen als feste JPEGs aus", async () => {
+  for (const filename of [
+    "journal-review-2026-08-12.jpg",
+    "journal-rereview-result-2026-08-12.jpg",
+  ]) {
+    const image = await readFile(new URL(`../dist/client/${filename}`, import.meta.url));
 
-  assert.deepEqual([...image.subarray(0, 4)], [255, 216, 255, 224]);
-  assert.ok(image.byteLength > 50_000);
+    assert.deepEqual([...image.subarray(0, 4)], [255, 216, 255, 224]);
+    assert.ok(image.byteLength > 50_000);
+  }
 });

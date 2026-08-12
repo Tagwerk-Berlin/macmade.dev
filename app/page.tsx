@@ -211,37 +211,65 @@ export default function Home() {
                   <figure className="journal-snapshot">
                     <div className="snapshot-copy">
                       <p className="tool-purpose">
-                        Oberfläche · <time dateTime="2026-08-11">11.08.2026</time>
+                        Oberfläche · <time dateTime="2026-08-12">12.08.2026</time>
                       </p>
-                      <h4>Ein Slice als lesbarer Arbeitsstand.</h4>
+                      <h4>Change Control im Ausschnitt.</h4>
                       <p>
-                        Die Projektion bringt Ziel, Task-, Slice- und
-                        Sessionstatus sowie den letzten fachlichen Stand in
-                        eine Ansicht. Das macht den Unterschied zwischen
-                        „ein Prozess lief“ und „eine Arbeit ist geprüft
-                        abgeschlossen“ auch ohne Kenntnis des Ereignismodells
-                        sichtbar.
+                        Zwei reale Slices derselben devMCP-Änderung zeigen den
+                        entscheidenden Übergang: Das erste revisionsgebundene
+                        Review endet mit drei konkreten Befunden. Der spätere
+                        Implementierungsslice weist die korrigierte Revision,
+                        das bestandene Re-Review und die erfüllten Gates aus.
+                        Integration und Deployment bleiben dort noch bewusst
+                        ein eigener Schritt.
                       </p>
                       <p className="snapshot-caveat">
-                        Gezeigt wird ausschließlich der bereits öffentliche
-                        macmade.dev-Slice. Die Aufnahme ist kein Live-Zugriff
-                        und kein UI-Versprechen: Oberfläche, Felder und Status
-                        dürfen mit dem Journal altern.
+                        Kontrollierte, datierte Ausschnitte: Session- und
+                        Slice-IDs, Links, Live-Telemetrie sowie konkrete
+                        sicherheitsrelevante Betriebsdetails wurden durch die
+                        Auswahl weggelassen. Die Bilder belegen eine Projektion,
+                        nicht den heutigen Runtime-Zustand oder ein festes
+                        UI-Versprechen.
                       </p>
                     </div>
-                    <div className="snapshot-frame">
-                      {/* eslint-disable-next-line @next/next/no-img-element -- statisches öffentliches Belegbild ohne Bildoptimierungs-Route im Export */}
-                      <img
-                        src="/journal-slice-detail-2026-08-11.jpg"
-                        width="458"
-                        height="788"
-                        loading="lazy"
-                        decoding="async"
-                        alt="CodexJournal-Detailansicht des öffentlichen macmade.dev-Slice mit Ziel, Status und letztem Stand"
-                      />
+                    <div className="snapshot-sequence" aria-label="Review und Re-Review im CodexJournal">
+                      <div className="snapshot-frame">
+                        <span className="snapshot-label">01 · Review · Vollbild ↗</span>
+                        <a
+                          href="/journal-review-2026-08-12.jpg"
+                          aria-label="Review-Ausschnitt in voller Größe öffnen"
+                        >
+                          {/* eslint-disable-next-line @next/next/no-img-element -- statisches öffentliches Belegbild ohne Bildoptimierungs-Route im Export */}
+                          <img
+                            src="/journal-review-2026-08-12.jpg"
+                            width="620"
+                            height="357"
+                            loading="lazy"
+                            decoding="async"
+                            alt="CodexJournal-Ausschnitt eines nicht bestandenen revisionsgebundenen Reviews mit drei endlichen Befunden"
+                          />
+                        </a>
+                      </div>
+                      <div className="snapshot-frame">
+                        <span className="snapshot-label">02 · Re-Review · Vollbild ↗</span>
+                        <a
+                          href="/journal-rereview-result-2026-08-12.jpg"
+                          aria-label="Re-Review-Ausschnitt in voller Größe öffnen"
+                        >
+                          {/* eslint-disable-next-line @next/next/no-img-element -- statisches öffentliches Belegbild ohne Bildoptimierungs-Route im Export */}
+                          <img
+                            src="/journal-rereview-result-2026-08-12.jpg"
+                            width="620"
+                            height="922"
+                            loading="lazy"
+                            decoding="async"
+                            alt="CodexJournal-Ausschnitt der korrigierten Revision mit bestandenem Re-Review, erfüllten Gates und letztem Stand"
+                          />
+                        </a>
+                      </div>
                     </div>
                     <figcaption>
-                      CodexDashboard · kontrollierter Ausschnitt vom 11.08.2026
+                      CodexDashboard · zwei kontrollierte Ausschnitte vom 12.08.2026
                     </figcaption>
                   </figure>
                 )}
@@ -425,9 +453,10 @@ export default function Home() {
               aber die Angriffsfläche beschreiben.
             </p>
             <p>
-              Der gezeigte Screenshot ist eine kontrollierte, datierte
-              Momentaufnahme eines bereits öffentlichen Slice. Er belegt eine
-              Oberfläche, nicht den aktuellen Zustand eines privaten Systems.
+              Die gezeigten Journal-Bilder sind kontrollierte, datierte
+              Ausschnitte realer Slices. Interne Kennungen und Live-Daten sind
+              nicht enthalten; die Bilder belegen eine Oberfläche, nicht den
+              aktuellen Zustand eines privaten Systems.
             </p>
           </aside>
         </div>
