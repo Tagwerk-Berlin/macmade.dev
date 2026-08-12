@@ -34,7 +34,7 @@ const coreSystems = [
   {
     index: "03",
     name: "devMCP",
-    status: "im Einsatz · atomarer Lifecycle im Source",
+    status: "im Einsatz · atomarer Lifecycle aktiv",
     purpose: "Quellennavigation",
     lead: "Macht Dokumentation, DDL, Code und Endpoint-Kataloge repositoryübergreifend auffindbar, ohne sie zur neuen Wahrheit zu erklären.",
     problem:
@@ -42,9 +42,9 @@ const coreSystems = [
     mechanism:
       "Registrierte Quellen werden synchronisiert, in Dokumente und Chunks zerlegt und über einen Worker indexiert. Ein neuer Source-Stand hält geänderte Dokumente als unveröffentlichte Scan-Kandidaten zurück. Persistente Läufe und ein digestgebundenes Manifest erlauben den atomaren Wechsel erst, wenn die Pflichtjobs und erforderlichen Embeddings dieser Kandidaten vollständig sind.",
     workflow:
-      "devMCP liefert den Einstiegspunkt. Bindende Aussagen werden anschließend im Original und bei Bedarf an einer konkreten Revision geprüft. Im neuen Lifecycle gelten Full- und Delta-Scans getrennt; ein Scan ist erst mit ready veröffentlicht. Ältere Embedding-Lücken können die Source trotzdem degraded lassen. Eine read-only Readiness-Sicht trennt diesen Zustand vom servierten Stand sowie von legacy_unverified und unavailable.",
+      "devMCP liefert den Einstiegspunkt. Bindende Aussagen werden anschließend im Original und bei Bedarf an einer konkreten Revision geprüft. Im aktiven Lifecycle gelten Full- und Delta-Scans getrennt; ein Scan ist erst mit ready veröffentlicht. Ältere Embedding-Lücken können die Source trotzdem degraded lassen. Eine read-only Readiness-Sicht trennt diesen Zustand vom servierten Stand sowie von legacy_unverified und unavailable.",
     tradeoff:
-      "Atomare Publikation verhindert unvollständige neue Source-Stände, aber weder veraltete Eingaben noch semantisch falsche Treffer. Dafür entstehen mehr persistenter Zustand, Schema-Rollforward, Polling und explizite Repair- sowie Maintenance-Pfade. Fehlgeschlagene Scans lassen den alten Stand unangetastet, müssen aber als eigene Readiness-Dimension beobachtet werden. Der Lifecycle liegt hier im Source; Integration und Deployment sind nicht Teil dieses Stands. In einem einzelnen kleinen Repo ist direkte Suche einfacher.",
+      "Atomare Publikation verhindert unvollständige neue Source-Stände, aber weder veraltete Eingaben noch semantisch falsche Treffer. Dafür entstehen mehr persistenter Zustand, Schema-Rollforward, Polling und explizite Repair- sowie Maintenance-Pfade. Fehlgeschlagene Scans lassen den alten Stand unangetastet, müssen aber als eigene Readiness-Dimension beobachtet werden. Historische Generationen verschwinden nicht automatisch; ihre Bereinigung bleibt ein separater, geschützter Betriebsakt. In einem einzelnen kleinen Repo ist direkte Suche einfacher.",
     facts: ["Scan-Kandidaten + Manifest", "atomare Publikation", "Readiness + Repair"],
   },
 ];

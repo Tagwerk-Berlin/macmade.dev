@@ -17,12 +17,13 @@ test("exportiert die öffentliche technische Seite als statisches HTML", async (
   assert.match(html, /kanonische Auflösung aktiv/);
   assert.match(html, /Typen \+ TTL \+ Supersession/);
   assert.match(html, /fehlende Ziele bleiben dagegen diagnostisch sichtbar/);
-  assert.match(html, /atomarer Lifecycle im Source/);
+  assert.match(html, /atomarer Lifecycle aktiv/);
   assert.match(html, /Scan-Kandidaten \+ Manifest/);
   assert.match(html, /ein Scan ist erst mit ready veröffentlicht/);
   assert.match(html, /erforderlichen Embeddings dieser Kandidaten/);
   assert.match(html, /Embedding-Lücken können die Source trotzdem degraded lassen/);
-  assert.match(html, /Integration und Deployment sind nicht Teil dieses Stands/);
+  assert.match(html, /Historische Generationen verschwinden nicht automatisch/);
+  assert.doesNotMatch(html, /atomarer Lifecycle im Source|Integration und Deployment sind nicht Teil dieses Stands/);
   assert.match(html, /journal-slice-detail-2026-08-11\.jpg/);
   assert.match(html, /Ein Slice als lesbarer Arbeitsstand/);
   assert.doesNotMatch(html, /noch nicht ausgerollter Stand|Bis zum Deployment/);
