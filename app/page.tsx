@@ -69,13 +69,14 @@ export default function Home() {
           <a href="#system">System</a>
           <a href="#werkzeuge">Werkzeuge</a>
           <a href="#praxis">Praxis</a>
+          <a href="#museum">Museum</a>
           <a href="#quellen">Quellenlage</a>
         </nav>
       </header>
 
       <section className="hero" id="top">
         <div className="hero-copy">
-          <p className="eyebrow">Systemnotizen · Stand 11.08.2026</p>
+          <p className="eyebrow">Systemnotizen · Stand 12.08.2026</p>
           <h1>Werkzeuge für nachvollziehbare Entwicklungsarbeit.</h1>
           <p className="hero-intro">
             macmade.dev ist eine technische Bestandsaufnahme selbst gebauter
@@ -266,6 +267,87 @@ export default function Home() {
             </p>
           </article>
         </div>
+      </section>
+
+      <section className="museum-section section-rule" id="museum">
+        <div className="section-heading museum-heading">
+          <p className="eyebrow">Werkzeugmuseum</p>
+          <h2>Nicht jede hilfreiche Schicht muss bleiben.</h2>
+          <p>
+            Hier landen Werkzeuge, die real gebaut und verwendet wurden, deren
+            Aufgabe im aktuellen Workflow aber entfallen ist.
+          </p>
+        </div>
+
+        <article className="museum-card">
+          <div className="museum-meta">
+            <span className="retired-status">retired</span>
+            <span>12.08.2026</span>
+            <span>erstes Exponat</span>
+          </div>
+
+          <div className="museum-title">
+            <p className="tool-purpose">Externe Slice-Orchestrierung</p>
+            <h3>CodexSlicer</h3>
+            <p>
+              Zerlegte größere Arbeiten in kontrollierbare Codex-Runs, als der
+              Agent diese Struktur, ihre Gates und ihre Übergaben noch nicht
+              zuverlässig selbst halten konnte.
+            </p>
+          </div>
+
+          <div className="museum-transition" aria-label="Ablösung von CodexSlicer">
+            <div>
+              <span>damals</span>
+              <strong>CLI als Zustandsmaschine</strong>
+              <small>Plan · Preflight · Attempts · Checks · Scope-Gates</small>
+            </div>
+            <b aria-hidden="true">→</b>
+            <div>
+              <span>heute</span>
+              <strong>Orchestrierung im Agenten</strong>
+              <small>Slice · Quellen · Revision · Review · Ergebnis</small>
+            </div>
+          </div>
+
+          <div className="museum-details">
+            <div>
+              <h4>Was tatsächlich gebaut war</h4>
+              <p>
+                Eine .NET-10-CLI plante Modellversuche, prüfte benötigte
+                MCP-Server, startete <code>codex exec</code>, schrieb
+                Laufartefakte und bewertete Checks sowie neue Git-Änderungen
+                gegen explizite Scope-Grenzen.
+              </p>
+            </div>
+            <div>
+              <h4>Warum sie gehen konnte</h4>
+              <p>
+                Im heutigen interaktiven Workflow führt Codex diese
+                Orchestrierung, Revisionsbindung und Verifikation selbst. Die
+                zusätzliche CLI verdoppelte Planung, Zustand und mögliche
+                Fehlerpfade, ohne hier noch denselben Sicherheitsgewinn zu
+                liefern.
+              </p>
+            </div>
+            <div>
+              <h4>Was geblieben ist</h4>
+              <p>
+                Begrenzte Slices, explizite Voraussetzungen, harte
+                Scope-Grenzen und reproduzierbare Checks. Verschwunden ist die
+                zusätzliche Laufzeit, nicht die dahinterliegende Disziplin.
+              </p>
+            </div>
+            <div className="museum-caveat">
+              <h4>Kein allgemeines Todesurteil</h4>
+              <p>
+                Für unbeaufsichtigte oder streng deterministische
+                Batch-Pipelines kann ein externer Runner weiterhin sinnvoll
+                sein. Retired bedeutet hier: für diesen Workflow ersetzt.
+              </p>
+            </div>
+          </div>
+        </article>
       </section>
 
       <section className="sources-section section-rule" id="quellen">

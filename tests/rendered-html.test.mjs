@@ -15,6 +15,10 @@ test("exportiert die öffentliche technische Seite als statisches HTML", async (
   assert.match(html, /Grenze \/ Trade-off/);
   assert.match(html, /Keine Betriebsanleitung/);
   assert.match(html, /neuer, noch nicht ausgerollter Stand/);
+  assert.match(html, /Werkzeugmuseum/);
+  assert.match(html, /CodexSlicer/);
+  assert.match(html, /retired/);
+  assert.match(html, /Kein allgemeines Todesurteil/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton|Starter Project/);
 });
 
