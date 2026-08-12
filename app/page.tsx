@@ -34,18 +34,18 @@ const coreSystems = [
   {
     index: "03",
     name: "devMCP",
-    status: "im Einsatz",
+    status: "im Einsatz · atomarer Lifecycle im Source",
     purpose: "Quellennavigation",
     lead: "Macht Dokumentation, DDL, Code und Endpoint-Kataloge repositoryübergreifend auffindbar, ohne sie zur neuen Wahrheit zu erklären.",
     problem:
       "Bei mehreren Repositories kostet schon das Finden der zuständigen Quelle Zeit. Freie Volltextsuche bevorzugt zudem häufig den zufällig passenden Text statt des kanonischen Vertrags.",
     mechanism:
-      "Registrierte Quellen werden synchronisiert, in aktuelle Dokumente und Chunks zerlegt und über einen Worker indexiert. MCP bietet projektspezifische Suche sowie gezielte Werkzeuge für Dokumente, Tabellen und HTTP-Endpunkte.",
+      "Registrierte Quellen werden synchronisiert, in Dokumente und Chunks zerlegt und über einen Worker indexiert. Ein neuer Source-Stand hält geänderte Dokumente als unveröffentlichte Scan-Kandidaten zurück. Persistente Läufe und ein digestgebundenes Manifest erlauben den atomaren Wechsel erst, wenn Pflichtjobs und Embeddings vollständig sind.",
     workflow:
-      "devMCP liefert den Einstiegspunkt. Bindende Aussagen werden anschließend im Original und bei Bedarf an einer konkreten Revision geprüft. Änderungen an indexierten Quellen benötigen einen bewussten Sync.",
+      "devMCP liefert den Einstiegspunkt. Bindende Aussagen werden anschließend im Original und bei Bedarf an einer konkreten Revision geprüft. Im neuen Lifecycle gelten Full- und Delta-Scans getrennt; ein Scan ist erst mit ready veröffentlicht. Eine read-only Readiness-Sicht trennt den servierten Stand von degraded, legacy_unverified und unavailable.",
     tradeoff:
-      "Der Index kann hinter dem Repository zurückliegen oder einen plausiblen, aber falschen Treffer hoch ranken. Ein Golden Set hält bekannte Retrieval-Lücken sichtbar. In einem einzelnen kleinen Repo ist direkte Suche schneller und ehrlicher.",
-    facts: ["registrierte Quellen", "Chunk-Index + Embeddings", "spezialisierte Suchtools"],
+      "Atomare Publikation verhindert unvollständige neue Source-Stände, aber weder veraltete Eingaben noch semantisch falsche Treffer. Dafür entstehen mehr persistenter Zustand, Schema-Rollforward, Polling und explizite Repair- sowie Maintenance-Pfade. Fehlgeschlagene Scans lassen den alten Stand unangetastet, müssen aber als eigene Readiness-Dimension beobachtet werden. Der Lifecycle liegt hier im Source; Integration und Deployment sind nicht Teil dieses Stands. In einem einzelnen kleinen Repo ist direkte Suche einfacher.",
+    facts: ["Scan-Kandidaten + Manifest", "atomare Publikation", "Readiness + Repair"],
   },
 ];
 
