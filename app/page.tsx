@@ -28,7 +28,7 @@ const coreSystems = [
     workflow:
       "Zu Beginn wird nach passendem Wissen gesucht. Gespeichert wird nur bestätigtes, außerhalb des aktuellen Slices nützliches Wissen – oder ein wirklich benötigter Übergabestand. Repository und aktuelle Dokumentation bleiben maßgeblich.",
     tradeoff:
-      "Suche und Query bleiben strikt lesend; abgelaufene Einträge werden nur durch eine explizite Bereinigung gelöscht. Supersession löst Widersprüche dennoch nicht allgemein: Ersetzungen müssen ausdrücklich referenziert werden und scheitern bei fehlenden oder zyklischen Beziehungen fail-closed. Retrieval bleibt probabilistisch und Metadaten brauchen Pflege. Für wenige stabile Notizen ist eine versionierte Markdown-Datei einfacher.",
+      "Suche und Query bleiben strikt lesend; abgelaufene Einträge werden nur durch eine explizite Bereinigung gelöscht. Supersession löst Widersprüche dennoch nicht allgemein: Ersetzungen müssen ausdrücklich referenziert werden. Zyklen, ungültige Beziehungen und konkurrierende terminale Nachfolger werden fail-closed als Konflikt behandelt; fehlende Ziele bleiben dagegen diagnostisch sichtbar und erzeugen keinen Platzhalter. Retrieval bleibt probabilistisch und Metadaten brauchen Pflege. Für wenige stabile Notizen ist eine versionierte Markdown-Datei einfacher.",
     facts: ["PostgreSQL + pgvector", "Typen + TTL + Supersession", "semantische Suche"],
   },
   {

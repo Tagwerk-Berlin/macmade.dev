@@ -16,6 +16,7 @@ test("exportiert die öffentliche technische Seite als statisches HTML", async (
   assert.match(html, /Keine Betriebsanleitung/);
   assert.match(html, /kanonische Auflösung aktiv/);
   assert.match(html, /Typen \+ TTL \+ Supersession/);
+  assert.match(html, /fehlende Ziele bleiben dagegen diagnostisch sichtbar/);
   assert.match(html, /journal-slice-detail-2026-08-11\.jpg/);
   assert.match(html, /Ein Slice als lesbarer Arbeitsstand/);
   assert.doesNotMatch(html, /noch nicht ausgerollter Stand|Bis zum Deployment/);
