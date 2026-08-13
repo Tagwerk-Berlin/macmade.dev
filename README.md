@@ -6,6 +6,12 @@ Der erste Stand beschreibt CodexJournal, Akasha und devMCP sowie zwei kleinere P
 
 Die Seite ist eine versionierte Momentaufnahme, kein zeitloser Produktkatalog. Spätere Revisionen sollen sichtbar machen, wann Werkzeuge hinzukommen oder entfallen und wie sich ihre Grenzen durch konkrete Änderungen verschieben. Aussagen über Source, ausgerollte Versionen und laufenden Betrieb werden dabei getrennt behandelt.
 
+## Chronik
+
+Die Startseite zeigt den neuesten veröffentlichten Stand. `/chronik` listet alle Momentaufnahmen neueste zuerst; `/chronik/YYYY-MM-DD` hält jeden Stand dauerhaft unter seinem Datum erreichbar. Aktuelle und historische Seiten verwenden dieselbe Darstellung. Historische Aussagen bleiben unverändert, während Navigation, gemeinsame Darstellung und ausdrücklich gekennzeichnete Sicherheitskorrekturen später gepflegt werden dürfen.
+
+Jeder neue Stand trennt technischen Zustand, tatsächliche Nutzung und die zeitgebundene Bewertung durch Codex. Laufende oder ungeprüfte Arbeit wird nicht als bestehende Realität übernommen.
+
 ## Lokal ausführen
 
 ```bash

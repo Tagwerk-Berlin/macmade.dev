@@ -2,8 +2,8 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-async function readExportedHtml() {
-  return readFile(new URL("../dist/client/index.html", import.meta.url), "utf8");
+async function readExportedHtml(path = "index.html") {
+  return readFile(new URL(`../dist/client/${path}`, import.meta.url), "utf8");
 }
 
 test("exportiert die öffentliche technische Seite als statisches HTML", async () => {
@@ -53,6 +53,54 @@ test("verwendet öffentliche kanonische Metadaten", async () => {
   assert.match(html, /<meta property="og:image" content="https:\/\/macmade\.dev\/og\.png"/);
   assert.doesNotMatch(html, /localhost|x-forwarded-host/i);
   assert.doesNotMatch(html, /codexdashboard\.macmade\.dev|019ff[0-9a-f-]{20,}/i);
+});
+
+test("exportiert Chronik und beide datierten Momentaufnahmen", async () => {
+  const current = await readExportedHtml();
+  const chronicle = await readExportedHtml("chronik.html");
+  const firstSnapshot = await readExportedHtml("chronik/2026-08-12.html");
+  const currentSnapshot = await readExportedHtml("chronik/2026-08-13.html");
+
+  assert.match(current, /Ein echtes Lab ersetzt den kurzlebigen Versuchsaufbau/);
+  assert.match(current, /Technischer Stand/);
+  assert.match(current, /Tatsächliche Nutzung/);
+  assert.match(current, /Bewertung durch Codex/);
+  assert.match(current, /laufende Arbeit/);
+  assert.match(current, /dev-infra 40f7f6a/);
+
+  assert.match(chronicle, /Technische Urteile mit Datum/);
+  assert.match(chronicle, /href="\/chronik\/2026-08-13"/);
+  assert.match(chronicle, /href="\/chronik\/2026-08-12"/);
+
+  assert.match(firstSnapshot, /Systemnotizen · Stand (?:<!-- -->)?12\.08\.2026/);
+  assert.match(firstSnapshot, /macmade\.dev ist eine technische Bestandsaufnahme/);
+  assert.match(firstSnapshot, /Nächster Stand · 13\.08\.2026/);
+  assert.doesNotMatch(firstSnapshot, /Parat-Lab|Ein echtes Lab ersetzt/);
+
+  assert.match(currentSnapshot, /Systemnotizen · Stand (?:<!-- -->)?13\.08\.2026/);
+  assert.match(currentSnapshot, /Älterer Stand · 12\.08\.2026/);
+  assert.match(currentSnapshot, /Ein echtes Lab ersetzt den kurzlebigen Versuchsaufbau/);
+});
+
+test("bindet Canonical und Open Graph an jede konkrete Route", async () => {
+  const routes = [
+    ["chronik.html", "https://macmade.dev/chronik"],
+    ["chronik/2026-08-12.html", "https://macmade.dev/chronik/2026-08-12"],
+    ["chronik/2026-08-13.html", "https://macmade.dev/chronik/2026-08-13"],
+  ];
+
+  for (const [path, url] of routes) {
+    const html = await readExportedHtml(path);
+    assert.match(html, new RegExp(`<link rel="canonical" href="${url}"`));
+    assert.match(html, new RegExp(`<meta property="og:url" content="${url}"`));
+    assert.match(html, /<meta property="og:image" content="https:\/\/macmade\.dev\/og\.png"/);
+  }
+});
+
+test("liefert ein eigenständiges statisches 404-Dokument", async () => {
+  const html = await readExportedHtml("404.html");
+  assert.match(html, /404: This page could not be found/);
+  assert.doesNotMatch(html, /Ein echtes Lab ersetzt/);
 });
 
 test("liefert die datierten Journal-Momentaufnahmen als feste JPEGs aus", async () => {
