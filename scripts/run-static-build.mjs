@@ -7,20 +7,45 @@ const RELEASE_ID_PATTERN = /^[a-f0-9]{40}$/;
 
 export function resolveReleaseId({ cwd = process.cwd(), env = process.env } = {}) {
   const explicitReleaseId = env.MACMADE_RELEASE_ID?.trim();
-  const releaseId =
-    explicitReleaseId ||
-    execFileSync("git", ["rev-parse", "--verify", "HEAD^{commit}"], {
+  const headRevision = execFileSync(
+    "git",
+    ["rev-parse", "--verify", "HEAD^{commit}"],
+    {
       cwd,
       encoding: "utf8",
-    }).trim();
+    },
+  ).trim();
 
-  if (!RELEASE_ID_PATTERN.test(releaseId)) {
+  if (!RELEASE_ID_PATTERN.test(headRevision)) {
     throw new Error(
-      "Die Release-ID muss der vollständige Git-Commit-SHA des Builds sein.",
+      "HEAD konnte nicht als vollständiger Git-Commit-SHA bestimmt werden.",
     );
   }
 
-  return releaseId;
+  if (explicitReleaseId && explicitReleaseId !== headRevision) {
+    throw new Error(
+      `MACMADE_RELEASE_ID stimmt nicht mit HEAD überein: ${explicitReleaseId} != ${headRevision}.`,
+    );
+  }
+
+  return headRevision;
+}
+
+export function assertCleanWorktree({ cwd = process.cwd() } = {}) {
+  const status = execFileSync(
+    "git",
+    ["status", "--porcelain=v1", "--untracked-files=all"],
+    {
+      cwd,
+      encoding: "utf8",
+    },
+  ).trim();
+
+  if (status) {
+    throw new Error(
+      "Der revisionsgebundene Build benötigt einen vollständig sauberen Git-Arbeitsbaum.",
+    );
+  }
 }
 
 function runVinextBuild({ cwd, releaseId }) {
@@ -61,6 +86,7 @@ function runVinextBuild({ cwd, releaseId }) {
 }
 
 export async function runStaticBuild({ cwd = process.cwd() } = {}) {
+  assertCleanWorktree({ cwd });
   const releaseId = resolveReleaseId({ cwd });
   const distDirectory = path.join(cwd, "dist");
   const releaseIdPath = path.join(distDirectory, "build-release-id");
