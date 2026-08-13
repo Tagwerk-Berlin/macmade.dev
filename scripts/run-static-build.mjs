@@ -2,6 +2,7 @@ import { execFileSync, spawn } from "node:child_process";
 import { mkdir, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
+import { normalizeStaticRoutes } from "./normalize-static-routes.mjs";
 
 const RELEASE_ID_PATTERN = /^[a-f0-9]{40}$/;
 
@@ -97,6 +98,7 @@ export async function runStaticBuild({ cwd = process.cwd() } = {}) {
     rm(manifestPath, { force: true }),
   ]);
   await runVinextBuild({ cwd, releaseId });
+  await normalizeStaticRoutes({ rootDirectory: path.join(distDirectory, "client") });
   await mkdir(distDirectory, { recursive: true });
   await writeFile(releaseIdPath, `${releaseId}\n`, "utf8");
 

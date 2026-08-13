@@ -20,7 +20,6 @@ const nextConfig: NextConfig = {
   deploymentId: releaseId,
   generateBuildId: async () => releaseId,
   output: "export",
-  trailingSlash: true,
 };
 
 export default nextConfig;

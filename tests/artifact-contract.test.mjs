@@ -21,6 +21,7 @@ import {
   assertCleanWorktree,
   resolveReleaseId,
 } from "../scripts/run-static-build.mjs";
+import { normalizeStaticRoutes } from "../scripts/normalize-static-routes.mjs";
 
 async function createTestRepository() {
   const repository = await mkdtemp(path.join(os.tmpdir(), "macmade-build-id-"));
@@ -174,5 +175,47 @@ test("exportiert Seitenrouten als direkt auslieferbare Verzeichnisse", async () 
     await assert.rejects(
       access(new URL(`../dist/client/${pathName}`, import.meta.url)),
     );
+  }
+});
+
+test("normalisiert nur Seitenrouten und erhält Root sowie 404", async () => {
+  const temporaryDirectory = await mkdtemp(path.join(os.tmpdir(), "macmade-routes-"));
+
+  try {
+    await mkdir(path.join(temporaryDirectory, "nested"));
+    await writeFile(path.join(temporaryDirectory, "index.html"), "root", "utf8");
+    await writeFile(path.join(temporaryDirectory, "404.html"), "missing", "utf8");
+    await writeFile(path.join(temporaryDirectory, "chronik.html"), "chronik", "utf8");
+    await writeFile(
+      path.join(temporaryDirectory, "nested", "snapshot.html"),
+      "snapshot",
+      "utf8",
+    );
+
+    assert.equal(
+      await normalizeStaticRoutes({ rootDirectory: temporaryDirectory }),
+      2,
+    );
+    assert.equal(
+      await readFile(path.join(temporaryDirectory, "chronik", "index.html"), "utf8"),
+      "chronik",
+    );
+    assert.equal(
+      await readFile(
+        path.join(temporaryDirectory, "nested", "snapshot", "index.html"),
+        "utf8",
+      ),
+      "snapshot",
+    );
+    assert.equal(
+      await readFile(path.join(temporaryDirectory, "index.html"), "utf8"),
+      "root",
+    );
+    assert.equal(
+      await readFile(path.join(temporaryDirectory, "404.html"), "utf8"),
+      "missing",
+    );
+  } finally {
+    await rm(temporaryDirectory, { recursive: true, force: true });
   }
 });
