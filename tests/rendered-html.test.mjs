@@ -58,9 +58,9 @@ test("verwendet öffentliche kanonische Metadaten", async () => {
 
 test("exportiert Chronik und beide datierten Momentaufnahmen", async () => {
   const current = await readExportedHtml();
-  const chronicle = await readExportedHtml("chronik.html");
-  const firstSnapshot = await readExportedHtml("chronik/2026-08-12.html");
-  const currentSnapshot = await readExportedHtml("chronik/2026-08-13.html");
+  const chronicle = await readExportedHtml("chronik/index.html");
+  const firstSnapshot = await readExportedHtml("chronik/2026-08-12/index.html");
+  const currentSnapshot = await readExportedHtml("chronik/2026-08-13/index.html");
 
   assert.match(current, /Ein echtes Lab ersetzt den kurzlebigen Versuchsaufbau/);
   assert.match(current, /Technischer Stand/);
@@ -93,9 +93,9 @@ test("exportiert Chronik und beide datierten Momentaufnahmen", async () => {
 
 test("bindet Canonical und Open Graph an jede konkrete Route", async () => {
   const routes = [
-    ["chronik.html", "https://macmade.dev/chronik"],
-    ["chronik/2026-08-12.html", "https://macmade.dev/chronik/2026-08-12"],
-    ["chronik/2026-08-13.html", "https://macmade.dev/chronik/2026-08-13"],
+    ["chronik/index.html", "https://macmade.dev/chronik"],
+    ["chronik/2026-08-12/index.html", "https://macmade.dev/chronik/2026-08-12"],
+    ["chronik/2026-08-13/index.html", "https://macmade.dev/chronik/2026-08-13"],
   ];
 
   for (const [path, url] of routes) {

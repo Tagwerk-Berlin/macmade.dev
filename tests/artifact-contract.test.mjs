@@ -1,6 +1,14 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { mkdtemp, mkdir, readFile, rm, symlink, writeFile } from "node:fs/promises";
+import {
+  access,
+  mkdtemp,
+  mkdir,
+  readFile,
+  rm,
+  symlink,
+  writeFile,
+} from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
@@ -144,5 +152,27 @@ test("weist einen veränderten oder unversionierten Arbeitsbaum zurück", async 
     );
   } finally {
     await rm(repository, { recursive: true, force: true });
+  }
+});
+
+test("exportiert Seitenrouten als direkt auslieferbare Verzeichnisse", async () => {
+  for (const pathName of [
+    "chronik/index.html",
+    "chronik/2026-08-12/index.html",
+    "chronik/2026-08-13/index.html",
+  ]) {
+    await assert.doesNotReject(
+      access(new URL(`../dist/client/${pathName}`, import.meta.url)),
+    );
+  }
+
+  for (const pathName of [
+    "chronik.html",
+    "chronik/2026-08-12.html",
+    "chronik/2026-08-13.html",
+  ]) {
+    await assert.rejects(
+      access(new URL(`../dist/client/${pathName}`, import.meta.url)),
+    );
   }
 });
