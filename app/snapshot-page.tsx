@@ -60,7 +60,7 @@ const workflow = [
   ["06", "Promotion", "Nur dauerhaftes Wissen bewusst nach Akasha übernehmen."],
 ];
 
-type SnapshotDate = "2026-08-12" | "2026-08-13";
+type SnapshotDate = "2026-08-12" | "2026-08-13" | "2026-08-16";
 
 type SnapshotPageProps = {
   snapshotDate: SnapshotDate;
@@ -69,11 +69,13 @@ type SnapshotPageProps = {
 const snapshotLabels: Record<SnapshotDate, string> = {
   "2026-08-12": "12.08.2026",
   "2026-08-13": "13.08.2026",
+  "2026-08-16": "16.08.2026",
 };
 
 /** Rendert einen aktuellen oder archivierten Stand aus derselben Darstellung. */
 export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
-  const isCurrentSnapshot = snapshotDate === "2026-08-13";
+  const isFirstLabSnapshot = snapshotDate === "2026-08-13";
+  const isCurrentSnapshot = snapshotDate === "2026-08-16";
 
   return (
     <main>
@@ -82,7 +84,9 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
           macmade<span>.dev</span>
         </a>
         <nav aria-label="Seitennavigation">
-          {isCurrentSnapshot && <a href="#aenderungen">Änderungen</a>}
+          {(isFirstLabSnapshot || isCurrentSnapshot) && (
+            <a href="#aenderungen">Änderungen</a>
+          )}
           <a href="#system">System</a>
           <a href="#werkzeuge">Werkzeuge</a>
           <a href="#praxis">Praxis</a>
@@ -96,6 +100,14 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
           <p className="eyebrow">Systemnotizen · Stand {snapshotLabels[snapshotDate]}</p>
           <h1>Werkzeuge für nachvollziehbare Entwicklungsarbeit.</h1>
           {isCurrentSnapshot ? (
+            <p className="hero-intro">
+              Die drei Kernwerkzeuge bleiben unverändert. Hinzu kommt eine
+              zweite Laborform, die absichtlich weniger Deploymentapparat
+              trägt: erwartbar offline, manuell neu aufbaubar und näher an
+              einer kleinen eigenständigen Kundenumgebung als an einem
+              Produktionsklon.
+            </p>
+          ) : isFirstLabSnapshot ? (
             <p className="hero-intro">
               Die drei kleinen Werkzeuge bleiben im Kern unverändert. Neu ist
               eine eng begrenzte, nichtproduktive Labumgebung: Sie macht reale
@@ -125,7 +137,7 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
         </aside>
       </section>
 
-      {isCurrentSnapshot && (
+      {isFirstLabSnapshot && (
         <section className="change-section section-rule" id="aenderungen">
           <div className="section-heading">
             <p className="eyebrow">Seit 12.08.2026</p>
@@ -178,6 +190,60 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
             Verlauf, Akasha bewahrt kuratiertes Wissen. CodexSlicer bleibt für
             diesen Workflow ersetzt, SimpleDisplay bleibt ein enges
             macOS-Experiment.
+          </div>
+        </section>
+      )}
+
+      {isCurrentSnapshot && (
+        <section className="change-section section-rule" id="aenderungen">
+          <div className="section-heading">
+            <p className="eyebrow">Seit 13.08.2026</p>
+            <h2>Nicht jedes Lab braucht einen Release-Apparat.</h2>
+          </div>
+
+          <div className="change-grid">
+            <article>
+              <span>Technischer Stand</span>
+              <h3>Eine zweite, erwartbar offline betriebene Umgebung.</h3>
+              <p>
+                Eine kleine Parat-Runtime verbindet die benötigten
+                Anwendungs- und Datenbankprozesse hinter einem engen
+                HTTPS-Zugang. Direkte App- und Datenbankports bleiben außen
+                geschlossen. Der Aufbau ist bewusst kein Produktionsklon und
+                besitzt weder Releasebäume noch Manifeste oder eine eigene
+                automatische Rollbackstrecke.
+              </p>
+            </article>
+            <article>
+              <span>Tatsächliche Nutzung</span>
+              <h3>Mehr als ein Healthcheck, weniger als ein voller E2E-Beweis.</h3>
+              <p>
+                Für die öffentliche API sind Anmeldung, Mailcode, Auftragslese,
+                Logout, negative Identität und Session-Fortbestand nach einem
+                Containerersatz belegt. Für das Frontend sind Loginseite,
+                Assets, API-Ping und ein fehlerfreier warmer Browser belegt;
+                echter Login, Fachnavigation und Accessibility bleiben offen.
+              </p>
+            </article>
+            <article className="assessment-card">
+              <span>Bewertung durch Codex</span>
+              <h3>Weniger Nachweisapparat kann die ehrlichere Grenze sein.</h3>
+              <p>
+                Die revisionsgebundene Umgebung vom 13. August bleibt für
+                kontrollierte Releases sinnvoll. Für einen erwartbar
+                ausgeschalteten, physisch kontrollierten Simulationshost ist
+                manueller Neuaufbau jedoch plausibler als eine zweite
+                Releaseplattform. Der Preis sind schwächere
+                Artefakt-Reproduzierbarkeit und sichtbare manuelle Wartung.
+              </p>
+            </article>
+          </div>
+
+          <div className="unchanged-note">
+            <strong>Unverändert:</strong> Repository und Runtime bleiben
+            bindend; devMCP navigiert, CodexJournal dokumentiert den operativen
+            Verlauf und Akasha bewahrt kuratiertes Wissen. Laufende Geo- und
+            Datenbankerweiterungen sind nicht Teil dieses Stands.
           </div>
         </section>
       )}
@@ -418,7 +484,7 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
             </p>
           </article>
 
-          {isCurrentSnapshot && (
+          {(isFirstLabSnapshot || isCurrentSnapshot) && (
             <article className="practice-card lab-card">
               <p className="eyebrow">Nichtproduktive Infrastruktur</p>
               <h3>Parat-Lab</h3>
@@ -437,6 +503,29 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
                 Produktionsklon. Datenrealismus ist nur mit reproduzierbarer
                 Bereinigung, Negativprüfungen und belegtem Wiederanlauf
                 vertretbar; weitere Erweiterungen benötigen eigene Gates.
+              </p>
+            </article>
+          )}
+
+          {isCurrentSnapshot && (
+            <article className="practice-card lab-card">
+              <p className="eyebrow">Erwartbar offline</p>
+              <h3>Kleine Systemsimulation</h3>
+              <p>
+                Eine zweite Umgebung prüft reale Fachgrenzen mit einer
+                begrenzten App-Topologie, intern gehaltenen Datenbanken und
+                einem schmalen Webzugang. Images werden bewusst direkt
+                übertragen; ein Quellcheckout oder Releasearchiv entsteht auf
+                dem Ziel nicht.
+              </p>
+              <div className="lab-flow" aria-label="Prüffluss der kleinen Systemsimulation">
+                <span>Browser</span><b>→</b><span>Webkante</span><b>→</b><span>Apps</span><b>→</b><span>Persistenz</span>
+              </div>
+              <p className="card-limit">
+                <strong>Grenze:</strong> Erwartbar offline ist ein gültiger
+                Zustand. Manueller Neuaufbau spart dauerhafte Apparatur, macht
+                Updates und Wiederherstellung aber stärker vom Runbook und von
+                erneut ausgeführten Smokes abhängig.
               </p>
             </article>
           )}
@@ -571,6 +660,15 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
           <span>Chronik-Vertrag v1</span>
           {isCurrentSnapshot ? (
             <>
+              <span>MiniUbuntu-Vertrag fad0dce</span>
+              <span>CodexJournal fd084b7</span>
+              <span>Akasha 5d219db</span>
+              <span>devMCP a4fe8e1</span>
+              <span>SimpleDisplay c576ccb</span>
+              <span>CodexSlicer fc68381</span>
+            </>
+          ) : isFirstLabSnapshot ? (
+            <>
               <span>dev-infra 0989c78</span>
               <span>Lab-Runtime 9b73321</span>
               <span>CodexJournal fd084b7</span>
@@ -587,13 +685,20 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
 
       <nav className="snapshot-navigation" aria-label="Navigation zwischen Momentaufnahmen">
         {isCurrentSnapshot ? (
+          <Link href="/chronik/2026-08-13">← Älterer Stand · 13.08.2026</Link>
+        ) : isFirstLabSnapshot ? (
           <Link href="/chronik/2026-08-12">← Älterer Stand · 12.08.2026</Link>
         ) : (
           <span>Erster veröffentlichter Stand · 12.08.2026</span>
         )}
         <Link href="/chronik">Chronik</Link>
-        <Link href="/" aria-current={isCurrentSnapshot ? "page" : undefined}>Aktueller Stand · 13.08.2026</Link>
-        {!isCurrentSnapshot && <Link href="/chronik/2026-08-13">Nächster Stand · 13.08.2026 →</Link>}
+        <Link href="/" aria-current={isCurrentSnapshot ? "page" : undefined}>Aktueller Stand · 16.08.2026</Link>
+        {snapshotDate === "2026-08-12" && (
+          <Link href="/chronik/2026-08-13">Nächster Stand · 13.08.2026 →</Link>
+        )}
+        {isFirstLabSnapshot && (
+          <Link href="/chronik/2026-08-16">Nächster Stand · 16.08.2026 →</Link>
+        )}
       </nav>
 
       <footer>

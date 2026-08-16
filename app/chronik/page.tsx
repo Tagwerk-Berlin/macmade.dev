@@ -9,9 +9,18 @@ export const metadata = createPageMetadata({
 
 const entries = [
   {
+    date: "2026-08-16",
+    label: "16.08.2026",
+    current: true,
+    title: "Eine kleinere, erwartbar offline betriebene Laborform kommt hinzu.",
+    summary:
+      "Manueller Neuaufbau ersetzt einen zweiten Release-Apparat. Reale Smokes bleiben nötig, ihre noch offenen Grenzen werden ausdrücklich benannt.",
+    triggers: ["Technischer Stand", "Tatsächliche Nutzung", "Bewertung durch Codex"],
+  },
+  {
     date: "2026-08-13",
     label: "13.08.2026",
-    current: true,
+    current: false,
     title: "Eine dauerhafte, nichtproduktive Labumgebung kommt hinzu.",
     summary:
       "Reale Browser-, Vertrauens- und Rollbackgrenzen werden prüfbar. Die drei Kernwerkzeuge und ihre Rollen bleiben unverändert.",

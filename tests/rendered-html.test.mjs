@@ -56,28 +56,31 @@ test("verwendet öffentliche kanonische Metadaten", async () => {
   assert.doesNotMatch(html, /data-(?:session|slice)-id=/i);
 });
 
-test("exportiert Chronik und beide datierten Momentaufnahmen", async () => {
+test("exportiert Chronik und alle datierten Momentaufnahmen", async () => {
   const current = await readExportedHtml();
   const chronicle = await readExportedHtml("chronik/index.html");
   const firstSnapshot = await readExportedHtml("chronik/2026-08-12/index.html");
-  const currentSnapshot = await readExportedHtml("chronik/2026-08-13/index.html");
+  const firstLabSnapshot = await readExportedHtml("chronik/2026-08-13/index.html");
+  const currentSnapshot = await readExportedHtml("chronik/2026-08-16/index.html");
 
-  assert.match(current, /Ein echtes Lab ersetzt den kurzlebigen Versuchsaufbau/);
+  assert.match(current, /Nicht jedes Lab braucht einen Release-Apparat/);
   assert.match(current, /Technischer Stand/);
   assert.match(current, /Tatsächliche Nutzung/);
   assert.match(current, /Bewertung durch Codex/);
-  assert.match(current, /Noch laufende Erweiterungen sind nicht Teil dieses Stands/);
-  assert.match(current, /persistente, bereinigte Datenbank/);
-  assert.match(current, /restore-geprüftes Backup/);
-  assert.match(current, /zustandserhaltender Wiederanlauf/);
-  assert.match(current, /dev-infra 0989c78/);
-  assert.match(current, /Lab-Runtime 9b73321/);
+  assert.match(current, /erwartbar offline/);
+  assert.match(current, /weder Releasebäume noch Manifeste/);
+  assert.match(current, /weniger als ein voller E2E-Beweis/);
+  assert.match(current, /echter Login, Fachnavigation und Accessibility bleiben offen/);
+  assert.match(current, /schwächere Artefakt-Reproduzierbarkeit/);
+  assert.match(current, /Laufende Geo- und Datenbankerweiterungen sind nicht Teil/);
+  assert.match(current, /MiniUbuntu-Vertrag fad0dce/);
   assert.doesNotMatch(
     current,
-    /persistente synthetische Datenbank|laufende Umbau|aktuell vorbereitete Wechsel/,
+    /PostgreSQL im LAN|GeoStack öffentlich|vollständiger authentifizierter Browser-Smoke/,
   );
 
   assert.match(chronicle, /Technische Urteile mit Datum/);
+  assert.match(chronicle, /href="\/chronik\/2026-08-16"/);
   assert.match(chronicle, /href="\/chronik\/2026-08-13"/);
   assert.match(chronicle, /href="\/chronik\/2026-08-12"/);
 
@@ -86,9 +89,15 @@ test("exportiert Chronik und beide datierten Momentaufnahmen", async () => {
   assert.match(firstSnapshot, /Nächster Stand · 13\.08\.2026/);
   assert.doesNotMatch(firstSnapshot, /Parat-Lab|Ein echtes Lab ersetzt/);
 
-  assert.match(currentSnapshot, /Systemnotizen · Stand (?:<!-- -->)?13\.08\.2026/);
-  assert.match(currentSnapshot, /Älterer Stand · 12\.08\.2026/);
-  assert.match(currentSnapshot, /Ein echtes Lab ersetzt den kurzlebigen Versuchsaufbau/);
+  assert.match(firstLabSnapshot, /Systemnotizen · Stand (?:<!-- -->)?13\.08\.2026/);
+  assert.match(firstLabSnapshot, /Älterer Stand · 12\.08\.2026/);
+  assert.match(firstLabSnapshot, /Ein echtes Lab ersetzt den kurzlebigen Versuchsaufbau/);
+  assert.match(firstLabSnapshot, /Nächster Stand · 16\.08\.2026/);
+  assert.doesNotMatch(firstLabSnapshot, /Nicht jedes Lab braucht einen Release-Apparat/);
+
+  assert.match(currentSnapshot, /Systemnotizen · Stand (?:<!-- -->)?16\.08\.2026/);
+  assert.match(currentSnapshot, /Älterer Stand · 13\.08\.2026/);
+  assert.match(currentSnapshot, /Nicht jedes Lab braucht einen Release-Apparat/);
 });
 
 test("bindet Canonical und Open Graph an jede konkrete Route", async () => {
@@ -96,6 +105,7 @@ test("bindet Canonical und Open Graph an jede konkrete Route", async () => {
     ["chronik/index.html", "https://macmade.dev/chronik"],
     ["chronik/2026-08-12/index.html", "https://macmade.dev/chronik/2026-08-12"],
     ["chronik/2026-08-13/index.html", "https://macmade.dev/chronik/2026-08-13"],
+    ["chronik/2026-08-16/index.html", "https://macmade.dev/chronik/2026-08-16"],
   ];
 
   for (const [path, url] of routes) {
@@ -110,6 +120,7 @@ test("liefert ein eigenständiges statisches 404-Dokument", async () => {
   const html = await readExportedHtml("404.html");
   assert.match(html, /404: This page could not be found/);
   assert.doesNotMatch(html, /Ein echtes Lab ersetzt/);
+  assert.doesNotMatch(html, /Nicht jedes Lab braucht einen Release-Apparat/);
 });
 
 test("liefert die datierten Journal-Momentaufnahmen als feste JPEGs aus", async () => {
