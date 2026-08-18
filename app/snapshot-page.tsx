@@ -60,7 +60,7 @@ const workflow = [
   ["06", "Promotion", "Nur dauerhaftes Wissen bewusst nach Akasha übernehmen."],
 ];
 
-type SnapshotDate = "2026-08-12" | "2026-08-13" | "2026-08-16";
+type SnapshotDate = "2026-08-12" | "2026-08-13" | "2026-08-16" | "2026-08-18";
 
 type SnapshotPageProps = {
   snapshotDate: SnapshotDate;
@@ -70,12 +70,14 @@ const snapshotLabels: Record<SnapshotDate, string> = {
   "2026-08-12": "12.08.2026",
   "2026-08-13": "13.08.2026",
   "2026-08-16": "16.08.2026",
+  "2026-08-18": "18.08.2026",
 };
 
 /** Rendert einen aktuellen oder archivierten Stand aus derselben Darstellung. */
 export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
   const isFirstLabSnapshot = snapshotDate === "2026-08-13";
-  const isCurrentSnapshot = snapshotDate === "2026-08-16";
+  const isOfflineLabSnapshot = snapshotDate === "2026-08-16";
+  const isCurrentSnapshot = snapshotDate === "2026-08-18";
 
   return (
     <main>
@@ -84,7 +86,7 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
           macmade<span>.dev</span>
         </a>
         <nav aria-label="Seitennavigation">
-          {(isFirstLabSnapshot || isCurrentSnapshot) && (
+          {(isFirstLabSnapshot || isOfflineLabSnapshot || isCurrentSnapshot) && (
             <a href="#aenderungen">Änderungen</a>
           )}
           <a href="#system">System</a>
@@ -100,6 +102,15 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
           <p className="eyebrow">Systemnotizen · Stand {snapshotLabels[snapshotDate]}</p>
           <h1>Werkzeuge für nachvollziehbare Entwicklungsarbeit.</h1>
           {isCurrentSnapshot ? (
+            <p className="hero-intro">
+              Die erwartbar-offline Systemsimulation umfasst jetzt drei feste,
+              voneinander abgegrenzte Installationen. Zugleich erhält das
+              CodexJournal einen schmalen Checkpoint für manuelle
+              Kontextkompaktierung. Beides ergänzt nur konkrete Grenzen – es
+              entsteht weder eine Mandantenplattform noch ein neues
+              Gedächtnissystem.
+            </p>
+          ) : isOfflineLabSnapshot ? (
             <p className="hero-intro">
               Die drei Kernwerkzeuge bleiben unverändert. Hinzu kommt eine
               zweite Laborform, die absichtlich weniger Deploymentapparat
@@ -195,6 +206,65 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
       )}
 
       {isCurrentSnapshot && (
+        <section className="change-section section-rule" id="aenderungen">
+          <div className="section-heading">
+            <p className="eyebrow">Seit 16.08.2026</p>
+            <h2>Feste Wiederholung ersetzt keine Mandantenplattform.</h2>
+          </div>
+
+          <div className="change-grid">
+            <article>
+              <span>Technischer Stand</span>
+              <h3>Drei Installationen, weiterhin explizit verdrahtet.</h3>
+              <p>
+                Zur bestehenden Systemsimulation kamen zwei feste
+                Lab-Installationen hinzu. Anwendungspfade, Datenbanken, Rollen,
+                Netze und Sitzungsschlüssel bleiben je Installation getrennt;
+                gemeinsame Datenbankprozesse sind dagegen bewusst ein
+                geteilter Ausfallbereich. Discovery, dynamisches Routing und
+                ein zusätzlicher Deploymentapparat entstanden nicht.
+              </p>
+            </article>
+            <article>
+              <span>Tatsächliche Nutzung</span>
+              <h3>Die Trennung wurde im echten Browser negativ geprüft.</h3>
+              <p>
+                Für beide neuen Installationen sind Mailcode, eigene Sitzung,
+                fachlicher Read, Logout und fremde Cookies, Akteure,
+                Backendnamen sowie Datenbankrollen als Negativpfade belegt.
+                Ein kontrollierter Neustart bestand ebenfalls. Vollständiger
+                Frontend-Roundtrip, Fachnavigation, Accessibility und ein
+                echter Kunden-Mailserver bleiben offen.
+              </p>
+            </article>
+            <article className="assessment-card">
+              <span>Bewertung durch Codex</span>
+              <h3>Duplikation kann kleiner sein als Abstraktion.</h3>
+              <p>
+                Für wenige feste Simulationen ist sichtbare Wiederholung
+                ehrlicher als ein generisches Mandantensystem. Sie hält
+                Vertrauensgrenzen lesbar, vergrößert aber Konfigurationsfläche,
+                Wartungsarbeit und den gemeinsamen Datenbank-Ausfallbereich.
+                Eine weitere Installation braucht deshalb einen neuen,
+                konkreten Prüfgrund.
+              </p>
+            </article>
+          </div>
+
+          <div className="unchanged-note">
+            <strong>Werkzeugstatus:</strong> CodexJournal besitzt zusätzlich
+            einen lokal aktivierten, revisionsgeprüften Checkpoint für manuelle
+            Kontextkompaktierung. Ein erster realer Trigger stellte Kontext
+            wieder her, schrieb bei bereits geschlossenem Slice aber korrekt
+            keinen Fortschritt. Das ist eine neue technische Fähigkeit, noch
+            keine regelmäßig etablierte Nutzung; automatische Kompaktierung,
+            Akasha, devMCP, SimpleDisplay und das Werkzeugmuseum bleiben
+            unverändert.
+          </div>
+        </section>
+      )}
+
+      {isOfflineLabSnapshot && (
         <section className="change-section section-rule" id="aenderungen">
           <div className="section-heading">
             <p className="eyebrow">Seit 13.08.2026</p>
@@ -484,7 +554,7 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
             </p>
           </article>
 
-          {(isFirstLabSnapshot || isCurrentSnapshot) && (
+          {(isFirstLabSnapshot || isOfflineLabSnapshot || isCurrentSnapshot) && (
             <article className="practice-card lab-card">
               <p className="eyebrow">Nichtproduktive Infrastruktur</p>
               <h3>Parat-Lab</h3>
@@ -507,7 +577,7 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
             </article>
           )}
 
-          {isCurrentSnapshot && (
+          {isOfflineLabSnapshot && (
             <article className="practice-card lab-card">
               <p className="eyebrow">Erwartbar offline</p>
               <h3>Kleine Systemsimulation</h3>
@@ -526,6 +596,29 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
                 Zustand. Manueller Neuaufbau spart dauerhafte Apparatur, macht
                 Updates und Wiederherstellung aber stärker vom Runbook und von
                 erneut ausgeführten Smokes abhängig.
+              </p>
+            </article>
+          )}
+
+          {isCurrentSnapshot && (
+            <article className="practice-card lab-card">
+              <p className="eyebrow">Erwartbar offline · fest verdrahtet</p>
+              <h3>Drei getrennte Systemsimulationen</h3>
+              <p>
+                Eine Referenzinstallation und zwei feste weitere
+                Installationen prüfen dieselben Produktgrenzen mit getrennten
+                Anwendungs-, Daten- und Sitzungskontexten. Der Aufbau bleibt
+                manuell erneuerbar und verzichtet auf Discovery oder
+                dynamische Mandantenauflösung.
+              </p>
+              <div className="lab-flow" aria-label="Prüffluss der getrennten Systemsimulationen">
+                <span>Browser</span><b>→</b><span>feste Webkante</span><b>→</b><span>eigene Apps</span><b>→</b><span>getrennte Daten</span>
+              </div>
+              <p className="card-limit">
+                <strong>Grenze:</strong> Getrennte Datenbanken und Rollen
+                beseitigen nicht den gemeinsamen Ausfallbereich der
+                Datenbankprozesse. Sichtbare Konfiguration ersetzt außerdem
+                keinen vollständigen Frontend- und Accessibility-Nachweis.
               </p>
             </article>
           )}
@@ -660,6 +753,16 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
           <span>Chronik-Vertrag v1</span>
           {isCurrentSnapshot ? (
             <>
+              <span>dev-infra 685a25b</span>
+              <span>Public-DDL 009671f</span>
+              <span>CodexJournal e55e998 · lokaler Hook-Release</span>
+              <span>Akasha 5d219db</span>
+              <span>devMCP a4fe8e1</span>
+              <span>SimpleDisplay c576ccb</span>
+              <span>CodexSlicer fc68381</span>
+            </>
+          ) : isOfflineLabSnapshot ? (
+            <>
               <span>MiniUbuntu-Vertrag fad0dce</span>
               <span>CodexJournal fd084b7</span>
               <span>Akasha 5d219db</span>
@@ -685,6 +788,8 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
 
       <nav className="snapshot-navigation" aria-label="Navigation zwischen Momentaufnahmen">
         {isCurrentSnapshot ? (
+          <Link href="/chronik/2026-08-16">← Älterer Stand · 16.08.2026</Link>
+        ) : isOfflineLabSnapshot ? (
           <Link href="/chronik/2026-08-13">← Älterer Stand · 13.08.2026</Link>
         ) : isFirstLabSnapshot ? (
           <Link href="/chronik/2026-08-12">← Älterer Stand · 12.08.2026</Link>
@@ -692,12 +797,15 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
           <span>Erster veröffentlichter Stand · 12.08.2026</span>
         )}
         <Link href="/chronik">Chronik</Link>
-        <Link href="/" aria-current={isCurrentSnapshot ? "page" : undefined}>Aktueller Stand · 16.08.2026</Link>
+        <Link href="/" aria-current={isCurrentSnapshot ? "page" : undefined}>Aktueller Stand · 18.08.2026</Link>
         {snapshotDate === "2026-08-12" && (
           <Link href="/chronik/2026-08-13">Nächster Stand · 13.08.2026 →</Link>
         )}
         {isFirstLabSnapshot && (
           <Link href="/chronik/2026-08-16">Nächster Stand · 16.08.2026 →</Link>
+        )}
+        {isOfflineLabSnapshot && (
+          <Link href="/chronik/2026-08-18">Nächster Stand · 18.08.2026 →</Link>
         )}
       </nav>
 

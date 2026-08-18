@@ -6,6 +6,38 @@ async function readExportedHtml(path = "index.html") {
   return readFile(new URL(`../dist/client/${path}`, import.meta.url), "utf8");
 }
 
+function decodeHtmlEntities(value) {
+  const namedEntities = new Map([
+    ["amp", "&"],
+    ["apos", "'"],
+    ["gt", ">"],
+    ["lt", "<"],
+    ["nbsp", " "],
+    ["quot", '"'],
+  ]);
+
+  return value.replace(
+    /&(?:#(\d+)|#x([\da-f]+)|([a-z]+));/gi,
+    (entity, decimal, hexadecimal, named) => {
+      if (decimal) return String.fromCodePoint(Number.parseInt(decimal, 10));
+      if (hexadecimal) return String.fromCodePoint(Number.parseInt(hexadecimal, 16));
+      return namedEntities.get(named.toLowerCase()) ?? entity;
+    },
+  );
+}
+
+function visibleText(html) {
+  return decodeHtmlEntities(
+    html
+      .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, " ")
+      .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, " ")
+      .replace(/<!--[\s\S]*?-->/g, "")
+      .replace(/<[^>]+>/g, " "),
+  )
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 test("exportiert die öffentliche technische Seite als statisches HTML", async () => {
   const html = await readExportedHtml();
   assert.match(html, /Werkzeuge für nachvollziehbare Entwicklungsarbeit/);
@@ -61,43 +93,58 @@ test("exportiert Chronik und alle datierten Momentaufnahmen", async () => {
   const chronicle = await readExportedHtml("chronik/index.html");
   const firstSnapshot = await readExportedHtml("chronik/2026-08-12/index.html");
   const firstLabSnapshot = await readExportedHtml("chronik/2026-08-13/index.html");
-  const currentSnapshot = await readExportedHtml("chronik/2026-08-16/index.html");
+  const offlineLabSnapshot = await readExportedHtml("chronik/2026-08-16/index.html");
+  const currentSnapshot = await readExportedHtml("chronik/2026-08-18/index.html");
+  const currentText = visibleText(current);
+  const firstSnapshotText = visibleText(firstSnapshot);
+  const firstLabSnapshotText = visibleText(firstLabSnapshot);
+  const offlineLabSnapshotText = visibleText(offlineLabSnapshot);
+  const currentSnapshotText = visibleText(currentSnapshot);
 
-  assert.match(current, /Nicht jedes Lab braucht einen Release-Apparat/);
-  assert.match(current, /Technischer Stand/);
-  assert.match(current, /Tatsächliche Nutzung/);
-  assert.match(current, /Bewertung durch Codex/);
-  assert.match(current, /erwartbar offline/);
-  assert.match(current, /weder Releasebäume noch Manifeste/);
-  assert.match(current, /weniger als ein voller E2E-Beweis/);
-  assert.match(current, /echter Login, Fachnavigation und Accessibility bleiben offen/);
-  assert.match(current, /schwächere Artefakt-Reproduzierbarkeit/);
-  assert.match(current, /Laufende Geo- und Datenbankerweiterungen sind nicht Teil/);
-  assert.match(current, /MiniUbuntu-Vertrag fad0dce/);
+  assert.match(currentText, /Feste Wiederholung ersetzt keine Mandantenplattform/);
+  assert.match(currentText, /Technischer Stand/);
+  assert.match(currentText, /Tatsächliche Nutzung/);
+  assert.match(currentText, /Bewertung durch Codex/);
+  assert.match(currentText, /erwartbar[- ]offline/);
+  assert.match(currentText, /Duplikation kann kleiner sein als Abstraktion/);
+  assert.match(currentText, /gemeinsamen Datenbank-Ausfallbereich/);
+  assert.match(currentText, /fremde Cookies, Akteure/);
+  assert.match(currentText, /vollständiger Frontend-Roundtrip/i);
+  assert.match(currentText, /Checkpoint für manuelle Kontextkompaktierung/);
+  assert.match(currentText, /noch keine regelmäßig etablierte Nutzung/);
+  assert.match(currentText, /dev-infra 685a25b/);
+  assert.match(currentText, /CodexJournal e55e998 · lokaler Hook-Release/);
   assert.doesNotMatch(
-    current,
-    /PostgreSQL im LAN|GeoStack öffentlich|vollständiger authentifizierter Browser-Smoke/,
+    currentText,
+    /(?:\d{1,3}\.){3}\d{1,3}|\/Users\/|\b(?:[a-z0-9-]+\.)+(?:internal|lan|local)\b|Mailcode:\s*\d+/i,
   );
 
   assert.match(chronicle, /Technische Urteile mit Datum/);
+  assert.match(chronicle, /href="\/chronik\/2026-08-18"/);
   assert.match(chronicle, /href="\/chronik\/2026-08-16"/);
   assert.match(chronicle, /href="\/chronik\/2026-08-13"/);
   assert.match(chronicle, /href="\/chronik\/2026-08-12"/);
 
-  assert.match(firstSnapshot, /Systemnotizen · Stand (?:<!-- -->)?12\.08\.2026/);
-  assert.match(firstSnapshot, /macmade\.dev ist eine technische Bestandsaufnahme/);
-  assert.match(firstSnapshot, /Nächster Stand · 13\.08\.2026/);
-  assert.doesNotMatch(firstSnapshot, /Parat-Lab|Ein echtes Lab ersetzt/);
+  assert.match(firstSnapshotText, /Systemnotizen · Stand 12\.08\.2026/);
+  assert.match(firstSnapshotText, /macmade\.dev ist eine technische Bestandsaufnahme/);
+  assert.match(firstSnapshotText, /Nächster Stand · 13\.08\.2026/);
+  assert.doesNotMatch(firstSnapshotText, /Parat-Lab|Ein echtes Lab ersetzt/);
 
-  assert.match(firstLabSnapshot, /Systemnotizen · Stand (?:<!-- -->)?13\.08\.2026/);
-  assert.match(firstLabSnapshot, /Älterer Stand · 12\.08\.2026/);
-  assert.match(firstLabSnapshot, /Ein echtes Lab ersetzt den kurzlebigen Versuchsaufbau/);
-  assert.match(firstLabSnapshot, /Nächster Stand · 16\.08\.2026/);
-  assert.doesNotMatch(firstLabSnapshot, /Nicht jedes Lab braucht einen Release-Apparat/);
+  assert.match(firstLabSnapshotText, /Systemnotizen · Stand 13\.08\.2026/);
+  assert.match(firstLabSnapshotText, /Älterer Stand · 12\.08\.2026/);
+  assert.match(firstLabSnapshotText, /Ein echtes Lab ersetzt den kurzlebigen Versuchsaufbau/);
+  assert.match(firstLabSnapshotText, /Nächster Stand · 16\.08\.2026/);
+  assert.doesNotMatch(firstLabSnapshotText, /Nicht jedes Lab braucht einen Release-Apparat/);
 
-  assert.match(currentSnapshot, /Systemnotizen · Stand (?:<!-- -->)?16\.08\.2026/);
-  assert.match(currentSnapshot, /Älterer Stand · 13\.08\.2026/);
-  assert.match(currentSnapshot, /Nicht jedes Lab braucht einen Release-Apparat/);
+  assert.match(offlineLabSnapshotText, /Systemnotizen · Stand 16\.08\.2026/);
+  assert.match(offlineLabSnapshotText, /Älterer Stand · 13\.08\.2026/);
+  assert.match(offlineLabSnapshotText, /Nicht jedes Lab braucht einen Release-Apparat/);
+  assert.match(offlineLabSnapshotText, /Nächster Stand · 18\.08\.2026/);
+  assert.doesNotMatch(offlineLabSnapshotText, /Feste Wiederholung ersetzt keine Mandantenplattform/);
+
+  assert.match(currentSnapshotText, /Systemnotizen · Stand 18\.08\.2026/);
+  assert.match(currentSnapshotText, /Älterer Stand · 16\.08\.2026/);
+  assert.match(currentSnapshotText, /Feste Wiederholung ersetzt keine Mandantenplattform/);
 });
 
 test("bindet Canonical und Open Graph an jede konkrete Route", async () => {
@@ -106,6 +153,7 @@ test("bindet Canonical und Open Graph an jede konkrete Route", async () => {
     ["chronik/2026-08-12/index.html", "https://macmade.dev/chronik/2026-08-12"],
     ["chronik/2026-08-13/index.html", "https://macmade.dev/chronik/2026-08-13"],
     ["chronik/2026-08-16/index.html", "https://macmade.dev/chronik/2026-08-16"],
+    ["chronik/2026-08-18/index.html", "https://macmade.dev/chronik/2026-08-18"],
   ];
 
   for (const [path, url] of routes) {
@@ -118,9 +166,11 @@ test("bindet Canonical und Open Graph an jede konkrete Route", async () => {
 
 test("liefert ein eigenständiges statisches 404-Dokument", async () => {
   const html = await readExportedHtml("404.html");
-  assert.match(html, /404: This page could not be found/);
-  assert.doesNotMatch(html, /Ein echtes Lab ersetzt/);
-  assert.doesNotMatch(html, /Nicht jedes Lab braucht einen Release-Apparat/);
+  const text = visibleText(html);
+  assert.match(text, /404: This page could not be found/);
+  assert.doesNotMatch(text, /Ein echtes Lab ersetzt/);
+  assert.doesNotMatch(text, /Nicht jedes Lab braucht einen Release-Apparat/);
+  assert.doesNotMatch(text, /Feste Wiederholung ersetzt keine Mandantenplattform/);
 });
 
 test("liefert die datierten Journal-Momentaufnahmen als feste JPEGs aus", async () => {

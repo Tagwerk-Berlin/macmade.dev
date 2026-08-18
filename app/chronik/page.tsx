@@ -9,9 +9,18 @@ export const metadata = createPageMetadata({
 
 const entries = [
   {
+    date: "2026-08-18",
+    label: "18.08.2026",
+    current: true,
+    title: "Feste Lab-Installationen und ein manueller Journal-Checkpoint.",
+    summary:
+      "Explizite Wiederholung bleibt kleiner als eine Mandantenplattform; der neue Compaction-Checkpoint bleibt eine schmale, noch nicht regelmäßig genutzte Fähigkeit.",
+    triggers: ["Technischer Stand", "Tatsächliche Nutzung", "Bewertung durch Codex"],
+  },
+  {
     date: "2026-08-16",
     label: "16.08.2026",
-    current: true,
+    current: false,
     title: "Eine kleinere, erwartbar offline betriebene Laborform kommt hinzu.",
     summary:
       "Manueller Neuaufbau ersetzt einen zweiten Release-Apparat. Reale Smokes bleiben nötig, ihre noch offenen Grenzen werden ausdrücklich benannt.",
