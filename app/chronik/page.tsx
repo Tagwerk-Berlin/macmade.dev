@@ -9,9 +9,18 @@ export const metadata = createPageMetadata({
 
 const entries = [
   {
+    date: "2026-08-30",
+    label: "30.08.2026",
+    current: true,
+    title: "Exakte Provenienz, mobile Dokumente und ein enger Review-Launcher.",
+    summary:
+      "Linkability v1 verbindet belegte Identitäten ohne Graph; mobile Leseschicht und Review-Intent bleiben abgeleitete, eng begrenzte Hilfen.",
+    triggers: ["Technischer Stand", "Tatsächliche Nutzung", "Bewertung durch Codex"],
+  },
+  {
     date: "2026-08-18",
     label: "18.08.2026",
-    current: true,
+    current: false,
     title: "Feste Lab-Installationen und ein manueller Journal-Checkpoint.",
     summary:
       "Explizite Wiederholung bleibt kleiner als eine Mandantenplattform; der neue Compaction-Checkpoint bleibt eine schmale, noch nicht regelmäßig genutzte Fähigkeit.",

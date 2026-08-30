@@ -163,6 +163,7 @@ test("exportiert Seitenrouten als direkt auslieferbare Verzeichnisse", async () 
     "chronik/2026-08-13/index.html",
     "chronik/2026-08-16/index.html",
     "chronik/2026-08-18/index.html",
+    "chronik/2026-08-30/index.html",
   ]) {
     await assert.doesNotReject(
       access(new URL(`../dist/client/${pathName}`, import.meta.url)),
@@ -175,7 +176,16 @@ test("exportiert Seitenrouten als direkt auslieferbare Verzeichnisse", async () 
     "chronik/2026-08-13.html",
     "chronik/2026-08-16.html",
     "chronik/2026-08-18.html",
+    "chronik/2026-08-30.html",
   ]) {
+    await assert.rejects(
+      access(new URL(`../dist/client/${pathName}`, import.meta.url)),
+    );
+  }
+});
+
+test("entfernt interne Build- und Hostingmetadaten aus dem Webroot", async () => {
+  for (const pathName of [".vite/manifest.json", ".assetsignore", "_headers"]) {
     await assert.rejects(
       access(new URL(`../dist/client/${pathName}`, import.meta.url)),
     );

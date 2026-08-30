@@ -98,7 +98,13 @@ export async function runStaticBuild({ cwd = process.cwd() } = {}) {
     rm(manifestPath, { force: true }),
   ]);
   await runVinextBuild({ cwd, releaseId });
-  await normalizeStaticRoutes({ rootDirectory: path.join(distDirectory, "client") });
+  const clientDirectory = path.join(distDirectory, "client");
+  await normalizeStaticRoutes({ rootDirectory: clientDirectory });
+  await Promise.all([
+    rm(path.join(clientDirectory, ".vite"), { recursive: true, force: true }),
+    rm(path.join(clientDirectory, ".assetsignore"), { force: true }),
+    rm(path.join(clientDirectory, "_headers"), { force: true }),
+  ]);
   await mkdir(distDirectory, { recursive: true });
   await writeFile(releaseIdPath, `${releaseId}\n`, "utf8");
 

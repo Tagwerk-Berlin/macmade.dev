@@ -60,7 +60,12 @@ const workflow = [
   ["06", "Promotion", "Nur dauerhaftes Wissen bewusst nach Akasha übernehmen."],
 ];
 
-type SnapshotDate = "2026-08-12" | "2026-08-13" | "2026-08-16" | "2026-08-18";
+type SnapshotDate =
+  | "2026-08-12"
+  | "2026-08-13"
+  | "2026-08-16"
+  | "2026-08-18"
+  | "2026-08-30";
 
 type SnapshotPageProps = {
   snapshotDate: SnapshotDate;
@@ -71,13 +76,15 @@ const snapshotLabels: Record<SnapshotDate, string> = {
   "2026-08-13": "13.08.2026",
   "2026-08-16": "16.08.2026",
   "2026-08-18": "18.08.2026",
+  "2026-08-30": "30.08.2026",
 };
 
 /** Rendert einen aktuellen oder archivierten Stand aus derselben Darstellung. */
 export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
   const isFirstLabSnapshot = snapshotDate === "2026-08-13";
   const isOfflineLabSnapshot = snapshotDate === "2026-08-16";
-  const isCurrentSnapshot = snapshotDate === "2026-08-18";
+  const isFixedLabsSnapshot = snapshotDate === "2026-08-18";
+  const isCurrentSnapshot = snapshotDate === "2026-08-30";
 
   return (
     <main>
@@ -86,7 +93,10 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
           macmade<span>.dev</span>
         </a>
         <nav aria-label="Seitennavigation">
-          {(isFirstLabSnapshot || isOfflineLabSnapshot || isCurrentSnapshot) && (
+          {(isFirstLabSnapshot ||
+            isOfflineLabSnapshot ||
+            isFixedLabsSnapshot ||
+            isCurrentSnapshot) && (
             <a href="#aenderungen">Änderungen</a>
           )}
           <a href="#system">System</a>
@@ -102,6 +112,14 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
           <p className="eyebrow">Systemnotizen · Stand {snapshotLabels[snapshotDate]}</p>
           <h1>Werkzeuge für nachvollziehbare Entwicklungsarbeit.</h1>
           {isCurrentSnapshot ? (
+            <p className="hero-intro">
+              Exakte Provenienz verbindet Journal, kuratiertes Wissen und
+              indexierte Dokumentversionen jetzt ohne Graph. Eine private
+              mobile Leseschicht und ein eng begrenzter Review-Launcher
+              verkürzen zwei Medienbrüche. Beide Hilfen bleiben abgeleitet:
+              weder Browser noch Gedächtnis werden zur technischen Autorität.
+            </p>
+          ) : isFixedLabsSnapshot ? (
             <p className="hero-intro">
               Die erwartbar-offline Systemsimulation umfasst jetzt drei feste,
               voneinander abgegrenzte Installationen. Zugleich erhält das
@@ -205,7 +223,7 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
         </section>
       )}
 
-      {isCurrentSnapshot && (
+      {isFixedLabsSnapshot && (
         <section className="change-section section-rule" id="aenderungen">
           <div className="section-heading">
             <p className="eyebrow">Seit 16.08.2026</p>
@@ -260,6 +278,62 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
             keine regelmäßig etablierte Nutzung; automatische Kompaktierung,
             Akasha, devMCP, SimpleDisplay und das Werkzeugmuseum bleiben
             unverändert.
+          </div>
+        </section>
+      )}
+
+      {isCurrentSnapshot && (
+        <section className="change-section section-rule" id="aenderungen">
+          <div className="section-heading">
+            <p className="eyebrow">Seit 18.08.2026</p>
+            <h2>Exakte Verbindungen sind nützlicher als ein vorschneller Graph.</h2>
+          </div>
+
+          <div className="change-grid">
+            <article>
+              <span>Technischer Stand</span>
+              <h3>Drei Systeme teilen Identitäten, nicht ihre Autorität.</h3>
+              <p>
+                CodexJournal kann eine bewusste Wissenspromotion append-only an
+                ihre Quellereignisse binden. Akasha löst diese technische
+                Referenz exakt auf; devMCP liefert Dokument-, Hash- und
+                Manifestprovenienz mit sichtbarer Drift. Hinzu kommt ein
+                revisionsgebundener Review-Intent, dessen Ausführung auf einem
+                lokalen, read-only Companion bleibt.
+              </p>
+            </article>
+            <article>
+              <span>Tatsächliche Nutzung</span>
+              <h3>Die erste Kette ist real, der Launcher noch kein Alltag.</h3>
+              <p>
+                Eine produktive Promotion wurde bereits in beide Richtungen
+                exakt aufgelöst. Repository-Dokumentation wird nach
+                erfolgreichen Indexläufen in eine private, mobil lesbare
+                Arbeitskopie gespiegelt. Der Review-Launcher ist ausgerollt und
+                sein Sicherheitsprofil real geprüft; eine regelmäßige
+                Review-Nutzung ist noch nicht belegt.
+              </p>
+            </article>
+            <article className="assessment-card">
+              <span>Bewertung durch Codex</span>
+              <h3>Weniger Suchmagie, mehr überprüfbare Kanten.</h3>
+              <p>
+                Exakte Referenzen lösen heute das konkrete Navigationsproblem,
+                für das ein Graph sonst zu früh zusätzliche Semantik und Betrieb
+                einführen würde. Die mobile Leseschicht senkt Reibung, erzeugt
+                aber Sync-, Konflikt- und Backupaufwand. Der Review-Launcher ist
+                nur dann ein Gewinn, wenn seine enge Vertrauensgrenze kleiner
+                bleibt als der ersetzte manuelle Kontextwechsel.
+              </p>
+            </article>
+          </div>
+
+          <div className="unchanged-note">
+            <strong>Unverändert:</strong> Repository, kanonische Dokumentation,
+            DDL und Runtime bleiben bindend. Es gibt keinen automatischen
+            Journal-Akasha-Übergang, keinen semantischen Backfill und keinen
+            produktiven Wissensgraphen. Die datierten Laborumgebungen,
+            SimpleDisplay und das Werkzeugmuseum bleiben unverändert.
           </div>
         </section>
       )}
@@ -554,7 +628,10 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
             </p>
           </article>
 
-          {(isFirstLabSnapshot || isOfflineLabSnapshot || isCurrentSnapshot) && (
+          {(isFirstLabSnapshot ||
+            isOfflineLabSnapshot ||
+            isFixedLabsSnapshot ||
+            isCurrentSnapshot) && (
             <article className="practice-card lab-card">
               <p className="eyebrow">Nichtproduktive Infrastruktur</p>
               <h3>Parat-Lab</h3>
@@ -600,7 +677,7 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
             </article>
           )}
 
-          {isCurrentSnapshot && (
+          {(isFixedLabsSnapshot || isCurrentSnapshot) && (
             <article className="practice-card lab-card">
               <p className="eyebrow">Erwartbar offline · fest verdrahtet</p>
               <h3>Drei getrennte Systemsimulationen</h3>
@@ -619,6 +696,29 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
                 beseitigen nicht den gemeinsamen Ausfallbereich der
                 Datenbankprozesse. Sichtbare Konfiguration ersetzt außerdem
                 keinen vollständigen Frontend- und Accessibility-Nachweis.
+              </p>
+            </article>
+          )}
+
+          {isCurrentSnapshot && (
+            <article className="practice-card observability-card">
+              <p className="eyebrow">Private Dokumentationskopie</p>
+              <h3>Obsidian als mobile Leseschicht</h3>
+              <p>
+                Freigegebene Markdown-Quellen werden nach einem erfolgreichen
+                devMCP-Sync in einen privaten Vault übernommen. Eine lokale
+                Historie bewahrt konkurrierende Änderungen sichtbar; die
+                synchronisierte Kopie erleichtert Lesen und Review auf mobilen
+                Geräten, schreibt aber nie automatisch in ein Repository zurück.
+              </p>
+              <div className="mini-diagram" aria-label="Abgeleiteter Dokumentationsfluss">
+                <span>Repository</span><b>→</b><span>devMCP-Sync</span><b>→</b><span>Vault</span>
+              </div>
+              <p className="card-limit">
+                <strong>Grenze:</strong> Synchronisation, Konfliktkopien,
+                Plug-in und Backup sind zusätzlicher Betrieb. Die Kopie ist eine
+                Arbeitsoberfläche, keine zweite Source of Truth und kein
+                automatischer Rückschreibkanal.
               </p>
             </article>
           )}
@@ -753,6 +853,16 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
           <span>Chronik-Vertrag v1</span>
           {isCurrentSnapshot ? (
             <>
+              <span>CodexJournal 38c69af</span>
+              <span>Akasha 6c583d2</span>
+              <span>devMCP ff5191d</span>
+              <span>dev-infra dd11a80</span>
+              <span>Doku-Publisher 24cf2dd</span>
+              <span>SimpleDisplay c576ccb</span>
+              <span>CodexSlicer fc68381</span>
+            </>
+          ) : isFixedLabsSnapshot ? (
+            <>
               <span>dev-infra 685a25b</span>
               <span>Public-DDL 009671f</span>
               <span>CodexJournal e55e998 · lokaler Hook-Release</span>
@@ -788,6 +898,8 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
 
       <nav className="snapshot-navigation" aria-label="Navigation zwischen Momentaufnahmen">
         {isCurrentSnapshot ? (
+          <Link href="/chronik/2026-08-18">← Älterer Stand · 18.08.2026</Link>
+        ) : isFixedLabsSnapshot ? (
           <Link href="/chronik/2026-08-16">← Älterer Stand · 16.08.2026</Link>
         ) : isOfflineLabSnapshot ? (
           <Link href="/chronik/2026-08-13">← Älterer Stand · 13.08.2026</Link>
@@ -797,7 +909,7 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
           <span>Erster veröffentlichter Stand · 12.08.2026</span>
         )}
         <Link href="/chronik">Chronik</Link>
-        <Link href="/" aria-current={isCurrentSnapshot ? "page" : undefined}>Aktueller Stand · 18.08.2026</Link>
+        <Link href="/" aria-current={isCurrentSnapshot ? "page" : undefined}>Aktueller Stand · 30.08.2026</Link>
         {snapshotDate === "2026-08-12" && (
           <Link href="/chronik/2026-08-13">Nächster Stand · 13.08.2026 →</Link>
         )}
@@ -806,6 +918,9 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
         )}
         {isOfflineLabSnapshot && (
           <Link href="/chronik/2026-08-18">Nächster Stand · 18.08.2026 →</Link>
+        )}
+        {isFixedLabsSnapshot && (
+          <Link href="/chronik/2026-08-30">Nächster Stand · 30.08.2026 →</Link>
         )}
       </nav>
 

@@ -10,5 +10,5 @@ export const metadata = createPageMetadata({
 
 /** Rendert die aktuell veröffentlichte technische Momentaufnahme. */
 export default function Home() {
-  return <SnapshotPage snapshotDate="2026-08-18" />;
+  return <SnapshotPage snapshotDate="2026-08-30" />;
 }
