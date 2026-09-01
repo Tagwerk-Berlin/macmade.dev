@@ -9,9 +9,18 @@ export const metadata = createPageMetadata({
 
 const entries = [
   {
+    date: "2026-09-01",
+    label: "01.09.2026",
+    current: true,
+    title: "Lokale Originalquellen ersetzen den Standardindex.",
+    summary:
+      "docs-find übernimmt die deterministische Navigation; devMCP bleibt als deaktivierter Rückfall erhalten und wandert für diesen Workflow ins Museum.",
+    triggers: ["Technischer Stand", "Tatsächliche Nutzung", "Bewertung durch Codex"],
+  },
+  {
     date: "2026-08-30",
     label: "30.08.2026",
-    current: true,
+    current: false,
     title: "Exakte Provenienz, mobile Dokumente und ein enger Review-Launcher.",
     summary:
       "Linkability v1 verbindet belegte Identitäten ohne Graph; mobile Leseschicht und Review-Intent bleiben abgeleitete, eng begrenzte Hilfen.",

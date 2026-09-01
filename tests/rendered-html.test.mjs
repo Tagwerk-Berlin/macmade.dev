@@ -44,17 +44,16 @@ test("exportiert die öffentliche technische Seite als statisches HTML", async (
   assert.match(html, /CodexJournal/);
   assert.match(html, /Akasha/);
   assert.match(html, /devMCP/);
+  assert.match(html, /docs-find/);
   assert.match(html, /Grenze \/ Trade-off/);
   assert.match(html, /Keine Betriebsanleitung/);
   assert.match(html, /kanonische Auflösung aktiv/);
   assert.match(html, /Typen \+ TTL \+ Supersession/);
   assert.match(html, /fehlende Ziele bleiben dagegen diagnostisch sichtbar/);
-  assert.match(html, /atomarer Lifecycle aktiv/);
-  assert.match(html, /Scan-Kandidaten \+ Manifest/);
-  assert.match(html, /ein Scan ist erst mit ready veröffentlicht/);
-  assert.match(html, /erforderlichen Embeddings dieser Kandidaten/);
-  assert.match(html, /Embedding-Lücken können die Source trotzdem degraded lassen/);
-  assert.match(html, /Historische Generationen verschwinden nicht automatisch/);
+  assert.match(html, /lokal und deterministisch/);
+  assert.match(html, /versioniertes Mapping/);
+  assert.match(html, /kein Index oder Netzwerk-Fallback/);
+  assert.match(html, /Lokale Originalquellen/);
   assert.doesNotMatch(html, /atomarer Lifecycle im Source|Integration und Deployment sind nicht Teil dieses Stands/);
   assert.match(html, /journal-review-2026-08-12\.jpg/);
   assert.match(html, /journal-rereview-result-2026-08-12\.jpg/);
@@ -68,6 +67,7 @@ test("exportiert die öffentliche technische Seite als statisches HTML", async (
   assert.doesNotMatch(html, /noch nicht ausgerollter Stand|Bis zum Deployment/);
   assert.match(html, /Werkzeugmuseum/);
   assert.match(html, /CodexSlicer/);
+  assert.match(html, /Indexierte Quellennavigation/);
   assert.match(html, /retired/);
   assert.match(html, /Kein allgemeines Todesurteil/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton|Starter Project/);
@@ -95,34 +95,38 @@ test("exportiert Chronik und alle datierten Momentaufnahmen", async () => {
   const firstLabSnapshot = await readExportedHtml("chronik/2026-08-13/index.html");
   const offlineLabSnapshot = await readExportedHtml("chronik/2026-08-16/index.html");
   const fixedLabsSnapshot = await readExportedHtml("chronik/2026-08-18/index.html");
-  const currentSnapshot = await readExportedHtml("chronik/2026-08-30/index.html");
+  const linkabilitySnapshot = await readExportedHtml("chronik/2026-08-30/index.html");
+  const currentSnapshot = await readExportedHtml("chronik/2026-09-01/index.html");
   const currentText = visibleText(current);
   const firstSnapshotText = visibleText(firstSnapshot);
   const firstLabSnapshotText = visibleText(firstLabSnapshot);
   const offlineLabSnapshotText = visibleText(offlineLabSnapshot);
   const fixedLabsSnapshotText = visibleText(fixedLabsSnapshot);
+  const linkabilitySnapshotText = visibleText(linkabilitySnapshot);
   const currentSnapshotText = visibleText(currentSnapshot);
 
-  assert.match(currentText, /Exakte Verbindungen sind nützlicher als ein vorschneller Graph/);
+  assert.match(currentText, /Die Originalquelle braucht für diesen Workflow keinen Index/);
   assert.match(currentText, /Technischer Stand/);
   assert.match(currentText, /Tatsächliche Nutzung/);
   assert.match(currentText, /Bewertung durch Codex/);
-  assert.match(currentText, /Drei Systeme teilen Identitäten, nicht ihre Autorität/);
-  assert.match(currentText, /Eine produktive Promotion wurde bereits in beide Richtungen exakt aufgelöst/);
-  assert.match(currentText, /eine regelmäßige Review-Nutzung ist noch nicht belegt/);
-  assert.match(currentText, /keinen produktiven Wissensgraphen/);
+  assert.match(currentText, /Ein lokales Mapping ersetzt die verteilte Suchschicht/);
+  assert.match(currentText, /devMCP ist nicht mehr der normale Einstiegspunkt/);
+  assert.match(currentText, /Weniger Infrastruktur ist hier die präzisere Suche/);
+  assert.match(currentText, /ein Indexlauf ist weder Trigger noch Gate/);
   assert.match(currentText, /Obsidian als mobile Leseschicht/);
-  assert.match(currentText, /kein automatischer Rückschreibkanal/);
+  assert.match(currentText, /lokales Mapping/);
+  assert.match(currentText, /Codex Workstation 3b31d1e/);
+  assert.match(currentText, /dev-infra 64734b6/);
   assert.match(currentText, /CodexJournal 38c69af/);
   assert.match(currentText, /Akasha 6c583d2/);
-  assert.match(currentText, /devMCP ff5191d/);
-  assert.match(currentText, /dev-infra dd11a80/);
+  assert.match(currentText, /devMCP ff5191d · retired im Standardworkflow/);
   assert.doesNotMatch(
     currentText,
     /(?:\d{1,3}\.){3}\d{1,3}|\/Users\/|\b(?:[a-z0-9-]+\.)+(?:internal|lan|local)\b|Mailcode:\s*\d+/i,
   );
 
   assert.match(chronicle, /Technische Urteile mit Datum/);
+  assert.match(chronicle, /href="\/chronik\/2026-09-01"/);
   assert.match(chronicle, /href="\/chronik\/2026-08-30"/);
   assert.match(chronicle, /href="\/chronik\/2026-08-18"/);
   assert.match(chronicle, /href="\/chronik\/2026-08-16"/);
@@ -153,9 +157,16 @@ test("exportiert Chronik und alle datierten Momentaufnahmen", async () => {
   assert.match(fixedLabsSnapshotText, /CodexJournal e55e998 · lokaler Hook-Release/);
   assert.doesNotMatch(fixedLabsSnapshotText, /Exakte Verbindungen sind nützlicher|Obsidian als mobile Leseschicht/);
 
-  assert.match(currentSnapshotText, /Systemnotizen · Stand 30\.08\.2026/);
-  assert.match(currentSnapshotText, /Älterer Stand · 18\.08\.2026/);
-  assert.match(currentSnapshotText, /Exakte Verbindungen sind nützlicher als ein vorschneller Graph/);
+  assert.match(linkabilitySnapshotText, /Systemnotizen · Stand 30\.08\.2026/);
+  assert.match(linkabilitySnapshotText, /Älterer Stand · 18\.08\.2026/);
+  assert.match(linkabilitySnapshotText, /Exakte Verbindungen sind nützlicher als ein vorschneller Graph/);
+  assert.match(linkabilitySnapshotText, /devMCP liefert den Einstiegspunkt/);
+  assert.match(linkabilitySnapshotText, /Nächster Stand · 01\.09\.2026/);
+  assert.doesNotMatch(linkabilitySnapshotText, /docs-find|devMCP ist nicht mehr der normale Einstiegspunkt/);
+
+  assert.match(currentSnapshotText, /Systemnotizen · Stand 01\.09\.2026/);
+  assert.match(currentSnapshotText, /Älterer Stand · 30\.08\.2026/);
+  assert.match(currentSnapshotText, /Die Originalquelle braucht für diesen Workflow keinen Index/);
 });
 
 test("bindet Canonical und Open Graph an jede konkrete Route", async () => {
@@ -166,6 +177,7 @@ test("bindet Canonical und Open Graph an jede konkrete Route", async () => {
     ["chronik/2026-08-16/index.html", "https://macmade.dev/chronik/2026-08-16"],
     ["chronik/2026-08-18/index.html", "https://macmade.dev/chronik/2026-08-18"],
     ["chronik/2026-08-30/index.html", "https://macmade.dev/chronik/2026-08-30"],
+    ["chronik/2026-09-01/index.html", "https://macmade.dev/chronik/2026-09-01"],
   ];
 
   for (const [path, url] of routes) {
@@ -184,6 +196,7 @@ test("liefert ein eigenständiges statisches 404-Dokument", async () => {
   assert.doesNotMatch(text, /Nicht jedes Lab braucht einen Release-Apparat/);
   assert.doesNotMatch(text, /Feste Wiederholung ersetzt keine Mandantenplattform/);
   assert.doesNotMatch(text, /Exakte Verbindungen sind nützlicher als ein vorschneller Graph/);
+  assert.doesNotMatch(text, /Die Originalquelle braucht für diesen Workflow keinen Index/);
 });
 
 test("liefert die datierten Journal-Momentaufnahmen als feste JPEGs aus", async () => {

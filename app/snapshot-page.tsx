@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-const coreSystems = [
+const indexedCoreSystems = [
   {
     index: "01",
     name: "CodexJournal",
@@ -51,7 +51,27 @@ const coreSystems = [
   },
 ];
 
-const workflow = [
+const localCoreSystems = [
+  ...indexedCoreSystems.slice(0, 2),
+  {
+    index: "03",
+    name: "docs-find",
+    status: "im Einsatz · lokal und deterministisch",
+    purpose: "Originalquellennavigation",
+    lead: "Ordnet Projekt- und Source-Keys direkt lokalen Repository-Originalen zu und durchsucht Dokumentation und DDL mit ripgrep.",
+    problem:
+      "Repositoryübergreifende Arbeit braucht einen stabilen Einstieg, ohne vor jeder Aussage einen entfernten Index, Embeddings oder einen veröffentlichten Scanstand vorauszusetzen.",
+    mechanism:
+      "Ein versioniertes Mapping verbindet Git-Origins, mögliche Checkout-Wurzeln und freigegebene Dokument- oder DDL-Pfade. Der aktuelle passende Worktree gewinnt; fehlende oder mehrdeutige Quellen brechen sichtbar ab. Suche läuft ohne Index, Cache, Auto-Clone oder Netzwerk-Fallback direkt auf den Dateien.",
+    workflow:
+      "Nach dem Akasha-Kontext wird zuerst das Projekt lokal aufgelöst. Dokumentation und DDL werden in den gemappten Originalen gesucht; für Code und nicht gemappte Quellen folgt normales ripgrep im aufgelösten Checkout. Erst der gelesene Originalstand autorisiert die Aussage.",
+    tradeoff:
+      "Determinismus und geringe Betriebsfläche kosten semantisches Ranking, zentrale Veröffentlichung und maschinenübergreifende Verfügbarkeit. Das Mapping muss gepflegt werden und setzt lokale Checkouts voraus. Für große, verteilte Korpora kann ein Index weiterhin sinnvoller sein.",
+    facts: ["versioniertes Mapping", "Originaldateien + ripgrep", "kein Index oder Netzwerk-Fallback"],
+  },
+];
+
+const indexedWorkflow = [
   ["01", "Kontext", "Akasha nach wiederverwendbarem Wissen durchsuchen."],
   ["02", "Quelle", "Mit devMCP navigieren, dann das kanonische Original lesen."],
   ["03", "Slice", "Ziel, Grenze und erforderliche Gates im Journal festlegen."],
@@ -60,12 +80,19 @@ const workflow = [
   ["06", "Promotion", "Nur dauerhaftes Wissen bewusst nach Akasha übernehmen."],
 ];
 
+const localWorkflow = indexedWorkflow.map((step) =>
+  step[0] === "02"
+    ? ["02", "Quelle", "Mit docs-find das lokale Original auflösen und direkt lesen."]
+    : step,
+);
+
 type SnapshotDate =
   | "2026-08-12"
   | "2026-08-13"
   | "2026-08-16"
   | "2026-08-18"
-  | "2026-08-30";
+  | "2026-08-30"
+  | "2026-09-01";
 
 type SnapshotPageProps = {
   snapshotDate: SnapshotDate;
@@ -77,6 +104,7 @@ const snapshotLabels: Record<SnapshotDate, string> = {
   "2026-08-16": "16.08.2026",
   "2026-08-18": "18.08.2026",
   "2026-08-30": "30.08.2026",
+  "2026-09-01": "01.09.2026",
 };
 
 /** Rendert einen aktuellen oder archivierten Stand aus derselben Darstellung. */
@@ -84,7 +112,10 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
   const isFirstLabSnapshot = snapshotDate === "2026-08-13";
   const isOfflineLabSnapshot = snapshotDate === "2026-08-16";
   const isFixedLabsSnapshot = snapshotDate === "2026-08-18";
-  const isCurrentSnapshot = snapshotDate === "2026-08-30";
+  const isLinkabilitySnapshot = snapshotDate === "2026-08-30";
+  const isCurrentSnapshot = snapshotDate === "2026-09-01";
+  const displayedCoreSystems = isCurrentSnapshot ? localCoreSystems : indexedCoreSystems;
+  const displayedWorkflow = isCurrentSnapshot ? localWorkflow : indexedWorkflow;
 
   return (
     <main>
@@ -96,6 +127,7 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
           {(isFirstLabSnapshot ||
             isOfflineLabSnapshot ||
             isFixedLabsSnapshot ||
+            isLinkabilitySnapshot ||
             isCurrentSnapshot) && (
             <a href="#aenderungen">Änderungen</a>
           )}
@@ -112,6 +144,14 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
           <p className="eyebrow">Systemnotizen · Stand {snapshotLabels[snapshotDate]}</p>
           <h1>Werkzeuge für nachvollziehbare Entwicklungsarbeit.</h1>
           {isCurrentSnapshot ? (
+            <p className="hero-intro">
+              Die Standardnavigation zu Dokumentation und DDL ist wieder eine
+              lokale, deterministische Dateisuche. Der frühere Index bleibt als
+              Rückfallidee dokumentiert, trägt aber weder den normalen
+              Arbeitsbeginn noch die mobile Lesekopie. Weniger Suchmagie
+              bedeutet hier vor allem: weniger verteilten Zustand.
+            </p>
+          ) : isLinkabilitySnapshot ? (
             <p className="hero-intro">
               Exakte Provenienz verbindet Journal, kuratiertes Wissen und
               indexierte Dokumentversionen jetzt ohne Graph. Eine private
@@ -285,6 +325,64 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
       {isCurrentSnapshot && (
         <section className="change-section section-rule" id="aenderungen">
           <div className="section-heading">
+            <p className="eyebrow">Seit 30.08.2026</p>
+            <h2>Die Originalquelle braucht für diesen Workflow keinen Index.</h2>
+          </div>
+
+          <div className="change-grid">
+            <article>
+              <span>Technischer Stand</span>
+              <h3>Ein lokales Mapping ersetzt die verteilte Suchschicht.</h3>
+              <p>
+                Eine installierte Dateisuche löst Projekt- und Source-Keys auf
+                konkrete Repository-Originale auf und durchsucht Dokumentation
+                sowie DDL direkt mit ripgrep. Sie besitzt keinen Index, Cache
+                oder Netzwerk-Fallback. Auch der Obsidian-Publisher bezieht
+                seine freigegebenen Quellen jetzt aus diesem Mapping statt aus
+                einem abgeschlossenen devMCP-Lauf.
+              </p>
+            </article>
+            <article>
+              <span>Tatsächliche Nutzung</span>
+              <h3>devMCP ist nicht mehr der normale Einstiegspunkt.</h3>
+              <p>
+                Der Arbeitsbeginn führt nach der Akasha-Suche über die lokale
+                Originalquellennavigation und anschließend direkt in Datei,
+                Code oder DDL. Die devMCP-Definition bleibt als reversibler
+                Rückfall erhalten, ist im Normalbetrieb aber deaktiviert. Die
+                mobile Lesekopie wird nach Dokumentänderungen separat
+                veröffentlicht; ein Indexlauf ist weder Trigger noch Gate.
+              </p>
+            </article>
+            <article className="assessment-card">
+              <span>Bewertung durch Codex</span>
+              <h3>Weniger Infrastruktur ist hier die präzisere Suche.</h3>
+              <p>
+                Für die überschaubare Zahl lokaler Repositories wiegen
+                deterministische Pfade und sichtbare Fehler schwerer als
+                semantisches Ranking. Der Index brachte Kandidatenzustand,
+                Embeddings, Readiness und Repair in einen Ablauf, der am Ende
+                ohnehin das Original lesen musste. Verloren gehen bequeme
+                semantische und maschinenübergreifende Suche; bei einem größeren
+                Korpus kann diese Rechnung deshalb wieder anders ausfallen.
+              </p>
+            </article>
+          </div>
+
+          <div className="unchanged-note">
+            <strong>Unverändert:</strong> Repository, Code, kanonische
+            Dokumentation, DDL und Runtime bleiben bindend. CodexJournal hält
+            den operativen Verlauf; Akasha bleibt das kuratierte semantische
+            Gedächtnis. Linkability v1, Review-Launcher, Labumgebungen,
+            SimpleDisplay und die früheren Momentaufnahmen werden nicht
+            nachträglich umgedeutet.
+          </div>
+        </section>
+      )}
+
+      {isLinkabilitySnapshot && (
+        <section className="change-section section-rule" id="aenderungen">
+          <div className="section-heading">
             <p className="eyebrow">Seit 18.08.2026</p>
             <h2>Exakte Verbindungen sind nützlicher als ein vorschneller Graph.</h2>
           </div>
@@ -407,8 +505,8 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
           <span className="map-arrow" aria-hidden="true">→</span>
           <div className="map-node">
             <span className="node-kicker">finden</span>
-            <strong>devMCP</strong>
-            <small>indexierte Navigation</small>
+            <strong>{isCurrentSnapshot ? "docs-find" : "devMCP"}</strong>
+            <small>{isCurrentSnapshot ? "lokale Originale" : "indexierte Navigation"}</small>
           </div>
           <span className="map-arrow" aria-hidden="true">→</span>
           <div className="map-node">
@@ -431,7 +529,7 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
         <div className="principles-grid">
           <article>
             <span>01</span>
-            <h3>Original vor Index</h3>
+            <h3>{isCurrentSnapshot ? "Original statt Index" : "Original vor Index"}</h3>
             <p>
               Suche beschleunigt das Finden. Sie autorisiert keine Aussage und
               ersetzt weder Code noch DDL oder Laufzeitbeleg.
@@ -461,13 +559,14 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
           <p className="eyebrow">Kernwerkzeuge</p>
           <h2>Was sie lösen – und was sie kosten.</h2>
           <p>
-            Alle drei Werkzeuge laufen im aktuellen Entwicklungsworkflow. Keines
-            davon ist als allgemeine Plattform gedacht.
+            Alle drei Werkzeuge dieses Stands laufen im beschriebenen
+            Entwicklungsworkflow. Keines davon ist als allgemeine Plattform
+            gedacht.
           </p>
         </div>
 
         <div className="tool-list">
-          {coreSystems.map((tool) => (
+          {displayedCoreSystems.map((tool) => (
             <article className="tool-card" key={tool.name}>
               <div className="tool-index">{tool.index}</div>
               <div className="tool-main">
@@ -579,7 +678,7 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
           <h2>Ein kleiner Kontrollkreis, kein autonomes Wissenssystem.</h2>
         </div>
         <ol className="workflow-list">
-          {workflow.map(([number, label, text]) => (
+          {displayedWorkflow.map(([number, label, text]) => (
             <li key={number}>
               <span className="workflow-number">{number}</span>
               <strong>{label}</strong>
@@ -631,6 +730,7 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
           {(isFirstLabSnapshot ||
             isOfflineLabSnapshot ||
             isFixedLabsSnapshot ||
+            isLinkabilitySnapshot ||
             isCurrentSnapshot) && (
             <article className="practice-card lab-card">
               <p className="eyebrow">Nichtproduktive Infrastruktur</p>
@@ -677,7 +777,7 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
             </article>
           )}
 
-          {(isFixedLabsSnapshot || isCurrentSnapshot) && (
+          {(isFixedLabsSnapshot || isLinkabilitySnapshot || isCurrentSnapshot) && (
             <article className="practice-card lab-card">
               <p className="eyebrow">Erwartbar offline · fest verdrahtet</p>
               <h3>Drei getrennte Systemsimulationen</h3>
@@ -700,7 +800,7 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
             </article>
           )}
 
-          {isCurrentSnapshot && (
+          {isLinkabilitySnapshot && (
             <article className="practice-card observability-card">
               <p className="eyebrow">Private Dokumentationskopie</p>
               <h3>Obsidian als mobile Leseschicht</h3>
@@ -719,6 +819,29 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
                 Plug-in und Backup sind zusätzlicher Betrieb. Die Kopie ist eine
                 Arbeitsoberfläche, keine zweite Source of Truth und kein
                 automatischer Rückschreibkanal.
+              </p>
+            </article>
+          )}
+
+          {isCurrentSnapshot && (
+            <article className="practice-card observability-card">
+              <p className="eyebrow">Private Dokumentationskopie</p>
+              <h3>Obsidian als mobile Leseschicht</h3>
+              <p>
+                Freigegebene Markdown-Originale werden nach einer Änderung
+                direkt über dasselbe lokale Dokument-Mapping in einen privaten
+                Vault übernommen. Eine lokale Historie bewahrt konkurrierende
+                Obsidian-Änderungen sichtbar; die Kopie schreibt nie automatisch
+                in ein Repository zurück.
+              </p>
+              <div className="mini-diagram" aria-label="Abgeleiteter Dokumentationsfluss">
+                <span>Repository</span><b>→</b><span>lokales Mapping</span><b>→</b><span>Vault</span>
+              </div>
+              <p className="card-limit">
+                <strong>Grenze:</strong> Synchronisation, Konfliktkopien,
+                Plug-in und Backup bleiben zusätzlicher Betrieb. Die direkte
+                Kopplung entfernt nur den Index als Zwischenstufe; Obsidian
+                bleibt eine abgeleitete Arbeitsoberfläche.
               </p>
             </article>
           )}
@@ -804,6 +927,80 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
             </div>
           </div>
         </article>
+
+        {isCurrentSnapshot && (
+          <article className="museum-card">
+            <div className="museum-meta">
+              <span className="retired-status">retired</span>
+              <span>01.09.2026</span>
+              <span>ersetzt im Standardworkflow</span>
+            </div>
+
+            <div className="museum-title">
+              <p className="tool-purpose">Indexierte Quellennavigation</p>
+              <h3>devMCP</h3>
+              <p>
+                Synchronisierte Dokumentation, DDL, Code und Endpoints in einen
+                semantisch durchsuchbaren Dienst mit atomarer Veröffentlichung,
+                Readiness und Repairpfaden.
+              </p>
+            </div>
+
+            <div className="museum-transition" aria-label="Ablösung von devMCP">
+              <div>
+                <span>damals</span>
+                <strong>Entfernter Index</strong>
+                <small>Scan · Chunks · Embeddings · Readiness</small>
+              </div>
+              <b aria-hidden="true">→</b>
+              <div>
+                <span>heute</span>
+                <strong>Lokale Originalquellen</strong>
+                <small>Mapping · Worktree · Datei · ripgrep</small>
+              </div>
+            </div>
+
+            <div className="museum-details">
+              <div>
+                <h4>Was tatsächlich gebaut war</h4>
+                <p>
+                  Registrierte Quellen wurden versioniert erfasst, in
+                  unveröffentlichte Kandidaten überführt und erst nach
+                  vollständigen Pflichtjobs atomar sichtbar. Manifeste,
+                  Readiness und Reparatur machten unvollständige Stände
+                  diagnostizierbar.
+                </p>
+              </div>
+              <div>
+                <h4>Warum es gehen konnte</h4>
+                <p>
+                  Der aktuelle Workflow muss bindende Aussagen ohnehin am
+                  lokalen Original prüfen. Für die vorhandenen Repositories
+                  erzeugte der Index mehr Zustands-, Betriebs- und
+                  Aktualisierungsarbeit, als sein semantisches Ranking sparte.
+                </p>
+              </div>
+              <div>
+                <h4>Was geblieben ist</h4>
+                <p>
+                  Stabile Projekt- und Source-Keys, explizite
+                  Originalquellenrollen, sichtbare Drift und die Trennung von
+                  Navigation und Autorität. Ersetzt wurde die Laufzeit, nicht
+                  die Provenienzdisziplin.
+                </p>
+              </div>
+              <div className="museum-caveat">
+                <h4>Kein allgemeines Todesurteil</h4>
+                <p>
+                  Für große, verteilte oder überwiegend semantisch erschlossene
+                  Korpora kann ein veröffentlichter Index wieder sinnvoll sein.
+                  Die deaktivierte Definition bleibt deshalb als begrenzter
+                  Rückfall erhalten.
+                </p>
+              </div>
+            </div>
+          </article>
+        )}
       </section>
 
       <section className="sources-section section-rule" id="quellen">
@@ -817,7 +1014,11 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
             <ul>
               <li>aktuelle Repository-Dokumentation und Architekturentscheidungen</li>
               <li>Implementierung, Tests und veröffentlichte Werkzeugverträge</li>
-              <li>Live-Navigation über die tatsächlich erreichbaren MCP-Werkzeuge</li>
+              <li>
+                {isCurrentSnapshot
+                  ? "installierte lokale Quellennavigation und tatsächliche Werkzeugkonfiguration"
+                  : "Live-Navigation über die tatsächlich erreichbaren MCP-Werkzeuge"}
+              </li>
               <li>Journal nur für Entstehung, Nutzung und Prozessgrenzen</li>
             </ul>
           </div>
@@ -852,6 +1053,16 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
         <div className="snapshot-provenance" aria-label="Revisionsstand der Momentaufnahme">
           <span>Chronik-Vertrag v1</span>
           {isCurrentSnapshot ? (
+            <>
+              <span>Codex Workstation 3b31d1e</span>
+              <span>dev-infra 64734b6</span>
+              <span>CodexJournal 38c69af</span>
+              <span>Akasha 6c583d2</span>
+              <span>devMCP ff5191d · retired im Standardworkflow</span>
+              <span>SimpleDisplay c576ccb</span>
+              <span>CodexSlicer fc68381</span>
+            </>
+          ) : isLinkabilitySnapshot ? (
             <>
               <span>CodexJournal 38c69af</span>
               <span>Akasha 6c583d2</span>
@@ -898,6 +1109,8 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
 
       <nav className="snapshot-navigation" aria-label="Navigation zwischen Momentaufnahmen">
         {isCurrentSnapshot ? (
+          <Link href="/chronik/2026-08-30">← Älterer Stand · 30.08.2026</Link>
+        ) : isLinkabilitySnapshot ? (
           <Link href="/chronik/2026-08-18">← Älterer Stand · 18.08.2026</Link>
         ) : isFixedLabsSnapshot ? (
           <Link href="/chronik/2026-08-16">← Älterer Stand · 16.08.2026</Link>
@@ -909,7 +1122,7 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
           <span>Erster veröffentlichter Stand · 12.08.2026</span>
         )}
         <Link href="/chronik">Chronik</Link>
-        <Link href="/" aria-current={isCurrentSnapshot ? "page" : undefined}>Aktueller Stand · 30.08.2026</Link>
+        <Link href="/" aria-current={isCurrentSnapshot ? "page" : undefined}>Aktueller Stand · 01.09.2026</Link>
         {snapshotDate === "2026-08-12" && (
           <Link href="/chronik/2026-08-13">Nächster Stand · 13.08.2026 →</Link>
         )}
@@ -921,6 +1134,9 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
         )}
         {isFixedLabsSnapshot && (
           <Link href="/chronik/2026-08-30">Nächster Stand · 30.08.2026 →</Link>
+        )}
+        {isLinkabilitySnapshot && (
+          <Link href="/chronik/2026-09-01">Nächster Stand · 01.09.2026 →</Link>
         )}
       </nav>
 

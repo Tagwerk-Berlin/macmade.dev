@@ -164,6 +164,7 @@ test("exportiert Seitenrouten als direkt auslieferbare Verzeichnisse", async () 
     "chronik/2026-08-16/index.html",
     "chronik/2026-08-18/index.html",
     "chronik/2026-08-30/index.html",
+    "chronik/2026-09-01/index.html",
   ]) {
     await assert.doesNotReject(
       access(new URL(`../dist/client/${pathName}`, import.meta.url)),
@@ -177,6 +178,7 @@ test("exportiert Seitenrouten als direkt auslieferbare Verzeichnisse", async () 
     "chronik/2026-08-16.html",
     "chronik/2026-08-18.html",
     "chronik/2026-08-30.html",
+    "chronik/2026-09-01.html",
   ]) {
     await assert.rejects(
       access(new URL(`../dist/client/${pathName}`, import.meta.url)),

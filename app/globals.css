@@ -750,6 +750,10 @@ h1 {
     var(--paper-deep);
 }
 
+.museum-card + .museum-card {
+  margin-top: 28px;
+}
+
 .museum-meta {
   display: flex;
   flex-wrap: wrap;
