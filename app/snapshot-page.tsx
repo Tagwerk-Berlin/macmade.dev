@@ -62,7 +62,7 @@ const localCoreSystems = [
     problem:
       "Repositoryübergreifende Arbeit braucht einen stabilen Einstieg, ohne vor jeder Aussage einen entfernten Index, Embeddings oder einen veröffentlichten Scanstand vorauszusetzen.",
     mechanism:
-      "Ein versioniertes Mapping verbindet Git-Origins, mögliche Checkout-Wurzeln und freigegebene Dokument- oder DDL-Pfade. Der aktuelle passende Worktree gewinnt; fehlende oder mehrdeutige Quellen brechen sichtbar ab. Suche läuft ohne Index, Cache, Auto-Clone oder Netzwerk-Fallback direkt auf den Dateien.",
+      "Ein versioniertes Mapping verbindet Git-Origins, mögliche Checkout-Wurzeln und freigegebene Dokument- oder DDL-Pfade. Der aktuelle passende Worktree gewinnt; fehlende oder mehrdeutige Quellen brechen sichtbar ab. Suche läuft ohne Index, persistenten Dokument- oder Inhaltscache, Auto-Clone oder Netzwerk-Fallback direkt auf den Dateien.",
     workflow:
       "Nach dem Akasha-Kontext wird zuerst das Projekt lokal aufgelöst. Dokumentation und DDL werden in den gemappten Originalen gesucht; für Code und nicht gemappte Quellen folgt normales ripgrep im aufgelösten Checkout. Erst der gelesene Originalstand autorisiert die Aussage.",
     tradeoff:
@@ -336,8 +336,9 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
               <p>
                 Eine installierte Dateisuche löst Projekt- und Source-Keys auf
                 konkrete Repository-Originale auf und durchsucht Dokumentation
-                sowie DDL direkt mit ripgrep. Sie besitzt keinen Index, Cache
-                oder Netzwerk-Fallback. Auch der Obsidian-Publisher bezieht
+                sowie DDL direkt mit ripgrep. Sie besitzt keinen Index,
+                persistiert keinen Dokument- oder Inhaltscache und nutzt
+                keinen Netzwerk-Fallback. Auch der Obsidian-Publisher bezieht
                 seine freigegebenen Quellen jetzt aus diesem Mapping statt aus
                 einem abgeschlossenen devMCP-Lauf.
               </p>
