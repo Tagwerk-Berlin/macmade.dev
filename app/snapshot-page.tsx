@@ -71,6 +71,26 @@ const localCoreSystems = [
   },
 ];
 
+const linearCoreSystems = [
+  {
+    index: "01",
+    name: "CodexJournal",
+    status: "im Einsatz · linearer Ablauf",
+    purpose: "Operative Provenienz",
+    lead: "Hält fest, was eine Arbeitseinheit erreichen soll, welche Entscheidungen gefallen sind und woran ihr Ergebnis geprüft wurde.",
+    problem:
+      "Git zeigt Änderungen, aber nicht zuverlässig Ziel, bewusste Nicht-Änderungen, Review-Ergebnisse oder den Grund für einen Abbruch. Bei längeren Agentenläufen fehlt dadurch ein belastbarer Arbeitsverlauf.",
+    mechanism:
+      "MCP-Werkzeuge schreiben semantische Ereignisse in ein append-only PostgreSQL-Journal; technische Hooks ergänzen Session-Fakten. Historische Change-Control-Daten bleiben lesbar, ihre Level und Gates gehören aber nicht mehr zur aktiven Werkzeugfläche. Ein Write-only-Briefkasten und experimentelle Shared Notes liegen als getrennte Nebenflächen außerhalb des Slice-Verlaufs.",
+    workflow:
+      "Der normale Weg ist Aufgabe, Slice, Implementierung, Tests, bei Bedarf ein risikobasierter unabhängiger Review und Abschluss. Das Journal dokumentiert diesen Verlauf, autorisiert aber keine Repository-Aktion und verlangt keine allgemeine Risikoklassifikation.",
+    tradeoff:
+      "Auch der kleinere Vertrag bleibt zusätzliche Prozess- und Betriebsinfrastruktur. Für kurze Arbeiten reichen Commit und Tests oft aus. Der Briefkasten ist nur ein optionales Signal; Shared Notes sind noch kein Koordinationssystem und müssten ihren Nutzen erst in tatsächlicher Verwendung zeigen.",
+    facts: ["append-only Ereignisse", "linearer Workflow", "getrennte optionale Nebenflächen"],
+  },
+  ...localCoreSystems.slice(1),
+];
+
 const indexedWorkflow = [
   ["01", "Kontext", "Akasha nach wiederverwendbarem Wissen durchsuchen."],
   ["02", "Quelle", "Mit devMCP navigieren, dann das kanonische Original lesen."],
@@ -86,13 +106,24 @@ const localWorkflow = indexedWorkflow.map((step) =>
     : step,
 );
 
+const linearWorkflow = localWorkflow.map((step) =>
+  step[0] === "03"
+    ? [
+        "03",
+        "Slice",
+        "Ziel und Grenze festlegen; einen unabhängigen Review nur nach Risiko, Auftrag oder bindender Regel einsetzen.",
+      ]
+    : step,
+);
+
 type SnapshotDate =
   | "2026-08-12"
   | "2026-08-13"
   | "2026-08-16"
   | "2026-08-18"
   | "2026-08-30"
-  | "2026-09-01";
+  | "2026-09-01"
+  | "2026-09-04";
 
 type SnapshotPageProps = {
   snapshotDate: SnapshotDate;
@@ -105,6 +136,7 @@ const snapshotLabels: Record<SnapshotDate, string> = {
   "2026-08-18": "18.08.2026",
   "2026-08-30": "30.08.2026",
   "2026-09-01": "01.09.2026",
+  "2026-09-04": "04.09.2026",
 };
 
 /** Rendert einen aktuellen oder archivierten Stand aus derselben Darstellung. */
@@ -113,9 +145,19 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
   const isOfflineLabSnapshot = snapshotDate === "2026-08-16";
   const isFixedLabsSnapshot = snapshotDate === "2026-08-18";
   const isLinkabilitySnapshot = snapshotDate === "2026-08-30";
-  const isCurrentSnapshot = snapshotDate === "2026-09-01";
-  const displayedCoreSystems = isCurrentSnapshot ? localCoreSystems : indexedCoreSystems;
-  const displayedWorkflow = isCurrentSnapshot ? localWorkflow : indexedWorkflow;
+  const isDocsFindSnapshot = snapshotDate === "2026-09-01";
+  const isCurrentSnapshot = snapshotDate === "2026-09-04";
+  const usesLocalDocumentation = isDocsFindSnapshot || isCurrentSnapshot;
+  const displayedCoreSystems = isCurrentSnapshot
+    ? linearCoreSystems
+    : isDocsFindSnapshot
+      ? localCoreSystems
+      : indexedCoreSystems;
+  const displayedWorkflow = isCurrentSnapshot
+    ? linearWorkflow
+    : usesLocalDocumentation
+      ? localWorkflow
+      : indexedWorkflow;
 
   return (
     <main>
@@ -128,6 +170,7 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
             isOfflineLabSnapshot ||
             isFixedLabsSnapshot ||
             isLinkabilitySnapshot ||
+            isDocsFindSnapshot ||
             isCurrentSnapshot) && (
             <a href="#aenderungen">Änderungen</a>
           )}
@@ -144,6 +187,15 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
           <p className="eyebrow">Systemnotizen · Stand {snapshotLabels[snapshotDate]}</p>
           <h1>Werkzeuge für nachvollziehbare Entwicklungsarbeit.</h1>
           {isCurrentSnapshot ? (
+            <p className="hero-intro">
+              CodexJournal dokumentiert den Arbeitsverlauf wieder ohne
+              verpflichtende Change-Control-Matrix. Historische Level und
+              Gates bleiben lesbar, steuern neue Slices aber nicht mehr.
+              Optionale Reibungssignale und experimentelle Shared Notes sind
+              bewusst getrennt – eine neue Oberfläche ist noch kein neuer
+              Pflichtprozess.
+            </p>
+          ) : isDocsFindSnapshot ? (
             <p className="hero-intro">
               Die Standardnavigation zu Dokumentation und DDL ist wieder eine
               lokale, deterministische Dateisuche. Der frühere Index bleibt als
@@ -323,6 +375,63 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
       )}
 
       {isCurrentSnapshot && (
+        <section className="change-section section-rule" id="aenderungen">
+          <div className="section-heading">
+            <p className="eyebrow">Seit 01.09.2026</p>
+            <h2>Das Journal dokumentiert Arbeit, es steuert sie nicht.</h2>
+          </div>
+
+          <div className="change-grid">
+            <article>
+              <span>Technischer Stand</span>
+              <h3>Change-Control verlässt die aktive Werkzeugfläche.</h3>
+              <p>
+                Neue Slices benötigen keine L1–L4-Klassifikation und keine
+                allgemeine Gate-Matrix mehr. Die historischen Ereignisse
+                bleiben unverändert lesbar. Neu hinzu kamen ein getrennter
+                Write-only-Briefkasten für optionale Reibungssignale und eine
+                experimentelle persistente Read-/Append-Fläche; beide liegen
+                außerhalb des Journal- und Slice-Modells.
+              </p>
+            </article>
+            <article>
+              <span>Tatsächliche Nutzung</span>
+              <h3>Der normale Ablauf ist wieder linear.</h3>
+              <p>
+                Arbeit läuft von Aufgabe und begrenztem Slice über
+                Implementierung und Tests zum risikobasierten Review und
+                Abschluss. Zusätzliche Task- oder Kontextmarker werden nur bei
+                echtem Nutzen gesetzt. Der Briefkasten bleibt optional; für
+                eine regelmäßige Nutzung der Shared Notes gibt es noch keinen
+                Beleg.
+              </p>
+            </article>
+            <article className="assessment-card">
+              <span>Bewertung durch Codex</span>
+              <h3>Entfernen war hier die eigentliche Vereinfachung.</h3>
+              <p>
+                Git, Journal, Tests und Review hatten denselben Zustand
+                teilweise parallel modelliert. Ihre Rollen klar zu trennen ist
+                belastbarer als immer neue Pflichtnachweise einzuführen. Auch
+                Shared Notes verdienen noch keine Koordinationssemantik: Erst
+                konkrete Nutzung kann zeigen, ob die kleine Fläche mehr löst
+                als sie an neuem Zustand erzeugt.
+              </p>
+            </article>
+          </div>
+
+          <div className="unchanged-note">
+            <strong>Unverändert:</strong> CodexJournal bleibt append-only;
+            Repository, Code, kanonische Dokumentation, DDL und Runtime bleiben
+            bindend. Akasha bewahrt kuratiertes Wissen, docs-find navigiert zu
+            lokalen Originalen und devMCP bleibt im Standardworkflow
+            deaktiviert. Frühere Momentaufnahmen und ihre damaligen
+            Prozessbewertungen werden nicht umgeschrieben.
+          </div>
+        </section>
+      )}
+
+      {isDocsFindSnapshot && (
         <section className="change-section section-rule" id="aenderungen">
           <div className="section-heading">
             <p className="eyebrow">Seit 30.08.2026</p>
@@ -506,8 +615,8 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
           <span className="map-arrow" aria-hidden="true">→</span>
           <div className="map-node">
             <span className="node-kicker">finden</span>
-            <strong>{isCurrentSnapshot ? "docs-find" : "devMCP"}</strong>
-            <small>{isCurrentSnapshot ? "lokale Originale" : "indexierte Navigation"}</small>
+            <strong>{usesLocalDocumentation ? "docs-find" : "devMCP"}</strong>
+            <small>{usesLocalDocumentation ? "lokale Originale" : "indexierte Navigation"}</small>
           </div>
           <span className="map-arrow" aria-hidden="true">→</span>
           <div className="map-node">
@@ -530,7 +639,7 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
         <div className="principles-grid">
           <article>
             <span>01</span>
-            <h3>{isCurrentSnapshot ? "Original statt Index" : "Original vor Index"}</h3>
+            <h3>{usesLocalDocumentation ? "Original statt Index" : "Original vor Index"}</h3>
             <p>
               Suche beschleunigt das Finden. Sie autorisiert keine Aussage und
               ersetzt weder Code noch DDL oder Laufzeitbeleg.
@@ -732,6 +841,7 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
             isOfflineLabSnapshot ||
             isFixedLabsSnapshot ||
             isLinkabilitySnapshot ||
+            isDocsFindSnapshot ||
             isCurrentSnapshot) && (
             <article className="practice-card lab-card">
               <p className="eyebrow">Nichtproduktive Infrastruktur</p>
@@ -778,7 +888,7 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
             </article>
           )}
 
-          {(isFixedLabsSnapshot || isLinkabilitySnapshot || isCurrentSnapshot) && (
+          {(isFixedLabsSnapshot || isLinkabilitySnapshot || usesLocalDocumentation) && (
             <article className="practice-card lab-card">
               <p className="eyebrow">Erwartbar offline · fest verdrahtet</p>
               <h3>Drei getrennte Systemsimulationen</h3>
@@ -824,7 +934,7 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
             </article>
           )}
 
-          {isCurrentSnapshot && (
+          {usesLocalDocumentation && (
             <article className="practice-card observability-card">
               <p className="eyebrow">Private Dokumentationskopie</p>
               <h3>Obsidian als mobile Leseschicht</h3>
@@ -929,7 +1039,7 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
           </div>
         </article>
 
-        {isCurrentSnapshot && (
+        {usesLocalDocumentation && (
           <article className="museum-card">
             <div className="museum-meta">
               <span className="retired-status">retired</span>
@@ -1016,7 +1126,7 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
               <li>aktuelle Repository-Dokumentation und Architekturentscheidungen</li>
               <li>Implementierung, Tests und veröffentlichte Werkzeugverträge</li>
               <li>
-                {isCurrentSnapshot
+                {usesLocalDocumentation
                   ? "installierte lokale Quellennavigation und tatsächliche Werkzeugkonfiguration"
                   : "Live-Navigation über die tatsächlich erreichbaren MCP-Werkzeuge"}
               </li>
@@ -1054,6 +1164,16 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
         <div className="snapshot-provenance" aria-label="Revisionsstand der Momentaufnahme">
           <span>Chronik-Vertrag v1</span>
           {isCurrentSnapshot ? (
+            <>
+              <span>CodexJournal b1cc07f · aktiver Release</span>
+              <span>Akasha a83c9ee · Quellenvertrag</span>
+              <span>docs-find 3b31d1e · installierter Stand</span>
+              <span>dev-infra 2826abb · Dokumentationspublisher</span>
+              <span>devMCP ff5191d · retired im Standardworkflow</span>
+              <span>SimpleDisplay c576ccb</span>
+              <span>CodexSlicer fc68381</span>
+            </>
+          ) : isDocsFindSnapshot ? (
             <>
               <span>Codex Workstation 3b31d1e</span>
               <span>dev-infra 64734b6</span>
@@ -1110,6 +1230,8 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
 
       <nav className="snapshot-navigation" aria-label="Navigation zwischen Momentaufnahmen">
         {isCurrentSnapshot ? (
+          <Link href="/chronik/2026-09-01">← Älterer Stand · 01.09.2026</Link>
+        ) : isDocsFindSnapshot ? (
           <Link href="/chronik/2026-08-30">← Älterer Stand · 30.08.2026</Link>
         ) : isLinkabilitySnapshot ? (
           <Link href="/chronik/2026-08-18">← Älterer Stand · 18.08.2026</Link>
@@ -1123,7 +1245,7 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
           <span>Erster veröffentlichter Stand · 12.08.2026</span>
         )}
         <Link href="/chronik">Chronik</Link>
-        <Link href="/" aria-current={isCurrentSnapshot ? "page" : undefined}>Aktueller Stand · 01.09.2026</Link>
+        <Link href="/" aria-current={isCurrentSnapshot ? "page" : undefined}>Aktueller Stand · 04.09.2026</Link>
         {snapshotDate === "2026-08-12" && (
           <Link href="/chronik/2026-08-13">Nächster Stand · 13.08.2026 →</Link>
         )}
@@ -1138,6 +1260,9 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
         )}
         {isLinkabilitySnapshot && (
           <Link href="/chronik/2026-09-01">Nächster Stand · 01.09.2026 →</Link>
+        )}
+        {isDocsFindSnapshot && (
+          <Link href="/chronik/2026-09-04">Nächster Stand · 04.09.2026 →</Link>
         )}
       </nav>
 

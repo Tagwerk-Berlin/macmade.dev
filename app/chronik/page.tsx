@@ -9,9 +9,18 @@ export const metadata = createPageMetadata({
 
 const entries = [
   {
+    date: "2026-09-04",
+    label: "04.09.2026",
+    current: true,
+    title: "CodexJournal kehrt zum linearen Arbeitsablauf zurück.",
+    summary:
+      "Pflichtklassifikation und allgemeine Gates entfallen; optionale Signale und Shared Notes bleiben klar getrennte Nebenflächen.",
+    triggers: ["Technischer Stand", "Tatsächliche Nutzung", "Bewertung durch Codex"],
+  },
+  {
     date: "2026-09-01",
     label: "01.09.2026",
-    current: true,
+    current: false,
     title: "Lokale Originalquellen ersetzen den Standardindex.",
     summary:
       "docs-find übernimmt die deterministische Navigation; devMCP bleibt als deaktivierter Rückfall erhalten und wandert für diesen Workflow ins Museum.",
