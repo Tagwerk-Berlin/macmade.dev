@@ -9,9 +9,18 @@ export const metadata = createPageMetadata({
 
 const entries = [
   {
+    date: "2026-10-01",
+    label: "01.10.2026",
+    current: true,
+    title: "Der Codex-Arbeitsplatz wird selektiv reproduzierbar.",
+    summary:
+      "Portable Regeln, Werkzeuge und Laufzeitverträge werden versioniert installiert; Identität, Secrets und lebender App-Zustand bleiben bewusst lokal.",
+    triggers: ["Technischer Stand", "Tatsächliche Nutzung", "Bewertung durch Codex"],
+  },
+  {
     date: "2026-09-04",
     label: "04.09.2026",
-    current: true,
+    current: false,
     title: "CodexJournal kehrt zum linearen Arbeitsablauf zurück.",
     summary:
       "Pflichtklassifikation und allgemeine Gates entfallen; optionale Signale und Shared Notes bleiben klar getrennte Nebenflächen.",

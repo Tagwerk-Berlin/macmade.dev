@@ -45,6 +45,7 @@ test("exportiert die öffentliche technische Seite als statisches HTML", async (
   assert.match(html, /Akasha/);
   assert.match(html, /devMCP/);
   assert.match(html, /docs-find/);
+  assert.match(html, /Codex Workstation/);
   assert.match(html, /Grenze \/ Trade-off/);
   assert.match(html, /Keine Betriebsanleitung/);
   assert.match(html, /kanonische Auflösung aktiv/);
@@ -99,7 +100,8 @@ test("exportiert Chronik und alle datierten Momentaufnahmen", async () => {
   const fixedLabsSnapshot = await readExportedHtml("chronik/2026-08-18/index.html");
   const linkabilitySnapshot = await readExportedHtml("chronik/2026-08-30/index.html");
   const docsFindSnapshot = await readExportedHtml("chronik/2026-09-01/index.html");
-  const currentSnapshot = await readExportedHtml("chronik/2026-09-04/index.html");
+  const journalSnapshot = await readExportedHtml("chronik/2026-09-04/index.html");
+  const currentSnapshot = await readExportedHtml("chronik/2026-10-01/index.html");
   const currentText = visibleText(current);
   const firstSnapshotText = visibleText(firstSnapshot);
   const firstLabSnapshotText = visibleText(firstLabSnapshot);
@@ -107,23 +109,26 @@ test("exportiert Chronik und alle datierten Momentaufnahmen", async () => {
   const fixedLabsSnapshotText = visibleText(fixedLabsSnapshot);
   const linkabilitySnapshotText = visibleText(linkabilitySnapshot);
   const docsFindSnapshotText = visibleText(docsFindSnapshot);
+  const journalSnapshotText = visibleText(journalSnapshot);
   const currentSnapshotText = visibleText(currentSnapshot);
 
-  assert.match(currentText, /Das Journal dokumentiert Arbeit, es steuert sie nicht/);
+  assert.match(currentText, /Reproduzierbar wird nur, was portabel bleiben darf/);
   assert.match(currentText, /Technischer Stand/);
   assert.match(currentText, /Tatsächliche Nutzung/);
   assert.match(currentText, /Bewertung durch Codex/);
-  assert.match(currentText, /Change-Control verlässt die aktive Werkzeugfläche/);
-  assert.match(currentText, /Der normale Ablauf ist wieder linear/);
+  assert.match(currentText, /Der Arbeitsplatz erhält eine begrenzte Source of Truth/);
+  assert.match(currentText, /Installiert wird eine Auswahl, kein Benutzerverzeichnis/);
   assert.match(currentText, /einen unabhängigen Review nur nach Risiko, Auftrag oder bindender Regel einsetzen/);
-  assert.match(currentText, /Entfernen war hier die eigentliche Vereinfachung/);
-  assert.match(currentText, /für eine regelmäßige Nutzung der Shared Notes gibt es noch keinen Beleg/);
+  assert.match(currentText, /Explizite Lücken sind besser als falsche Maschinenparität/);
+  assert.match(currentText, /kein Nachweis vollständiger Parität/);
+  assert.match(currentText, /Sessions, Memories, Zugangsdaten, Trust-Entscheidungen/);
   assert.match(currentText, /Obsidian als mobile Leseschicht/);
+  assert.match(currentText, /Versionierter Arbeitsplatz Codex Workstation/);
   assert.match(currentText, /lokales Mapping/);
   assert.match(currentText, /CodexJournal b1cc07f · aktiver Release/);
-  assert.match(currentText, /Akasha a83c9ee · Quellenvertrag/);
-  assert.match(currentText, /docs-find 3b31d1e · installierter Stand/);
-  assert.match(currentText, /dev-infra 2826abb · Dokumentationspublisher/);
+  assert.match(currentText, /Akasha a83c9ee · aktiver Quellenvertrag/);
+  assert.match(currentText, /Codex Workstation 356e12b · versionierter Vertragsstand/);
+  assert.match(currentText, /dev-infra 89d238d · Dokumentations- und Laufzeitquellen/);
   assert.match(currentText, /devMCP ff5191d · retired im Standardworkflow/);
   assert.doesNotMatch(
     currentText,
@@ -131,6 +136,7 @@ test("exportiert Chronik und alle datierten Momentaufnahmen", async () => {
   );
 
   assert.match(chronicle, /Technische Urteile mit Datum/);
+  assert.match(chronicle, /href="\/chronik\/2026-10-01"/);
   assert.match(chronicle, /href="\/chronik\/2026-09-04"/);
   assert.match(chronicle, /href="\/chronik\/2026-09-01"/);
   assert.match(chronicle, /href="\/chronik\/2026-08-30"/);
@@ -177,10 +183,16 @@ test("exportiert Chronik und alle datierten Momentaufnahmen", async () => {
   assert.match(docsFindSnapshotText, /Nächster Stand · 04\.09\.2026/);
   assert.doesNotMatch(docsFindSnapshotText, /Das Journal dokumentiert Arbeit, es steuert sie nicht/);
 
-  assert.match(currentSnapshotText, /Systemnotizen · Stand 04\.09\.2026/);
-  assert.match(currentSnapshotText, /Älterer Stand · 01\.09\.2026/);
-  assert.match(currentSnapshotText, /Das Journal dokumentiert Arbeit, es steuert sie nicht/);
-  assert.doesNotMatch(currentSnapshotText, /Ein lokales Mapping ersetzt die verteilte Suchschicht/);
+  assert.match(journalSnapshotText, /Systemnotizen · Stand 04\.09\.2026/);
+  assert.match(journalSnapshotText, /Älterer Stand · 01\.09\.2026/);
+  assert.match(journalSnapshotText, /Das Journal dokumentiert Arbeit, es steuert sie nicht/);
+  assert.match(journalSnapshotText, /Nächster Stand · 01\.10\.2026/);
+  assert.doesNotMatch(journalSnapshotText, /Reproduzierbar wird nur, was portabel bleiben darf/);
+
+  assert.match(currentSnapshotText, /Systemnotizen · Stand 01\.10\.2026/);
+  assert.match(currentSnapshotText, /Älterer Stand · 04\.09\.2026/);
+  assert.match(currentSnapshotText, /Reproduzierbar wird nur, was portabel bleiben darf/);
+  assert.doesNotMatch(currentSnapshotText, /Change-Control verlässt die aktive Werkzeugfläche/);
 });
 
 test("bindet Canonical und Open Graph an jede konkrete Route", async () => {
@@ -193,6 +205,7 @@ test("bindet Canonical und Open Graph an jede konkrete Route", async () => {
     ["chronik/2026-08-30/index.html", "https://macmade.dev/chronik/2026-08-30"],
     ["chronik/2026-09-01/index.html", "https://macmade.dev/chronik/2026-09-01"],
     ["chronik/2026-09-04/index.html", "https://macmade.dev/chronik/2026-09-04"],
+    ["chronik/2026-10-01/index.html", "https://macmade.dev/chronik/2026-10-01"],
   ];
 
   for (const [path, url] of routes) {
@@ -213,6 +226,7 @@ test("liefert ein eigenständiges statisches 404-Dokument", async () => {
   assert.doesNotMatch(text, /Exakte Verbindungen sind nützlicher als ein vorschneller Graph/);
   assert.doesNotMatch(text, /Die Originalquelle braucht für diesen Workflow keinen Index/);
   assert.doesNotMatch(text, /Das Journal dokumentiert Arbeit, es steuert sie nicht/);
+  assert.doesNotMatch(text, /Reproduzierbar wird nur, was portabel bleiben darf/);
 });
 
 test("liefert die datierten Journal-Momentaufnahmen als feste JPEGs aus", async () => {
@@ -232,5 +246,7 @@ test("trennt die mobile Hauptüberschrift typografisch statt zeichenweise", asyn
 
   assert.match(css, /h1\s*{[^}]*hyphens:\s*auto/s);
   assert.match(css, /h1\s*{[^}]*overflow-wrap:\s*normal/s);
+  assert.match(css, /\.change-grid article\s*{[^}]*min-width:\s*0/s);
+  assert.match(css, /\.change-grid h3\s*{[^}]*overflow-wrap:\s*break-word/s);
   assert.doesNotMatch(css, /overflow-wrap:\s*anywhere/);
 });

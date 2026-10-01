@@ -123,7 +123,8 @@ type SnapshotDate =
   | "2026-08-18"
   | "2026-08-30"
   | "2026-09-01"
-  | "2026-09-04";
+  | "2026-09-04"
+  | "2026-10-01";
 
 type SnapshotPageProps = {
   snapshotDate: SnapshotDate;
@@ -137,6 +138,7 @@ const snapshotLabels: Record<SnapshotDate, string> = {
   "2026-08-30": "30.08.2026",
   "2026-09-01": "01.09.2026",
   "2026-09-04": "04.09.2026",
+  "2026-10-01": "01.10.2026",
 };
 
 /** Rendert einen aktuellen oder archivierten Stand aus derselben Darstellung. */
@@ -146,14 +148,16 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
   const isFixedLabsSnapshot = snapshotDate === "2026-08-18";
   const isLinkabilitySnapshot = snapshotDate === "2026-08-30";
   const isDocsFindSnapshot = snapshotDate === "2026-09-01";
-  const isCurrentSnapshot = snapshotDate === "2026-09-04";
-  const usesLocalDocumentation = isDocsFindSnapshot || isCurrentSnapshot;
-  const displayedCoreSystems = isCurrentSnapshot
+  const isJournalSnapshot = snapshotDate === "2026-09-04";
+  const isCurrentSnapshot = snapshotDate === "2026-10-01";
+  const usesLinearWorkflow = isJournalSnapshot || isCurrentSnapshot;
+  const usesLocalDocumentation = isDocsFindSnapshot || usesLinearWorkflow;
+  const displayedCoreSystems = usesLinearWorkflow
     ? linearCoreSystems
     : isDocsFindSnapshot
       ? localCoreSystems
       : indexedCoreSystems;
-  const displayedWorkflow = isCurrentSnapshot
+  const displayedWorkflow = usesLinearWorkflow
     ? linearWorkflow
     : usesLocalDocumentation
       ? localWorkflow
@@ -171,6 +175,7 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
             isFixedLabsSnapshot ||
             isLinkabilitySnapshot ||
             isDocsFindSnapshot ||
+            isJournalSnapshot ||
             isCurrentSnapshot) && (
             <a href="#aenderungen">Änderungen</a>
           )}
@@ -187,6 +192,14 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
           <p className="eyebrow">Systemnotizen · Stand {snapshotLabels[snapshotDate]}</p>
           <h1>Werkzeuge für nachvollziehbare Entwicklungsarbeit.</h1>
           {isCurrentSnapshot ? (
+            <p className="hero-intro">
+              Der zentrale Codex-Arbeitsplatz ist inzwischen selektiv
+              versioniert. Portable Regeln, Werkzeuge, Shell- und
+              Laufzeitverträge lassen sich gezielt prüfen und installieren;
+              Logins, Secrets, App-Zustand und laufende Automationen bleiben
+              bewusst an ihren jeweiligen Rechner gebunden.
+            </p>
+          ) : isJournalSnapshot ? (
             <p className="hero-intro">
               CodexJournal dokumentiert den Arbeitsverlauf wieder ohne
               verpflichtende Change-Control-Matrix. Historische Level und
@@ -375,6 +388,67 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
       )}
 
       {isCurrentSnapshot && (
+        <section className="change-section section-rule" id="aenderungen">
+          <div className="section-heading">
+            <p className="eyebrow">Seit 04.09.2026</p>
+            <h2>Reproduzierbar wird nur, was portabel bleiben darf.</h2>
+          </div>
+
+          <div className="change-grid">
+            <article>
+              <span>Technischer Stand</span>
+              <h3>Der Arbeitsplatz erhält eine begrenzte Source of Truth.</h3>
+              <p>
+                Ein privates Repository beschreibt jetzt die portablen Teile
+                des Codex-Arbeitsplatzes: globale Arbeitsregeln, persönliche
+                Skills und Hooks, lokale Quellennavigation, einen markierten
+                Shell-Block, ausgewählte Laufzeitdefinitionen sowie einen
+                prüfbaren macOS-Bootstrap. Dry-runs, ein mutierungsfreier Doctor
+                und konfliktbewusste Installer ersetzen die frühere Sammlung
+                einzelner manueller Kopierschritte.
+              </p>
+            </article>
+            <article>
+              <span>Tatsächliche Nutzung</span>
+              <h3>Installiert wird eine Auswahl, kein Benutzerverzeichnis.</h3>
+              <p>
+                Auf dem führenden Entwicklungsrechner entsprechen die globalen
+                Regeln und persönlichen Skills dem versionierten Stand; auch
+                der verwaltete Shell-Bereich und ausgewählte lokale
+                Laufzeitdefinitionen sind aktiv. Regelmäßige Nutzung ist bisher
+                nur dort belegt; für einen zweiten Rechner existiert ein
+                kontrollierter Übergabevertrag, aber kein Nachweis vollständiger
+                Parität. Sessions, Memories, Zugangsdaten, Trust-Entscheidungen
+                und Live-Automationen werden nicht gespiegelt.
+              </p>
+            </article>
+            <article className="assessment-card">
+              <span>Bewertung durch Codex</span>
+              <h3>Explizite Lücken sind besser als falsche Maschinenparität.</h3>
+              <p>
+                Die selektive Installation macht Wiederaufbau und Drift
+                prüfbarer, ohne lokale Identität mit Konfiguration zu
+                verwechseln. Sie ist trotzdem kein vollständig deklaratives
+                Maschinenmanagement: Sicherheitssoftware, Anmeldungen,
+                Toolchains und laufende Dienste brauchen weiterhin bewusste
+                lokale Schritte. Jeder neue verwaltete Bereich vergrößert auch
+                die Migrations- und Konfliktfläche.
+              </p>
+            </article>
+          </div>
+
+          <div className="unchanged-note">
+            <strong>Unverändert:</strong> CodexJournal dokumentiert den linearen
+            Arbeitsverlauf, Akasha bewahrt kuratiertes Wissen und docs-find
+            führt zu lokalen Originalquellen. devMCP bleibt im Standardworkflow
+            deaktiviert. Der versionierte Arbeitsplatz enthält weder laufenden
+            Zustand noch Secrets und behauptet keine vollständige Gleichheit
+            mehrerer Rechner.
+          </div>
+        </section>
+      )}
+
+      {isJournalSnapshot && (
         <section className="change-section section-rule" id="aenderungen">
           <div className="section-heading">
             <p className="eyebrow">Seit 01.09.2026</p>
@@ -842,6 +916,7 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
             isFixedLabsSnapshot ||
             isLinkabilitySnapshot ||
             isDocsFindSnapshot ||
+            isJournalSnapshot ||
             isCurrentSnapshot) && (
             <article className="practice-card lab-card">
               <p className="eyebrow">Nichtproduktive Infrastruktur</p>
@@ -953,6 +1028,28 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
                 Plug-in und Backup bleiben zusätzlicher Betrieb. Die direkte
                 Kopplung entfernt nur den Index als Zwischenstufe; Obsidian
                 bleibt eine abgeleitete Arbeitsoberfläche.
+              </p>
+            </article>
+          )}
+
+          {isCurrentSnapshot && (
+            <article className="practice-card observability-card">
+              <p className="eyebrow">Versionierter Arbeitsplatz</p>
+              <h3>Codex Workstation</h3>
+              <p>
+                Ein privater, prüfbarer Vertrag bündelt die portablen Teile des
+                Entwicklungsrechners und installiert sie komponentenweise. Die
+                führende Maschine autorisiert Änderungen; weitere Geräte dürfen
+                nur bewusst ausgewählte Git-Stände übernehmen.
+              </p>
+              <div className="mini-diagram" aria-label="Selektiver Installationsfluss">
+                <span>Quelle</span><b>→</b><span>Prüfung</span><b>→</b><span>Auswahl</span><b>→</b><span>lokaler Zustand</span>
+              </div>
+              <p className="card-limit">
+                <strong>Grenze:</strong> Logins, Secrets, Sessions, Memories,
+                breite Trust-Entscheidungen, Live-Automationen und
+                hardwarespezifische Laufzeitdaten bleiben absichtlich außerhalb
+                dieses Vertrags.
               </p>
             </article>
           )}
@@ -1143,6 +1240,9 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
               </li>
               <li>dass Journal und Akasha automatisch gekoppelt sind</li>
               <li>dass lokale Infrastruktur ein übertragbares Produkt darstellt</li>
+              {isCurrentSnapshot && (
+                <li>dass zwei Rechner vollständig oder automatisch synchronisiert sind</li>
+              )}
             </ul>
           </div>
           <aside>
@@ -1164,6 +1264,16 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
         <div className="snapshot-provenance" aria-label="Revisionsstand der Momentaufnahme">
           <span>Chronik-Vertrag v1</span>
           {isCurrentSnapshot ? (
+            <>
+              <span>Codex Workstation 356e12b · versionierter Vertragsstand</span>
+              <span>CodexJournal b1cc07f · aktiver Release</span>
+              <span>Akasha a83c9ee · aktiver Quellenvertrag</span>
+              <span>dev-infra 89d238d · Dokumentations- und Laufzeitquellen</span>
+              <span>devMCP ff5191d · retired im Standardworkflow</span>
+              <span>SimpleDisplay c576ccb</span>
+              <span>CodexSlicer fc68381</span>
+            </>
+          ) : isJournalSnapshot ? (
             <>
               <span>CodexJournal b1cc07f · aktiver Release</span>
               <span>Akasha a83c9ee · Quellenvertrag</span>
@@ -1230,6 +1340,8 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
 
       <nav className="snapshot-navigation" aria-label="Navigation zwischen Momentaufnahmen">
         {isCurrentSnapshot ? (
+          <Link href="/chronik/2026-09-04">← Älterer Stand · 04.09.2026</Link>
+        ) : isJournalSnapshot ? (
           <Link href="/chronik/2026-09-01">← Älterer Stand · 01.09.2026</Link>
         ) : isDocsFindSnapshot ? (
           <Link href="/chronik/2026-08-30">← Älterer Stand · 30.08.2026</Link>
@@ -1245,7 +1357,7 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
           <span>Erster veröffentlichter Stand · 12.08.2026</span>
         )}
         <Link href="/chronik">Chronik</Link>
-        <Link href="/" aria-current={isCurrentSnapshot ? "page" : undefined}>Aktueller Stand · 04.09.2026</Link>
+        <Link href="/" aria-current={isCurrentSnapshot ? "page" : undefined}>Aktueller Stand · 01.10.2026</Link>
         {snapshotDate === "2026-08-12" && (
           <Link href="/chronik/2026-08-13">Nächster Stand · 13.08.2026 →</Link>
         )}
@@ -1263,6 +1375,9 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
         )}
         {isDocsFindSnapshot && (
           <Link href="/chronik/2026-09-04">Nächster Stand · 04.09.2026 →</Link>
+        )}
+        {isJournalSnapshot && (
+          <Link href="/chronik/2026-10-01">Nächster Stand · 01.10.2026 →</Link>
         )}
       </nav>
 
