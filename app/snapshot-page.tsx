@@ -437,9 +437,10 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
               <h3>Installiert wird eine Auswahl, kein Benutzerverzeichnis.</h3>
               <p>
                 Auf dem führenden Entwicklungsrechner entsprechen die globalen
-                Regeln und persönlichen Skills dem versionierten Stand; auch
-                der verwaltete Shell-Bereich und ausgewählte lokale
-                Laufzeitdefinitionen sind aktiv. Auf einem zweiten Rechner
+                Regeln, der verwaltete Shell-Bereich und ausgewählte lokale
+                Laufzeitdefinitionen dem versionierten Stand. Persönliche Skills
+                folgen demselben Installationsmodell, zwei von ihnen enthalten
+                dort aber bereits neuere lokale Ergänzungen. Auf einem zweiten Rechner
                 wurden einzelne geprüfte Repository-Stände bewusst übernommen;
                 ein read-only Abgleich macht Abweichungen sichtbar, autorisiert
                 aber kein Update. Vollständige Parität ist nicht belegt.
