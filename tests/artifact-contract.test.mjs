@@ -166,6 +166,7 @@ test("exportiert Seitenrouten als direkt auslieferbare Verzeichnisse", async () 
     "chronik/2026-08-30/index.html",
     "chronik/2026-09-01/index.html",
     "chronik/2026-09-04/index.html",
+    "chronik/2026-10-06/index.html",
   ]) {
     await assert.doesNotReject(
       access(new URL(`../dist/client/${pathName}`, import.meta.url)),
@@ -181,11 +182,16 @@ test("exportiert Seitenrouten als direkt auslieferbare Verzeichnisse", async () 
     "chronik/2026-08-30.html",
     "chronik/2026-09-01.html",
     "chronik/2026-09-04.html",
+    "chronik/2026-10-06.html",
   ]) {
     await assert.rejects(
       access(new URL(`../dist/client/${pathName}`, import.meta.url)),
     );
   }
+
+  await assert.rejects(
+    access(new URL("../dist/client/chronik/2026-10-01/index.html", import.meta.url)),
+  );
 });
 
 test("entfernt interne Build- und Hostingmetadaten aus dem Webroot", async () => {
