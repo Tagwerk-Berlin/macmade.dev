@@ -9,9 +9,18 @@ export const metadata = createPageMetadata({
 
 const entries = [
   {
+    date: "2026-10-08",
+    label: "08.10.2026",
+    current: true,
+    title: "Eine falsche Kopiergarantie fällt; das Journal wird lesbarer.",
+    summary:
+      "Datierte Obsidian-Korrektur, sichtbare nächste Schritte im Journal und deliberate als konfigurierter, noch nicht bewährter Pilot.",
+    triggers: ["Korrektur", "Technischer Stand", "Tatsächliche Nutzung", "Bewertung durch Codex"],
+  },
+  {
     date: "2026-10-06",
     label: "06.10.2026",
-    current: true,
+    current: false,
     title: "Der Arbeitsplatz wird selektiv reproduzierbar – und das Journal wieder kleiner.",
     summary:
       "Portable Regeln und Laufzeitverträge werden gezielt installiert; ungenutzte Journal-Hilfsschichten wurden entfernt.",

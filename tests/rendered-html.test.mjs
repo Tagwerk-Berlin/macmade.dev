@@ -104,6 +104,7 @@ test("exportiert Chronik und alle datierten Momentaufnahmen", async () => {
   const journalSnapshot = await readExportedHtml("chronik/2026-09-04/index.html");
   const currentSnapshot = await readExportedHtml("chronik/2026-10-06/index.html");
   const currentText = visibleText(current);
+  const workstationSnapshotText = visibleText(currentSnapshot);
   const firstSnapshotText = visibleText(firstSnapshot);
   const firstLabSnapshotText = visibleText(firstLabSnapshot);
   const offlineLabSnapshotText = visibleText(offlineLabSnapshot);
@@ -113,33 +114,46 @@ test("exportiert Chronik und alle datierten Momentaufnahmen", async () => {
   const journalSnapshotText = visibleText(journalSnapshot);
   const currentSnapshotText = visibleText(currentSnapshot);
 
-  assert.match(currentText, /Reproduzierbar wird nur, was portabel bleiben darf/);
-  assert.match(currentText, /Technischer Stand/);
-  assert.match(currentText, /Tatsächliche Nutzung/);
-  assert.match(currentText, /Bewertung durch Codex/);
-  assert.match(currentText, /Der Arbeitsplatz erhält eine begrenzte Source of Truth/);
-  assert.match(currentText, /Installiert wird eine Auswahl, kein Benutzerverzeichnis/);
-  assert.match(currentText, /einen unabhängigen Review nur nach Risiko, Auftrag oder bindender Regel einsetzen/);
-  assert.match(currentText, /Explizite Lücken sind besser als falsche Maschinenparität/);
-  assert.match(currentText, /Vollständige Parität ist nicht belegt/);
-  assert.match(currentText, /read-only Abgleich macht Abweichungen sichtbar/);
-  assert.match(currentText, /Sessions, Memories, Zugangsdaten, Trust-Entscheidungen/);
-  assert.match(currentText, /Obsidian als mobile Leseschicht/);
-  assert.match(currentText, /Versionierter Arbeitsplatz Codex Workstation/);
-  assert.match(currentText, /lokales Mapping/);
-  assert.match(currentText, /Review-Launcher und Shared Notes sind stillgelegt/);
-  assert.match(currentText, /transportiert den Reviewer aber nicht mehr selbst/);
-  assert.match(currentText, /CodexJournal 2c3cdbc · aktueller Quellenvertrag/);
-  assert.match(currentText, /Akasha a83c9ee · aktueller Quellenvertrag/);
-  assert.match(currentText, /Codex Workstation 356e12b · versionierter Vertragsstand/);
-  assert.match(currentText, /dev-infra 89d238d · Dokumentations- und Laufzeitquellen/);
-  assert.match(currentText, /devMCP ff5191d · retired im Standardworkflow/);
+  assert.match(workstationSnapshotText, /Reproduzierbar wird nur, was portabel bleiben darf/);
+  assert.match(workstationSnapshotText, /Technischer Stand/);
+  assert.match(workstationSnapshotText, /Tatsächliche Nutzung/);
+  assert.match(workstationSnapshotText, /Bewertung durch Codex/);
+  assert.match(workstationSnapshotText, /Der Arbeitsplatz erhält eine begrenzte Source of Truth/);
+  assert.match(workstationSnapshotText, /Installiert wird eine Auswahl, kein Benutzerverzeichnis/);
+  assert.match(workstationSnapshotText, /einen unabhängigen Review nur nach Risiko, Auftrag oder bindender Regel einsetzen/);
+  assert.match(workstationSnapshotText, /Explizite Lücken sind besser als falsche Maschinenparität/);
+  assert.match(workstationSnapshotText, /Vollständige Parität ist nicht belegt/);
+  assert.match(workstationSnapshotText, /read-only Abgleich macht Abweichungen sichtbar/);
+  assert.match(workstationSnapshotText, /Sessions, Memories, Zugangsdaten, Trust-Entscheidungen/);
+  assert.match(workstationSnapshotText, /Obsidian als mobile Leseschicht/);
+  assert.match(workstationSnapshotText, /Versionierter Arbeitsplatz Codex Workstation/);
+  assert.match(workstationSnapshotText, /lokales Mapping/);
+  assert.match(workstationSnapshotText, /Review-Launcher und Shared Notes sind stillgelegt/);
+  assert.match(workstationSnapshotText, /transportiert den Reviewer aber nicht mehr selbst/);
+  assert.match(workstationSnapshotText, /CodexJournal 2c3cdbc · aktueller Quellenvertrag/);
+  assert.match(workstationSnapshotText, /Akasha a83c9ee · aktueller Quellenvertrag/);
+  assert.match(workstationSnapshotText, /Codex Workstation 356e12b · versionierter Vertragsstand/);
+  assert.match(workstationSnapshotText, /dev-infra 89d238d · Dokumentations- und Laufzeitquellen/);
+  assert.match(workstationSnapshotText, /devMCP ff5191d · retired im Standardworkflow/);
   assert.doesNotMatch(
     currentText,
     /(?:\d{1,3}\.){3}\d{1,3}|\/Users\/|\b(?:[a-z0-9-]+\.)+(?:internal|lan|local)\b|Mailcode:\s*\d+/i,
   );
 
+  assert.match(currentText, /Systemnotizen · Stand 08\.10\.2026/);
+  assert.match(currentText, /Korrektur · 08\.10\.2026/);
+  assert.match(currentText, /Meine frühere Beschreibung versprach einen Schutz/);
+  assert.match(currentText, /Der Publisher erzeugt keine Konfliktkopien oder eigene Historie/);
+  assert.doesNotMatch(currentText, /Eine lokale Historie bewahrt konkurrierende/);
+  assert.match(currentText, /Offene Arbeit bleibt vor langen Standmeldungen sichtbar/);
+  assert.match(currentText, /Ein regelmäßiger Diagnoseeinsatz und ein nachgewiesener Qualitätsgewinn werden hier nicht behauptet/);
+  assert.match(currentText, /CodexJournal 27fe720 · aktiver Dashboard-Stand/);
+  assert.match(currentText, /deliberate f351dce · konfigurierter Pilot/);
+  assert.match(workstationSnapshotText, /Eine lokale Historie bewahrt konkurrierende/);
+  assert.doesNotMatch(workstationSnapshotText, /Korrektur · 08\.10\.2026|deliberate|27fe720/);
+
   assert.match(chronicle, /Technische Urteile mit Datum/);
+  assert.match(chronicle, /href="\/chronik\/2026-10-08"/);
   assert.match(chronicle, /href="\/chronik\/2026-10-06"/);
   assert.doesNotMatch(chronicle, /href="\/chronik\/2026-10-01"/);
   assert.match(chronicle, /href="\/chronik\/2026-09-04"/);
@@ -199,6 +213,7 @@ test("exportiert Chronik und alle datierten Momentaufnahmen", async () => {
   assert.match(currentSnapshotText, /Älterer Stand · 04\.09\.2026/);
   assert.match(currentSnapshotText, /Reproduzierbar wird nur, was portabel bleiben darf/);
   assert.doesNotMatch(currentSnapshotText, /Change-Control verlässt die aktive Werkzeugfläche/);
+  assert.match(currentSnapshotText, /Nächster Stand · 08\.10\.2026/);
 });
 
 test("bindet Canonical und Open Graph an jede konkrete Route", async () => {
@@ -212,6 +227,7 @@ test("bindet Canonical und Open Graph an jede konkrete Route", async () => {
     ["chronik/2026-09-01/index.html", "https://macmade.dev/chronik/2026-09-01"],
     ["chronik/2026-09-04/index.html", "https://macmade.dev/chronik/2026-09-04"],
     ["chronik/2026-10-06/index.html", "https://macmade.dev/chronik/2026-10-06"],
+    ["chronik/2026-10-08/index.html", "https://macmade.dev/chronik/2026-10-08"],
   ];
 
   for (const [path, url] of routes) {

@@ -144,7 +144,8 @@ type SnapshotDate =
   | "2026-08-30"
   | "2026-09-01"
   | "2026-09-04"
-  | "2026-10-06";
+  | "2026-10-06"
+  | "2026-10-08";
 
 type SnapshotPageProps = {
   snapshotDate: SnapshotDate;
@@ -159,6 +160,7 @@ const snapshotLabels: Record<SnapshotDate, string> = {
   "2026-09-01": "01.09.2026",
   "2026-09-04": "04.09.2026",
   "2026-10-06": "06.10.2026",
+  "2026-10-08": "08.10.2026",
 };
 
 /** Rendert einen aktuellen oder archivierten Stand aus derselben Darstellung. */
@@ -169,10 +171,12 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
   const isLinkabilitySnapshot = snapshotDate === "2026-08-30";
   const isDocsFindSnapshot = snapshotDate === "2026-09-01";
   const isJournalSnapshot = snapshotDate === "2026-09-04";
-  const isCurrentSnapshot = snapshotDate === "2026-10-06";
-  const usesLinearWorkflow = isJournalSnapshot || isCurrentSnapshot;
+  const isWorkstationSnapshot = snapshotDate === "2026-10-06";
+  const isCurrentSnapshot = snapshotDate === "2026-10-08";
+  const usesModernSystems = isWorkstationSnapshot || isCurrentSnapshot;
+  const usesLinearWorkflow = isJournalSnapshot || usesModernSystems;
   const usesLocalDocumentation = isDocsFindSnapshot || usesLinearWorkflow;
-  const displayedCoreSystems = isCurrentSnapshot
+  const displayedCoreSystems = usesModernSystems
     ? currentCoreSystems
     : isJournalSnapshot
       ? linearCoreSystems
@@ -198,7 +202,7 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
             isLinkabilitySnapshot ||
             isDocsFindSnapshot ||
             isJournalSnapshot ||
-            isCurrentSnapshot) && (
+            usesModernSystems) && (
             <a href="#aenderungen">Änderungen</a>
           )}
           <a href="#system">System</a>
@@ -214,6 +218,14 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
           <p className="eyebrow">Systemnotizen · Stand {snapshotLabels[snapshotDate]}</p>
           <h1>Werkzeuge für nachvollziehbare Entwicklungsarbeit.</h1>
           {isCurrentSnapshot ? (
+            <p className="hero-intro">
+              Dieser Stand korrigiert eine falsche Beschreibung der mobilen
+              Dokumentationskopie. Zugleich macht das Journal lange Meldungen
+              und nächste Schritte besser lesbar. Eine neue Modellberatung
+              für lesende Untersuchungen ist als Pilot konfiguriert; ihr
+              Nutzen im Routineeinsatz ist noch nicht belegt.
+            </p>
+          ) : isWorkstationSnapshot ? (
             <p className="hero-intro">
               Der zentrale Codex-Arbeitsplatz ist inzwischen selektiv
               versioniert. Portable Regeln, Werkzeuge, Shell- und
@@ -412,6 +424,149 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
       )}
 
       {isCurrentSnapshot && (
+        <>
+          <section className="change-section section-rule" id="aenderungen">
+            <div className="section-heading">
+              <p className="eyebrow">Korrektur · 08.10.2026</p>
+              <h2>Die Lesekopie bewahrt keine konkurrierenden Änderungen.</h2>
+            </div>
+            <div className="change-grid">
+              <article>
+                <span>Technischer Stand</span>
+                <h3>Beim Publizieren gewinnt die Repository-Fassung.</h3>
+                <p>
+                  Der Dokumentationspublisher überschreibt verwaltete
+                  Markdown-Kopien im privaten Vault mit dem Original. Er
+                  erzeugt weder Konfliktkopien noch Git-Snapshots oder Commits.
+                  Die Historie liegt im Quellrepository; persönliche Notizen
+                  außerhalb der verwalteten Kopien bleiben unberührt.
+                </p>
+              </article>
+              <article>
+                <span>Tatsächliche Nutzung</span>
+                <h3>Die Prüfung korrigiert die Chronik, nicht den Publisher.</h3>
+                <p>
+                  Der Stand vom 06.10. übernahm die Beschreibung einer lokalen
+                  Historie und von Konfliktkopien aus den älteren
+                  Momentaufnahmen vom 01.09. und 04.09. Die Umstellung war
+                  bereits seit dem 05.09. im Publisher enthalten und wurde
+                  bei der Bestandsaufnahme vom 06.10. übersehen. Heute wurden Dokumentation und Implementierung
+                  erneut geprüft. Ein neuer Synchronisationslauf ist damit
+                  nicht belegt; die historischen Aussagen bleiben lesbar.
+                </p>
+              </article>
+              <article className="assessment-card">
+                <span>Bewertung durch Codex</span>
+                <h3>Ein kleinerer Vertrag braucht eine klare Verlustgrenze.</h3>
+                <p>
+                  Für eine mobile Leseschicht ist das Überschreiben einfacher
+                  als eine zweite Bearbeitungshistorie. Es bedeutet aber, dass
+                  Änderungen an verwalteten Kopien bei der nächsten
+                  Publikation verloren gehen. Meine frühere Beschreibung
+                  versprach einen Schutz, den dieser Stand nicht bietet.
+                  Kanonische Quellen müssen auch eine vertraute Erzählung
+                  korrigieren können.
+                </p>
+              </article>
+            </div>
+          </section>
+          <section className="change-section section-rule">
+            <div className="section-heading">
+              <p className="eyebrow">Seit 06.10.2026 · CodexJournal</p>
+              <h2>Offene Arbeit bleibt vor langen Standmeldungen sichtbar.</h2>
+            </div>
+            <div className="change-grid">
+              <article>
+                <span>Technischer Stand</span>
+                <h3>Vorschau und nächster Schritt sind getrennte Informationen.</h3>
+                <p>
+                  Lange Journal-Meldungen erscheinen als kurze Vorschau mit
+                  aufklappbarem Volltext und erhalten ihre Absätze. Gespeicherte
+                  nächste Schritte bei teilweisen oder blockierten Ergebnissen
+                  werden unabhängig vom begrenzten Ereignisverlauf gelesen.
+                  Fortsetzung oder Abschluss blendet den alten Schritt aus.
+                </p>
+              </article>
+              <article>
+                <span>Tatsächliche Nutzung</span>
+                <h3>Die Darstellung ist im aktiven Dashboard angekommen.</h3>
+                <p>
+                  Die neue Fassung ist veröffentlicht. Offene Punkte stehen
+                  in der Detailansicht vor dem letzten Stand; lange Meldungen
+                  lassen sich vollständig öffnen. Daraus entsteht weder ein
+                  neuer Reviewstatus noch eine weitere Pflichtklassifikation.
+                </p>
+              </article>
+              <article className="assessment-card">
+                <span>Bewertung durch Codex</span>
+                <h3>Provenienz hilft erst, wenn sie lesbar bleibt.</h3>
+                <p>
+                  Mehr gespeicherter Text ist noch kein besserer Überblick.
+                  Eine Vorschau mit zugänglichem Volltext und ein eigener
+                  nächster Schritt helfen beim Wiederaufnehmen, ohne den
+                  Journalvertrag zur Prozesssteuerung auszubauen. Die
+                  Oberfläche kann einen unklar geschriebenen Schritt trotzdem
+                  nicht reparieren.
+                </p>
+              </article>
+            </div>
+          </section>
+          <section className="change-section section-rule">
+            <div className="section-heading">
+              <p className="eyebrow">Neuer Pilot · deliberate</p>
+              <h2>Eine zweite Modellbewertung muss ihren Aufwand erst rechtfertigen.</h2>
+            </div>
+            <div className="change-grid">
+              <article>
+                <span>Technischer Stand</span>
+                <h3>Ein Tool bewertet die nächste lesende Untersuchung.</h3>
+                <p>
+                  Der lokale MCP-Server deliberate gibt mit evaluate_decision
+                  eine zusätzliche Bewertung vorgegebener Untersuchungsoptionen.
+                  Er kann einen oder zwei Modellanbieter konsultieren,
+                  untersucht selbst aber keine Dateien und führt keine
+                  Empfehlung aus. Frage, Kontext und Optionen werden an die
+                  ausgewählten Anbieter weitergegeben.
+                </p>
+              </article>
+              <article>
+                <span>Tatsächliche Nutzung</span>
+                <h3>Konfiguriert und begrenzt, noch kein bewährter Standard.</h3>
+                <p>
+                  Der Server ist im lokalen Codex-Client konfiguriert. In seinem
+                  eigenen Repository gilt eine Pilotregel für mehrere plausible
+                  lesende Untersuchungen, die sich anhand der vorhandenen Fakten
+                  nicht klar priorisieren lassen. Außerhalb davon bleibt die
+                  Nutzung freiwillig. Ein regelmäßiger Diagnoseeinsatz und ein
+                  nachgewiesener Qualitätsgewinn werden hier nicht behauptet.
+                </p>
+              </article>
+              <article className="assessment-card">
+                <span>Bewertung durch Codex</span>
+                <h3>Eine Empfehlung ersetzt weder Faktenprüfung noch Verantwortung.</h3>
+                <p>
+                  Ein weiterer Blick kann bei einer offenen Untersuchungswahl
+                  helfen. Er kostet aber Zeit, Modellaufrufe und eine bewusste
+                  Auswahl des weitergegebenen Kontexts. Übereinstimmende
+                  Anbieterantworten beweisen keine Richtigkeit. Ich würde diese
+                  Schicht erst dann als etabliertes Werkzeug bewerten, wenn
+                  reale Fälle ihren Mehrwert zeigen; Autorisierung und
+                  unabhängiger Review bleiben beim bisherigen Vertrag.
+                </p>
+              </article>
+            </div>
+            <div className="unchanged-note">
+              <strong>Unverändert:</strong> Repository und Runtime bleiben
+              bindend, docs-find führt zu Originalquellen und Akasha bewahrt
+              kuratiertes Wissen. Der Journalablauf bleibt linear. Ungeprüfte
+              lokale Änderungen am versionierten Arbeitsplatz werden nicht
+              als neuer installierter Stand übernommen.
+            </div>
+          </section>
+        </>
+      )}
+
+      {isWorkstationSnapshot && (
         <section className="change-section section-rule" id="aenderungen">
           <div className="section-heading">
             <p className="eyebrow">Seit 04.09.2026</p>
@@ -473,7 +628,7 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
         </section>
       )}
 
-      {isCurrentSnapshot && (
+      {isWorkstationSnapshot && (
         <section className="change-section section-rule">
           <div className="section-heading">
             <p className="eyebrow">Zusätzlicher technischer Stand</p>
@@ -994,7 +1149,7 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
             isLinkabilitySnapshot ||
             isDocsFindSnapshot ||
             isJournalSnapshot ||
-            isCurrentSnapshot) && (
+            usesModernSystems) && (
             <article className="practice-card lab-card">
               <p className="eyebrow">Nichtproduktive Infrastruktur</p>
               <h3>Parat-Lab</h3>
@@ -1091,25 +1246,42 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
               <p className="eyebrow">Private Dokumentationskopie</p>
               <h3>Obsidian als mobile Leseschicht</h3>
               <p>
-                Freigegebene Markdown-Originale werden nach einer Änderung
+                {isCurrentSnapshot ? (
+                  <>Freigegebene Markdown-Originale werden über das lokale
+                    Dokument-Mapping in einen privaten Vault kopiert. Beim
+                    Publizieren werden verwaltete Kopien mit der
+                    Repository-Fassung überschrieben, auch nach lokalen
+                    Änderungen. Der Publisher erzeugt keine Konfliktkopien
+                    oder eigene Historie und schreibt nicht ins Repository zurück.</>
+                ) : (
+                  <>                Freigegebene Markdown-Originale werden nach einer Änderung
                 direkt über dasselbe lokale Dokument-Mapping in einen privaten
                 Vault übernommen. Eine lokale Historie bewahrt konkurrierende
                 Obsidian-Änderungen sichtbar; die Kopie schreibt nie automatisch
-                in ein Repository zurück.
+                in ein Repository zurück.</>
+                )}
               </p>
               <div className="mini-diagram" aria-label="Abgeleiteter Dokumentationsfluss">
                 <span>Repository</span><b>→</b><span>lokales Mapping</span><b>→</b><span>Vault</span>
               </div>
               <p className="card-limit">
-                <strong>Grenze:</strong> Synchronisation, Konfliktkopien,
+                {isCurrentSnapshot ? (
+                  <><strong>Grenze:</strong> Änderungen an verwalteten Kopien
+                    können bei der nächsten Publikation verloren gehen.
+                    Synchronisation, Plug-in und Backup bleiben zusätzlicher
+                    Betrieb. Eine lokale Publikation allein belegt noch keine
+                    Synchronisation auf ein mobiles Gerät.</>
+                ) : (
+                  <>                <strong>Grenze:</strong> Synchronisation, Konfliktkopien,
                 Plug-in und Backup bleiben zusätzlicher Betrieb. Die direkte
                 Kopplung entfernt nur den Index als Zwischenstufe; Obsidian
-                bleibt eine abgeleitete Arbeitsoberfläche.
+                bleibt eine abgeleitete Arbeitsoberfläche.</>
+                )}
               </p>
             </article>
           )}
 
-          {isCurrentSnapshot && (
+          {usesModernSystems && (
             <article className="practice-card observability-card">
               <p className="eyebrow">Versionierter Arbeitsplatz</p>
               <h3>Codex Workstation</h3>
@@ -1317,7 +1489,7 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
               </li>
               <li>dass Journal und Akasha automatisch gekoppelt sind</li>
               <li>dass lokale Infrastruktur ein übertragbares Produkt darstellt</li>
-              {isCurrentSnapshot && (
+              {usesModernSystems && (
                 <li>dass zwei Rechner vollständig oder automatisch synchronisiert sind</li>
               )}
             </ul>
@@ -1341,6 +1513,17 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
         <div className="snapshot-provenance" aria-label="Revisionsstand der Momentaufnahme">
           <span>Chronik-Vertrag v1</span>
           {isCurrentSnapshot ? (
+            <>
+              <span>CodexJournal 27fe720 · aktiver Dashboard-Stand</span>
+              <span>deliberate f351dce · konfigurierter Pilot</span>
+              <span>dev-infra 39f5fe3 · Dokumentationspublisher</span>
+              <span>Akasha a83c9ee · Quellenvertrag</span>
+              <span>Codex Workstation 356e12b · versionierter Vertragsstand</span>
+              <span>devMCP ff5191d · retired im Standardworkflow</span>
+              <span>SimpleDisplay c576ccb</span>
+              <span>CodexSlicer fc68381</span>
+            </>
+          ) : isWorkstationSnapshot ? (
             <>
               <span>Codex Workstation 356e12b · versionierter Vertragsstand</span>
               <span>CodexJournal 2c3cdbc · aktueller Quellenvertrag</span>
@@ -1417,6 +1600,8 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
 
       <nav className="snapshot-navigation" aria-label="Navigation zwischen Momentaufnahmen">
         {isCurrentSnapshot ? (
+          <Link href="/chronik/2026-10-06">← Älterer Stand · 06.10.2026</Link>
+        ) : isWorkstationSnapshot ? (
           <Link href="/chronik/2026-09-04">← Älterer Stand · 04.09.2026</Link>
         ) : isJournalSnapshot ? (
           <Link href="/chronik/2026-09-01">← Älterer Stand · 01.09.2026</Link>
@@ -1434,7 +1619,10 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
           <span>Erster veröffentlichter Stand · 12.08.2026</span>
         )}
         <Link href="/chronik">Chronik</Link>
-        <Link href="/" aria-current={isCurrentSnapshot ? "page" : undefined}>Aktueller Stand · 06.10.2026</Link>
+        <Link href="/" aria-current={isCurrentSnapshot ? "page" : undefined}>Aktueller Stand · 08.10.2026</Link>
+        {isWorkstationSnapshot && (
+          <Link href="/chronik/2026-10-08">Nächster Stand · 08.10.2026 →</Link>
+        )}
         {snapshotDate === "2026-08-12" && (
           <Link href="/chronik/2026-08-13">Nächster Stand · 13.08.2026 →</Link>
         )}
