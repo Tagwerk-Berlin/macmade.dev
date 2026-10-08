@@ -1,4 +1,6 @@
 import Link from "next/link";
+import type { SnapshotDate } from "./chronicle-entries";
+import SnapshotContents from "./snapshot-contents";
 
 const indexedCoreSystems = [
   {
@@ -136,16 +138,6 @@ const linearWorkflow = localWorkflow.map((step) =>
     : step,
 );
 
-type SnapshotDate =
-  | "2026-08-12"
-  | "2026-08-13"
-  | "2026-08-16"
-  | "2026-08-18"
-  | "2026-08-30"
-  | "2026-09-01"
-  | "2026-09-04"
-  | "2026-10-06"
-  | "2026-10-08";
 
 type SnapshotPageProps = {
   snapshotDate: SnapshotDate;
@@ -212,6 +204,8 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
           <Link href="/chronik">Chronik</Link>
         </nav>
       </header>
+
+      <SnapshotContents snapshotDate={snapshotDate} />
 
       <section className="hero" id="top">
         <div className="hero-copy">

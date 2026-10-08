@@ -29,6 +29,8 @@ function decodeHtmlEntities(value) {
 function visibleText(html) {
   return decodeHtmlEntities(
     html
+      // Gemeinsame Navigation beschreibt alle Stände, nicht den Archivinhalt.
+      .replace(/<nav\b[^>]*class="snapshot-contents"[^>]*>[\s\S]*?<\/nav>/gi, " ")
       .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, " ")
       .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, " ")
       .replace(/<!--[\s\S]*?-->/g, "")
