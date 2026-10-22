@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { SnapshotDate } from "./chronicle-entries";
 import SnapshotContents from "./snapshot-contents";
+import GraphSnapshotChanges from "./snapshot-changes-2026-10-22";
 
 const indexedCoreSystems = [
   {
@@ -113,6 +114,19 @@ const currentCoreSystems = [
   ...localCoreSystems.slice(1),
 ];
 
+const graphCoreSystems = [
+  {
+    ...currentCoreSystems[0],
+    status: "im Einsatz · explizite Arbeitsbeziehungen",
+    mechanism:
+      "MCP-Werkzeuge schreiben semantische Ereignisse in ein append-only PostgreSQL-Journal; technische Hooks ergänzen Session-Fakten. Ein expliziter Arbeitsgraph verbindet Schritte, Sessions, Prüfstände und Review-Ergebnisse. Das Dashboard stellt dieselben Beziehungen mit Mermaid dar und exportiert sie als Markdown. Alte Launcher- und Change-Control-Ereignisse bleiben historisch lesbar.",
+    tradeoff:
+      "Der Graph braucht explizite Einträge und kann Erfassungslücken enthalten. Er startet keine Arbeit, erteilt keine Freigaben und prüft nicht, ob ein historisches PASS noch zum heutigen Code passt. Für kurze Arbeiten reichen Commit und Tests oft aus; zusätzliche Provenienz muss ihren Pflegeaufwand rechtfertigen.",
+    facts: ["append-only Ereignisse", "direkte Review-Session", "expliziter Ressourcenverbleib", "Arbeitsgraph + Mermaid"],
+  },
+  ...currentCoreSystems.slice(1),
+];
+
 const indexedWorkflow = [
   ["01", "Kontext", "Akasha nach wiederverwendbarem Wissen durchsuchen."],
   ["02", "Quelle", "Mit devMCP navigieren, dann das kanonische Original lesen."],
@@ -153,6 +167,7 @@ const snapshotLabels: Record<SnapshotDate, string> = {
   "2026-09-04": "04.09.2026",
   "2026-10-06": "06.10.2026",
   "2026-10-08": "08.10.2026",
+  "2026-10-22": "22.10.2026",
 };
 
 /** Rendert einen aktuellen oder archivierten Stand aus derselben Darstellung. */
@@ -165,10 +180,14 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
   const isJournalSnapshot = snapshotDate === "2026-09-04";
   const isWorkstationSnapshot = snapshotDate === "2026-10-06";
   const isCurrentSnapshot = snapshotDate === "2026-10-08";
-  const usesModernSystems = isWorkstationSnapshot || isCurrentSnapshot;
+  const isGraphSnapshot = snapshotDate === "2026-10-22";
+  const usesCorrectedDocs = isCurrentSnapshot || isGraphSnapshot;
+  const usesModernSystems = isWorkstationSnapshot || usesCorrectedDocs;
   const usesLinearWorkflow = isJournalSnapshot || usesModernSystems;
   const usesLocalDocumentation = isDocsFindSnapshot || usesLinearWorkflow;
-  const displayedCoreSystems = usesModernSystems
+  const displayedCoreSystems = isGraphSnapshot
+    ? graphCoreSystems
+    : usesModernSystems
     ? currentCoreSystems
     : isJournalSnapshot
       ? linearCoreSystems
@@ -211,7 +230,16 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
         <div className="hero-copy">
           <p className="eyebrow">Systemnotizen · Stand {snapshotLabels[snapshotDate]}</p>
           <h1>Werkzeuge für nachvollziehbare Entwicklungsarbeit.</h1>
-          {isCurrentSnapshot ? (
+          {isGraphSnapshot ? (
+            <p className="hero-intro">
+              CodexJournal verknüpft Arbeitsschritte, Chats und Review-Ergebnisse
+              jetzt ausdrücklich miteinander. Der neue Arbeitsgraph ist im
+              Einsatz und als Mermaid-Diagramm lesbar. Damit wächst nach dem
+              Abbau des Review-Launchers wieder eine Hilfsschicht – diesmal
+              für die Herkunft und Rückübernahme von Ergebnissen. Ob sie ihren
+              Pflegeaufwand dauerhaft rechtfertigt, bleibt eine offene Frage.
+            </p>
+          ) : isCurrentSnapshot ? (
             <p className="hero-intro">
               Dieser Stand korrigiert eine falsche Beschreibung der mobilen
               Dokumentationskopie. Zugleich macht das Journal lange Meldungen
@@ -416,6 +444,8 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
           </div>
         </section>
       )}
+
+      {isGraphSnapshot && <GraphSnapshotChanges />}
 
       {isCurrentSnapshot && (
         <>
@@ -1240,7 +1270,7 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
               <p className="eyebrow">Private Dokumentationskopie</p>
               <h3>Obsidian als mobile Leseschicht</h3>
               <p>
-                {isCurrentSnapshot ? (
+                {usesCorrectedDocs ? (
                   <>Freigegebene Markdown-Originale werden über das lokale
                     Dokument-Mapping in einen privaten Vault kopiert. Beim
                     Publizieren werden verwaltete Kopien mit der
@@ -1259,7 +1289,7 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
                 <span>Repository</span><b>→</b><span>lokales Mapping</span><b>→</b><span>Vault</span>
               </div>
               <p className="card-limit">
-                {isCurrentSnapshot ? (
+                {usesCorrectedDocs ? (
                   <><strong>Grenze:</strong> Änderungen an verwalteten Kopien
                     können bei der nächsten Publikation verloren gehen.
                     Synchronisation, Plug-in und Backup bleiben zusätzlicher
@@ -1506,7 +1536,18 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
         </div>
         <div className="snapshot-provenance" aria-label="Revisionsstand der Momentaufnahme">
           <span>Chronik-Vertrag v1</span>
-          {isCurrentSnapshot ? (
+          {isGraphSnapshot ? (
+            <>
+              <span>CodexJournal b919429 · aktiver Release und Arbeitsgraph</span>
+              <span>deliberate dbde4e2 · Quellenvertrag und verfügbare Tools</span>
+              <span>dev-infra a26eabf · Dokumentationspublisher</span>
+              <span>Akasha a83c9ee · Quellenvertrag</span>
+              <span>Codex Workstation 356e12b · versionierter Vertragsstand</span>
+              <span>devMCP ff5191d · retired im Standardworkflow</span>
+              <span>SimpleDisplay c576ccb</span>
+              <span>CodexSlicer fc68381</span>
+            </>
+          ) : isCurrentSnapshot ? (
             <>
               <span>CodexJournal 27fe720 · aktiver Dashboard-Stand</span>
               <span>deliberate f351dce · konfigurierter Pilot</span>
@@ -1593,7 +1634,9 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
       </section>
 
       <nav className="snapshot-navigation" aria-label="Navigation zwischen Momentaufnahmen">
-        {isCurrentSnapshot ? (
+        {isGraphSnapshot ? (
+          <Link href="/chronik/2026-10-08">← Älterer Stand · 08.10.2026</Link>
+        ) : isCurrentSnapshot ? (
           <Link href="/chronik/2026-10-06">← Älterer Stand · 06.10.2026</Link>
         ) : isWorkstationSnapshot ? (
           <Link href="/chronik/2026-09-04">← Älterer Stand · 04.09.2026</Link>
@@ -1613,7 +1656,10 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
           <span>Erster veröffentlichter Stand · 12.08.2026</span>
         )}
         <Link href="/chronik">Chronik</Link>
-        <Link href="/" aria-current={isCurrentSnapshot ? "page" : undefined}>Aktueller Stand · 08.10.2026</Link>
+        <Link href="/" aria-current={isGraphSnapshot ? "page" : undefined}>Aktueller Stand · 22.10.2026</Link>
+        {isCurrentSnapshot && (
+          <Link href="/chronik/2026-10-22">Nächster Stand · 22.10.2026 →</Link>
+        )}
         {isWorkstationSnapshot && (
           <Link href="/chronik/2026-10-08">Nächster Stand · 08.10.2026 →</Link>
         )}

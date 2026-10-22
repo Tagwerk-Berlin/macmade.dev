@@ -54,7 +54,7 @@ test("exportiert die öffentliche technische Seite als statisches HTML", async (
   assert.match(html, /Typen \+ TTL \+ Supersession/);
   assert.match(html, /fehlende Ziele bleiben dagegen diagnostisch sichtbar/);
   assert.match(html, /lokal und deterministisch/);
-  assert.match(html, /im Einsatz · linear und verkleinert/);
+  assert.match(html, /im Einsatz · explizite Arbeitsbeziehungen/);
   assert.match(html, /direkte Review-Session/);
   assert.match(html, /expliziter Ressourcenverbleib/);
   assert.match(html, /versioniertes Mapping/);
@@ -106,6 +106,7 @@ test("exportiert Chronik und alle datierten Momentaufnahmen", async () => {
   const journalSnapshot = await readExportedHtml("chronik/2026-09-04/index.html");
   const currentSnapshot = await readExportedHtml("chronik/2026-10-06/index.html");
   const currentText = visibleText(current);
+  const correctionText = visibleText(await readExportedHtml("chronik/2026-10-08/index.html"));
   const workstationSnapshotText = visibleText(currentSnapshot);
   const firstSnapshotText = visibleText(firstSnapshot);
   const firstLabSnapshotText = visibleText(firstLabSnapshot);
@@ -142,15 +143,35 @@ test("exportiert Chronik und alle datierten Momentaufnahmen", async () => {
     /(?:\d{1,3}\.){3}\d{1,3}|\/Users\/|\b(?:[a-z0-9-]+\.)+(?:internal|lan|local)\b|Mailcode:\s*\d+/i,
   );
 
-  assert.match(currentText, /Systemnotizen · Stand 08\.10\.2026/);
-  assert.match(currentText, /Korrektur · 08\.10\.2026/);
-  assert.match(currentText, /Meine frühere Beschreibung versprach einen Schutz/);
+  assert.match(correctionText, /Systemnotizen · Stand 08\.10\.2026/);
+  assert.match(correctionText, /Korrektur · 08\.10\.2026/);
+  assert.match(correctionText, /Meine frühere Beschreibung versprach einen Schutz/);
+  assert.match(correctionText, /Der Publisher erzeugt keine Konfliktkopien oder eigene Historie/);
+  assert.doesNotMatch(correctionText, /Eine lokale Historie bewahrt konkurrierende/);
+  assert.match(correctionText, /Offene Arbeit bleibt vor langen Standmeldungen sichtbar/);
+  assert.match(correctionText, /Ein regelmäßiger Diagnoseeinsatz und ein nachgewiesener Qualitätsgewinn werden hier nicht behauptet/);
+  assert.match(correctionText, /CodexJournal 27fe720 · aktiver Dashboard-Stand/);
+  assert.match(correctionText, /deliberate f351dce · konfigurierter Pilot/);
+  assert.match(currentText, /Systemnotizen · Stand 22\.10\.2026/);
+  assert.match(currentText, /Ein Ergebnis braucht auch einen nachvollziehbaren Rückweg/);
+  assert.match(currentText, /Ein Teil älterer Beziehungen wurde ausdrücklich nachgetragen/);
+  assert.match(currentText, /die Aktualität gegenüber späterem Code bleibt ungeprüft/);
   assert.match(currentText, /Der Publisher erzeugt keine Konfliktkopien oder eigene Historie/);
   assert.doesNotMatch(currentText, /Eine lokale Historie bewahrt konkurrierende/);
-  assert.match(currentText, /Offene Arbeit bleibt vor langen Standmeldungen sichtbar/);
-  assert.match(currentText, /Ein regelmäßiger Diagnoseeinsatz und ein nachgewiesener Qualitätsgewinn werden hier nicht behauptet/);
-  assert.match(currentText, /CodexJournal 27fe720 · aktiver Dashboard-Stand/);
-  assert.match(currentText, /deliberate f351dce · konfigurierter Pilot/);
+  assert.match(currentText, /score_investigation/);
+  assert.match(currentText, /Qualitätsgewinn werden weiterhin nicht behauptet/);
+  assert.match(currentText, /CodexJournal b919429 · aktiver Release und Arbeitsgraph/);
+  assert.match(currentText, /deliberate dbde4e2 · Quellenvertrag und verfügbare Tools/);
+  assert.doesNotMatch(correctionText, /score_investigation|b919429|dbde4e2/);
+  assert.match(correctionText, /Nächster Stand · 22\.10\.2026/);
+  const graphHtml = await readExportedHtml("chronik/2026-10-22/index.html");
+  // Seitentitel unterscheiden sich; die eigentliche Momentaufnahme muss gleich sein.
+  assert.equal(
+    visibleText(current.match(/<main[\s\S]*?<\/main>/)[0]),
+    visibleText(graphHtml.match(/<main[\s\S]*?<\/main>/)[0]),
+  );
+  assert.match(chronicle, /href="\/chronik\/2026-10-22"/);
+
   assert.match(workstationSnapshotText, /Eine lokale Historie bewahrt konkurrierende/);
   assert.doesNotMatch(workstationSnapshotText, /Korrektur · 08\.10\.2026|deliberate|27fe720/);
 
@@ -230,6 +251,7 @@ test("bindet Canonical und Open Graph an jede konkrete Route", async () => {
     ["chronik/2026-09-04/index.html", "https://macmade.dev/chronik/2026-09-04"],
     ["chronik/2026-10-06/index.html", "https://macmade.dev/chronik/2026-10-06"],
     ["chronik/2026-10-08/index.html", "https://macmade.dev/chronik/2026-10-08"],
+    ["chronik/2026-10-22/index.html", "https://macmade.dev/chronik/2026-10-22"],
   ];
 
   for (const [path, url] of routes) {

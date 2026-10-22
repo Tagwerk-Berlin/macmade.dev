@@ -1,8 +1,17 @@
 export const chronicleEntries = [
   {
+    date: "2026-10-22",
+    label: "22.10.2026",
+    current: true,
+    title: "Das Journal verbindet Arbeitsschritte und Review-Übergaben.",
+    summary:
+      "Explizite Arbeitsbeziehungen und Mermaid sind im Einsatz; zusätzliche Modellbewertungen bleiben ein begrenzter Pilot.",
+    triggers: ["Technischer Stand", "Tatsächliche Nutzung", "Bewertung durch Codex"],
+  },
+  {
     date: "2026-10-08",
     label: "08.10.2026",
-    current: true,
+    current: false,
     title: "Eine falsche Kopiergarantie fällt; das Journal wird lesbarer.",
     summary:
       "Datierte Obsidian-Korrektur, sichtbare nächste Schritte im Journal und deliberate als konfigurierter, noch nicht bewährter Pilot.",
