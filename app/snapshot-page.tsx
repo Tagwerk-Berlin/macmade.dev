@@ -1,3 +1,4 @@
+import ReentrySnapshotChanges from "./snapshot-changes-2026-11-01";
 import Link from "next/link";
 import type { SnapshotDate } from "./chronicle-entries";
 import SnapshotContents from "./snapshot-contents";
@@ -168,6 +169,7 @@ const snapshotLabels: Record<SnapshotDate, string> = {
   "2026-10-06": "06.10.2026",
   "2026-10-08": "08.10.2026",
   "2026-10-22": "22.10.2026",
+  "2026-11-01": "01.11.2026",
 };
 
 /** Rendert einen aktuellen oder archivierten Stand aus derselben Darstellung. */
@@ -181,11 +183,13 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
   const isWorkstationSnapshot = snapshotDate === "2026-10-06";
   const isCurrentSnapshot = snapshotDate === "2026-10-08";
   const isGraphSnapshot = snapshotDate === "2026-10-22";
-  const usesCorrectedDocs = isCurrentSnapshot || isGraphSnapshot;
+  const isReentrySnapshot = snapshotDate === "2026-11-01";
+  const usesGraph = isGraphSnapshot || isReentrySnapshot;
+  const usesCorrectedDocs = isCurrentSnapshot || usesGraph;
   const usesModernSystems = isWorkstationSnapshot || usesCorrectedDocs;
   const usesLinearWorkflow = isJournalSnapshot || usesModernSystems;
   const usesLocalDocumentation = isDocsFindSnapshot || usesLinearWorkflow;
-  const displayedCoreSystems = isGraphSnapshot
+  const displayedCoreSystems = usesGraph
     ? graphCoreSystems
     : usesModernSystems
     ? currentCoreSystems
@@ -230,7 +234,16 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
         <div className="hero-copy">
           <p className="eyebrow">Systemnotizen · Stand {snapshotLabels[snapshotDate]}</p>
           <h1>Werkzeuge für nachvollziehbare Entwicklungsarbeit.</h1>
-          {isGraphSnapshot ? (
+          {isReentrySnapshot ? (
+            <p className="hero-intro">
+              Das Journal bekommt einen lesenden Wiedereinstieg: dokumentierter
+              Stand, Quellen und Fortsetzungen lassen sich gemeinsam aufrufen.
+              Beobachtete Session-Tokens machen außerdem einen Teil des
+              Werkzeugeinsatzes sichtbar. Beides verbessert die Einordnung;
+              weder aktuelle Codegültigkeit noch exakte Kosten pro Arbeitseinheit
+              sind damit belegt.
+            </p>
+          ) : isGraphSnapshot ? (
             <p className="hero-intro">
               CodexJournal verknüpft Arbeitsschritte, Chats und Review-Ergebnisse
               jetzt ausdrücklich miteinander. Der neue Arbeitsgraph ist im
@@ -446,6 +459,7 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
       )}
 
       {isGraphSnapshot && <GraphSnapshotChanges />}
+      {isReentrySnapshot && <ReentrySnapshotChanges />}
 
       {isCurrentSnapshot && (
         <>
@@ -1536,7 +1550,13 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
         </div>
         <div className="snapshot-provenance" aria-label="Revisionsstand der Momentaufnahme">
           <span>Chronik-Vertrag v1</span>
-          {isGraphSnapshot ? (
+          {isReentrySnapshot ? (
+            <>
+              <span>CodexJournal 8f8722b · Quellenstand; Wiedereinstieg live gelesen</span>
+              <span>deliberate dbde4e2 · unveränderter Quellenvertrag</span>
+              <span>Grundlagen und Grenzen aus dem Stand 22.10.2026 fortgeführt</span>
+            </>
+          ) : isGraphSnapshot ? (
             <>
               <span>CodexJournal b919429 · aktiver Release und Arbeitsgraph</span>
               <span>deliberate dbde4e2 · Quellenvertrag und verfügbare Tools</span>
@@ -1634,7 +1654,9 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
       </section>
 
       <nav className="snapshot-navigation" aria-label="Navigation zwischen Momentaufnahmen">
-        {isGraphSnapshot ? (
+        {isReentrySnapshot ? (
+          <Link href="/chronik/2026-10-22">← Älterer Stand · 22.10.2026</Link>
+        ) : isGraphSnapshot ? (
           <Link href="/chronik/2026-10-08">← Älterer Stand · 08.10.2026</Link>
         ) : isCurrentSnapshot ? (
           <Link href="/chronik/2026-10-06">← Älterer Stand · 06.10.2026</Link>
@@ -1656,7 +1678,10 @@ export default function SnapshotPage({ snapshotDate }: SnapshotPageProps) {
           <span>Erster veröffentlichter Stand · 12.08.2026</span>
         )}
         <Link href="/chronik">Chronik</Link>
-        <Link href="/" aria-current={isGraphSnapshot ? "page" : undefined}>Aktueller Stand · 22.10.2026</Link>
+        <Link href="/" aria-current={isReentrySnapshot ? "page" : undefined}>Aktueller Stand · 01.11.2026</Link>
+        {isGraphSnapshot && (
+          <Link href="/chronik/2026-11-01">Nächster Stand · 01.11.2026 →</Link>
+        )}
         {isCurrentSnapshot && (
           <Link href="/chronik/2026-10-22">Nächster Stand · 22.10.2026 →</Link>
         )}

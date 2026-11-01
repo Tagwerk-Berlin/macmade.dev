@@ -105,7 +105,13 @@ test("exportiert Chronik und alle datierten Momentaufnahmen", async () => {
   const docsFindSnapshot = await readExportedHtml("chronik/2026-09-01/index.html");
   const journalSnapshot = await readExportedHtml("chronik/2026-09-04/index.html");
   const currentSnapshot = await readExportedHtml("chronik/2026-10-06/index.html");
-  const currentText = visibleText(current);
+  const currentText = visibleText(await readExportedHtml("chronik/2026-10-22/index.html"));
+  const latestText = visibleText(current);
+  assert.match(latestText, /Systemnotizen · Stand 01\.11\.2026/);
+  assert.match(latestText, /Der Graph bekommt einen Einstieg für die nächste Arbeit/);
+  assert.match(latestText, /belegen keinen exklusiven Slice-Verbrauch/);
+  assert.match(latestText, /Öffnen und Kopieren erzeugen weder neue Journalereignisse/);
+  assert.doesNotMatch(currentText, /Der Graph bekommt einen Einstieg/);
   const correctionText = visibleText(await readExportedHtml("chronik/2026-10-08/index.html"));
   const workstationSnapshotText = visibleText(currentSnapshot);
   const firstSnapshotText = visibleText(firstSnapshot);
@@ -164,7 +170,7 @@ test("exportiert Chronik und alle datierten Momentaufnahmen", async () => {
   assert.match(currentText, /deliberate dbde4e2 · Quellenvertrag und verfügbare Tools/);
   assert.doesNotMatch(correctionText, /score_investigation|b919429|dbde4e2/);
   assert.match(correctionText, /Nächster Stand · 22\.10\.2026/);
-  const graphHtml = await readExportedHtml("chronik/2026-10-22/index.html");
+  const graphHtml = await readExportedHtml("chronik/2026-11-01/index.html");
   // Seitentitel unterscheiden sich; die eigentliche Momentaufnahme muss gleich sein.
   assert.equal(
     visibleText(current.match(/<main[\s\S]*?<\/main>/)[0]),
@@ -252,6 +258,7 @@ test("bindet Canonical und Open Graph an jede konkrete Route", async () => {
     ["chronik/2026-10-06/index.html", "https://macmade.dev/chronik/2026-10-06"],
     ["chronik/2026-10-08/index.html", "https://macmade.dev/chronik/2026-10-08"],
     ["chronik/2026-10-22/index.html", "https://macmade.dev/chronik/2026-10-22"],
+    ["chronik/2026-11-01/index.html", "https://macmade.dev/chronik/2026-11-01"],
   ];
 
   for (const [path, url] of routes) {

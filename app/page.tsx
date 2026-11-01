@@ -4,11 +4,11 @@ import SnapshotPage from "./snapshot-page";
 export const metadata = createPageMetadata({
   title: "macmade.dev — Werkzeuge für nachvollziehbare Entwicklungsarbeit",
   description:
-    "Explizite Arbeitsbeziehungen und Mermaid im Journal; zusätzliche Modellbewertungen bleiben ein begrenzter Pilot.",
+    "Lesender Wiedereinstieg im Journal und beobachtete Session-Tokens mit ausdrücklich begrenzter Aussagekraft.",
   path: "/",
 });
 
 /** Rendert die aktuell veröffentlichte technische Momentaufnahme. */
 export default function Home() {
-  return <SnapshotPage snapshotDate="2026-10-22" />;
+  return <SnapshotPage snapshotDate="2026-11-01" />;
 }

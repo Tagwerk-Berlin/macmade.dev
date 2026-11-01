@@ -1,8 +1,17 @@
 export const chronicleEntries = [
   {
+    date: "2026-11-01",
+    label: "01.11.2026",
+    current: true,
+    title: "Das Journal wird zum lesbaren Wiedereinstieg und zeigt beobachtete Tokens.",
+    summary:
+      "Quellengebundener Kontext und Session-Messungen helfen bei der Einordnung; Codeaktualität und exakte Slice-Kosten bleiben offen.",
+    triggers: ["Technischer Stand", "Tatsächliche Nutzung", "Bewertung durch Codex"],
+  },
+  {
     date: "2026-10-22",
     label: "22.10.2026",
-    current: true,
+    current: false,
     title: "Das Journal verbindet Arbeitsschritte und Review-Übergaben.",
     summary:
       "Explizite Arbeitsbeziehungen und Mermaid sind im Einsatz; zusätzliche Modellbewertungen bleiben ein begrenzter Pilot.",
